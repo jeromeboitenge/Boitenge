@@ -1,3 +1,4 @@
+"use client";
 import SkillCard from '../components/SkillCard';
 import { motion } from 'framer-motion';
 
