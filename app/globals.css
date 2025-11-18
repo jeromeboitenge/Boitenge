@@ -6,6 +6,9 @@
 html.dark {
   color-scheme: dark;
 }
+html {
+  font-size: 18px; /* Default is 16px; increasing by ~2px */
+}
 
 body {
   @apply font-poppins bg-lightBg text-darkText;
