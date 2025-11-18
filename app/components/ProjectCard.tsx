@@ -1,9 +1,6 @@
 'use client';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 
-interface ProjectProps {
+interface ProjectCardProps {
   title: string;
   description: string;
   tech: string[];
@@ -12,41 +9,49 @@ interface ProjectProps {
   demo: string;
 }
 
-export default function ProjectCard({ title, description, tech, image, github, demo }: ProjectProps) {
+export default function ProjectCard({
+  title,
+  description,
+  tech,
+  image,
+  github,
+  demo,
+}: ProjectCardProps) {
   return (
-    <motion.div
-      whileHover={{ scale: 1.03 }}
-      className="bg-lightBg dark:bg-darkText rounded-lg shadow-lg overflow-hidden transition cursor-pointer"
-    >
-      <Image
-        src={image}
-        alt={title}
-        width={600}
-        height={400}
-        className="w-full h-48 object-cover"
-      />
-      <div className="p-6">
-        <h3 className="text-2xl font-semibold mb-2">{title}</h3>
-        <p className="text-gray-700 dark:text-gray-300 mb-4">{description}</p>
-        <div className="flex flex-wrap gap-2 mb-4">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300">
+      <img src={image} alt={title} className="w-full h-48 object-cover" />
+      <div className="p-4">
+        <h3 className="text-xl font-semibold mb-2">{title}</h3>
+        <p className="text-gray-700 dark:text-gray-300 mb-3">{description}</p>
+        <div className="flex flex-wrap gap-2 mb-3">
           {tech.map((t) => (
             <span
               key={t}
-              className="px-3 py-1 bg-primary text-white rounded-full text-sm"
+              className="bg-primary text-white px-2 py-1 rounded text-sm"
             >
               {t}
             </span>
           ))}
         </div>
         <div className="flex gap-4">
-          <a href={github} target="_blank" rel="noopener noreferrer" className="text-xl text-darkText dark:text-lightBg hover:text-primary">
-            <FaGithub />
+          <a
+            href={github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:underline"
+          >
+            GitHub
           </a>
-          <a href={demo} target="_blank" rel="noopener noreferrer" className="text-xl text-darkText dark:text-lightBg hover:text-primary">
-            <FaExternalLinkAlt />
+          <a
+            href={demo}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:underline"
+          >
+            Live Demo
           </a>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

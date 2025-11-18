@@ -1,5 +1,6 @@
-import ProjectCard from '../components/ProjectCard';
+'use client';
 import { motion } from 'framer-motion';
+import ProjectCard from '../components/ProjectCard';
 
 const projects = [
   {
@@ -7,7 +8,7 @@ const projects = [
     description:
       'A complete hotel management platform including room booking, staff management, online payments, and analytics.',
     tech: ['React', 'Node.js', 'MongoDB', 'Tailwind CSS'],
-    image: '/hotel-project.jpg', // placeholder
+    image: '/hotel-project.jpg',
     github: 'https://github.com/jeromeboitenge/hotel-management-system',
     demo: '#',
   },
@@ -41,7 +42,7 @@ const projects = [
 
 export default function Projects() {
   return (
-    <section className="max-w-7xl mx-auto py-20 px-4 md:px-8">
+    <section className="max-w-7xl mx-auto py-20 px-4 md:px-8" id="projects">
       <h2 className="text-4xl font-bold text-center mb-12">Projects</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {projects.map((project, idx) => (
@@ -49,6 +50,7 @@ export default function Projects() {
             key={project.title}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.8, delay: idx * 0.2 }}
           >
             <ProjectCard {...project} />
