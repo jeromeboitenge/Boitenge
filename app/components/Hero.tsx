@@ -20,7 +20,7 @@ export default function Hero() {
           />
         </div>
         <h1 className="text-4xl md:text-6xl font-bold mb-4">
-          Hi, I’m Jerome Boitenge
+          Hi, I’m NZARAMYIMANA Jerome
         </h1>
         <p className="text-xl md:text-2xl mb-6">Full-Stack Software Engineer | React, Next.js, Node.js</p>
         <div className="flex justify-center gap-4">
