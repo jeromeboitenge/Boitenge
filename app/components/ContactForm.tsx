@@ -4,14 +4,18 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaRegEnvelope, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
-export default function ContactForm() {
+interface ContactFormProps {
+  onSuccess?: () => void;
+}
+
+export default function ContactForm({ onSuccess }: ContactFormProps) {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
   // Auto-hide success/error message after 30 seconds
   useEffect(() => {
     if (status === "success" || status === "error") {
-      const timer = setTimeout(() => setStatus("idle"), 30000); // 30 seconds
+      const timer = setTimeout(() => setStatus("idle"), 30000);
       return () => clearTimeout(timer);
     }
   }, [status]);
@@ -30,6 +34,7 @@ export default function ContactForm() {
       if (response.ok) {
         setForm({ name: "", email: "", message: "" });
         setStatus("success");
+        if (onSuccess) onSuccess();
       } else {
         setStatus("error");
       }
@@ -38,7 +43,7 @@ export default function ContactForm() {
     }
   };
 
-  // Show overlay for success/error
+  // Overlay for success/error messages
   if (status === "success" || status === "error") {
     return (
       <motion.div
@@ -85,7 +90,7 @@ export default function ContactForm() {
           <FaRegEnvelope className="text-primary text-4xl" />
           <h3 className="text-2xl font-semibold dark:text-white">Send a Message</h3>
         </div>
-        <p className="text-sm text-gray-700 dark:text-white opacity-60 dark:opacity-60 ml-[52px]">
+        <p className="text-sm text-gray-700 dark:text-white opacity-60 ml-[52px]">
           We’ll respond to you as soon as possible
         </p>
       </div>
@@ -131,9 +136,9 @@ export default function ContactForm() {
         className="w-full mt-4 p-3 text-lg font-semibold bg-primary text-white rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-3"
         disabled={status === "sending"}
       >
-        {status === "sending" ? (
+        {status === "sending" && (
           <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-5 h-5"></span>
-        ) : null}
+        )}
         Send Message
       </motion.button>
     </motion.form>
