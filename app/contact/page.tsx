@@ -55,7 +55,7 @@ export default function ContactPage() {
     {
       icon: <FaFacebook />,
       label: "Facebook",
-      href: "https://www.facebook.com/jeromeboitenge", // replace with your actual FB link
+      href: "https://www.facebook.com/share/17NkML51dL/", // replace with your actual FB link
       color: "text-blue-700",
     },
   ];

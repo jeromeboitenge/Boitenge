@@ -15,7 +15,7 @@ const sample = [
     description:
       "Manage internal and external events with intelligent scheduling, QR code registration, and finance tracking.",
     tech: ["Next.js", "Node.js", "Prisma", "Tailwind CSS"],
-    image: "/event-project.jpg",
+    image: "/hitamoSpace.png",
     github: "https://github.com/jeromeboitenge/hitamospace",
     demo: "#",
   },
