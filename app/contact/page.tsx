@@ -9,6 +9,7 @@ import {
   FaLinkedin,
   FaGithub,
   FaTwitter,
+  FaFacebook,
 } from "react-icons/fa";
 
 export default function ContactPage() {
@@ -18,6 +19,46 @@ export default function ContactPage() {
       style: { background: "#1d1d1d", color: "white" },
     });
   };
+
+  // Social contact links
+  const contacts = [
+    {
+      icon: <FaEnvelope />,
+      label: "jeromeboitenge@gmail.com",
+      href: "mailto:jeromeboitenge@gmail.com",
+      color: "text-primary",
+    },
+    {
+      icon: <FaWhatsapp />,
+      label: "0782 433 539",
+      href: "https://wa.me/250782433539",
+      color: "text-green-500",
+    },
+    {
+      icon: <FaLinkedin />,
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/in/nzaramyimana-jerome-961714391",
+      color: "text-blue-600",
+    },
+    {
+      icon: <FaGithub />,
+      label: "GitHub",
+      href: "https://github.com/jeromeboitenge",
+      color: "text-gray-800 dark:text-white",
+    },
+    {
+      icon: <FaTwitter />,
+      label: "Twitter",
+      href: "https://twitter.com/jeromeboitenge",
+      color: "text-blue-400",
+    },
+    {
+      icon: <FaFacebook />,
+      label: "Facebook",
+      href: "https://www.facebook.com/jeromeboitenge", // replace with your actual FB link
+      color: "text-blue-700",
+    },
+  ];
 
   return (
     <section id="contact" className="max-w-7xl mx-auto py-24 px-4 md:px-8">
@@ -42,49 +83,27 @@ export default function ContactPage() {
           transition={{ duration: 0.7 }}
           className="bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-700 shadow-lg rounded-2xl p-8 flex flex-col gap-6"
         >
-          <h3 className="text-3xl font-semibold text-darkText dark:text-white">Let’s Talk</h3>
-          <p className="text-lg leading-relaxed text-gray-700 dark:text-white">
-            Feel free to reach out for collaborations, projects, or opportunities. I’ll respond as soon as possible.
-          </p>
+          <h3 className="text-3xl font-semibold text-darkText dark:text-white">Let’s Talk Via</h3>
+         
 
           {/* Contact Links */}
           <div className="flex flex-col gap-5 mt-4">
-            {[
-              {
-                icon: <FaEnvelope className="text-3xl text-primary" />,
-                label: "jeromeboitenge@gmail.com",
-                href: "mailto:jeromeboitenge@gmail.com",
-              },
-              {
-                icon: <FaWhatsapp className="text-3xl text-green-500" />,
-                label: "0782 433 539",
-                href: "https://wa.me/250782433539",
-              },
-              {
-                icon: <FaLinkedin className="text-3xl text-blue-600" />,
-                label: "LinkedIn",
-                href: "https://www.linkedin.com/in/nzaramyimana-jerome-961714391",
-              },
-              {
-                icon: <FaGithub className="text-3xl dark:text-white" />,
-                label: "GitHub",
-                href: "https://github.com/jeromeboitenge",
-              },
-              {
-                icon: <FaTwitter className="text-3xl text-blue-400" />,
-                label: "Twitter",
-                href: "https://twitter.com/jeromeboitenge",
-              },
-            ].map((item, i) => (
+            {contacts.map((item, i) => (
               <motion.a
                 key={i}
-                whileHover={{ scale: 1.03 }}
-                className="group flex items-center gap-4 px-5 py-4 rounded-xl bg-gray-100 dark:bg-[#2a2a2a] border border-gray-200 dark:border-gray-600 shadow-sm hover:shadow-md transition"
+                whileHover={{ scale: 1.05 }}
+                className={`
+                  group flex items-center gap-4 px-5 py-4 rounded-xl
+                  bg-gray-100 dark:bg-[#2a2a2a]
+                  border border-gray-200 dark:border-gray-600
+                  shadow-sm hover:shadow-md
+                  transition
+                `}
                 href={item.href}
                 target="_blank"
               >
-                {item.icon}
-                <span className="text-lg transition text-darkText dark:text-white group-hover:text-primary">
+                <span className={`${item.color} text-3xl`}>{item.icon}</span>
+                <span className="text-lg text-darkText dark:text-white transition group-hover:text-primary">
                   {item.label}
                 </span>
               </motion.a>
