@@ -1,11 +1,9 @@
-"use client"; // ⬅️ CRITICAL FIX: Ensures event handlers (onClick) work
+"use client"; 
 
 import { Mail, Phone, MapPin, ArrowUp } from 'lucide-react';
-// Imports React Icons for social links
 import { FaTwitter, FaLinkedin, FaGithub } from 'react-icons/fa'; 
 import Link from 'next/link';
 
-// Helper function for scroll-to-top functionality
 const scrollToTop = () => {
   if (typeof window !== 'undefined') {
     window.scrollTo({
@@ -20,14 +18,13 @@ export default function Footer() {
   const primaryColor = 'text-primary'; 
 
   return (
-    // Footer Container
     <footer className="relative bg-light dark:bg-[#1A1A1A] border-t border-gray-200 dark:border-gray-800 pt-12 mt-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* === Grid Layout for Columns === */}
+        {/* === GRID COLUMNS === */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 border-b border-gray-200 dark:border-gray-800 pb-10">
           
-          {/* 1. About/Social (Mbaduko) */}
+          {/* === ABOUT === */}
           <div className="space-y-4 col-span-2 sm:col-span-1">
             <div className="flex items-center space-x-2 text-xl font-bold">
               <span className="text-accent text-3xl">⚡</span>
@@ -36,13 +33,14 @@ export default function Footer() {
             <p className="text-sm text-gray-600 dark:text-gray-400 max-w-xs">
               Passionate software developer crafting digital solutions that make a difference. Let's build something amazing together.
             </p>
-            {/* Social Icons (React Icons) */}
+
+            {/* Social Icons */}
             <div className="flex space-x-3 pt-2">
               <a href="https://twitter.com/jeromeboitenge" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white transition-colors">
                 <FaTwitter size={20} />
               </a>
               <a href="https://linkedin.com/in/jeromeboitenge" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-blue-700 hover:bg-blue-800 text-white transition-colors">
-                 <FaLinkedin size={20} />
+                <FaLinkedin size={20} />
               </a>
               <a href="https://github.com/jeromeboitenge" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 text-white transition-colors">
                 <FaGithub size={20} />
@@ -50,7 +48,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 2. Quick Links */}
+          {/* === QUICK LINKS === */}
           <div className="space-y-4">
             <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Quick Links</h4>
             <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
@@ -62,7 +60,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* 3. Services */}
+          {/* === SERVICES === */}
           <div className="space-y-4">
             <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Services</h4>
             <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
@@ -73,41 +71,65 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* 4. Get In Touch (Contact Info - Lucide) */}
+          {/* === CONTACT INFO === */}
           <div className="space-y-4">
             <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Get In Touch</h4>
             <div className="space-y-3">
+
+              {/* Email */}
               <div className="flex items-center space-x-3">
                 <Mail size={20} className={primaryColor} />
-                <a href="mailto:jeromeboitenge@gmail.com" className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary">jeromeboitenge@gmail.com</a>
+                <a 
+                  href="mailto:jeromeboitenge@gmail.com" 
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary"
+                >
+                  jeromeboitenge@gmail.com
+                </a>
               </div>
+
+              {/* Phone */}
               <div className="flex items-center space-x-3">
                 <Phone size={20} className={primaryColor} />
-                <a href="tel:+250791130583" className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary">+250 791 130 583</a>
+                <a 
+                  href="tel:+250782433539" 
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary"
+                >
+                  +250 782 433 539
+                </a>
               </div>
-              <div className="flex items-center space-x-3">
-                <Phone size={20} className={primaryColor} />
-                <a href="tel:+250726542585" className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary">+250 726 542 585</a>
-              </div>
+
+              {/* Location with Google Map link */}
               <div className="flex items-center space-x-3">
                 <MapPin size={20} className={primaryColor} />
-                <span className="text-sm text-gray-600 dark:text-gray-400">Kigali, Rwanda</span>
+                <a 
+                  href="https://maps.app.goo.gl/Pm6nVE3Qb2LzXCng8" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary"
+                >
+                  Kigali, Rwanda
+                </a>
               </div>
+
+              {/* NEW: Small low-visibility message */}
+              <p className="text-xs text-gray-500 dark:text-gray-500 opacity-70 pl-7">
+                We’ll respond to you as soon as possible
+              </p>
+
             </div>
           </div>
         </div>
 
-        {/* === Copyright & Footer Bottom === */}
+        {/* === COPYRIGHT === */}
         <div className="flex justify-between items-center py-6 text-xs text-gray-500 dark:text-gray-500">
           <p className="flex flex-col">
             <span>© {currentYear} Jerome Boitenge. All rights reserved.</span>
             <span className="mt-1">Crafted with passion and precision</span>
           </p>
         </div>
-
       </div>
 
-      {/* === Scroll to Top Button === */}
+      {/* === SCROLL TO TOP BUTTON === */}
       <button
         onClick={scrollToTop}
         className="fixed bottom-6 right-6 p-3 rounded-full bg-accent hover:bg-primary text-white shadow-lg transition-colors z-40"
@@ -115,7 +137,6 @@ export default function Footer() {
       >
         <ArrowUp size={24} />
       </button>
-
     </footer>
   );
 }

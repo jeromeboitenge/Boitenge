@@ -1,62 +1,26 @@
-'use client';
-import { motion } from 'framer-motion';
 import ProjectCard from '../components/ProjectCard';
+import { projectsData } from '../data/projectsData';
 
-const projects = [
-  {
-    title: 'Hotel Management System',
-    description:
-      'A complete hotel management platform including room booking, staff management, online payments, and analytics.',
-    tech: ['React', 'Node.js', 'MongoDB', 'Tailwind CSS'],
-    image: '/hotel-project.jpg',
-    github: 'https://github.com/jeromeboitenge/hotel-management-system',
-    demo: '#',
-  },
-  {
-    title: 'Event Management System (HitamoSpace)',
-    description:
-      'Manage internal and external events with intelligent scheduling, QR code registration, and finance tracking.',
-    tech: ['Next.js', 'Node.js', 'Prisma', 'Tailwind CSS'],
-    image: '/event-project.jpg',
-    github: 'https://github.com/jeromeboitenge/hitamospace',
-    demo: '#',
-  },
-  {
-    title: 'Tourism / ExploreHub Platform',
-    description:
-      'A tourism platform to explore, review, and share destinations in Rwanda with Google Maps integration.',
-    tech: ['MERN Stack', 'Google Maps API', 'Tailwind CSS'],
-    image: '/explorehub-project.jpg',
-    github: 'https://github.com/jeromeboitenge/explorehub',
-    demo: '#',
-  },
-  {
-    title: 'Extra Placeholder Project',
-    description: 'This is a placeholder for future exciting projects.',
-    tech: ['React', 'Node.js'],
-    image: '/placeholder.jpg',
-    github: '#',
-    demo: '#',
-  },
-];
-
-export default function Projects() {
+export default function ProjectsPage() {
   return (
-    <section className="max-w-7xl mx-auto py-20 px-4 md:px-8" id="projects">
-      <h2 className="text-4xl font-bold text-center mb-12">Projects</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {projects.map((project, idx) => (
-          <motion.div
-            key={project.title}
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: idx * 0.2 }}
-          >
-            <ProjectCard {...project} />
-          </motion.div>
-        ))}
-      </div>
-    </section>
+    <div className="bg-gradient-to-b from-white via-primary/5 to-transparent" id="projects">
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-3xl text-center space-y-6 animate-fade-up">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.4em] text-primary/70">
+            Featured Work
+          </p>
+          <h1 className="text-4xl font-bold text-slate-900 sm:text-5xl">My Projects</h1>
+          <p className="text-lg text-slate-600 sm:text-xl">
+            A collection of the software I’ve designed, developed, and deployed.
+          </p>
+        </div>
+
+        <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {projectsData.slice(0, 3).map(({ id, ...project }) => (
+            <ProjectCard key={id} {...project} />
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }
