@@ -1,7 +1,9 @@
 'use client';
 
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+import Image from "next/image";
+import { motion } from "framer-motion";
+
+const badges = ["Full-stack engineer", "Design systems", "Hardware&software maintanace"];
 
 export default function ProfileIntro({ showButtons = false }) {
   return (
@@ -9,42 +11,52 @@ export default function ProfileIntro({ showButtons = false }) {
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      className="flex flex-col md:flex-row items-center gap-12"
+      className="flex flex-col items-start gap-12 rounded-[32px] bg-white/80 p-10 shadow-[0_30px_90px_rgba(15,23,42,0.12)] backdrop-blur-xl ring-1 ring-white/70 dark:bg-slate-900/70 dark:ring-slate-800 md:flex-row md:items-start"
     >
-      {/* Image */}
-      <div className="relative w-60 h-60 md:w-72 md:h-72">
-        <div className="absolute inset-0 bg-gradient-to-tr from-primary to-accent rounded-full p-1 animate-pulse"></div>
-
-        <Image
-          src="/Nzaramyimana-Jerome.jpeg"
-          alt="Jerome Boitenge"
-          fill
-          className="rounded-full object-cover border-4 border-lightBg dark:border-darkText"
-        />
+      <div className="relative flex-shrink-0">
+        <div className="absolute -inset-0.5 rounded-full  from-primary via-accent to-primary blur-2xl opacity-60" />
+        <div className="relative h-64 w-64 overflow-hidden rounded-[36px] border border-white/60 bg-slate-900 p-3 shadow-2xl ring-1 ring-white/30 dark:bg-slate-900/90">
+          <Image
+            src="/Nzaramyimana-Jerome.jpeg"
+            alt="Jerome Boitenge"
+            fill
+            className="rounded-[28px] object-cover"
+            priority
+          />
+          <div className="absolute bottom-4 left-4 rounded-full bg-white/90 px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-slate-900">
+            Kigali · Remote
+          </div>
+        </div>
       </div>
 
-      {/* Text */}
-      <div className="flex-1 text-center md:text-left">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-darkText dark:text-lightBg">
+      <div className="flex-1 space-y-6 text-center md:text-left">
+        <div className="inline-flex flex-wrap justify-center gap-3 md:justify-start">
+          {badges.map((badge) => (
+            <span
+              key={badge}
+              className="rounded-full bg-primary/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-primary"
+            >
+              {badge}
+            </span>
+          ))}
+        </div>
+        <h1 className="text-4xl font-bold text-darkText dark:text-lightBg md:text-5xl">
           Hi, I’m NZARAMYIMANA Jerome
         </h1>
-
-        <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
-          I’m a Full-Stack Software Engineer specializing in React, Next.js, Node.js, and modern web
-          technologies. I build scalable, elegant, and high-performance digital solutions.
+        <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+          I design and engineer premium digital experiences across React, Next.js, and Node.js — blending product
+          thinking, design systems, and scalable infrastructure so launches feel effortless and polished.
         </p>
 
-        {/* Optional buttons: only show on Hero section */}
         {showButtons && (
-          <div className="flex justify-center md:justify-start gap-4">
-            <button className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-accent transition">
+          <div className="flex flex-wrap justify-center gap-4 md:justify-start">
+            <button className="inline-flex items-center justify-center rounded-2xl bg-primary px-6 py-3 text-sm font-semibold text-white shadow-xl transition hover:-translate-y-0.5 hover:bg-primary/90">
               Hire Me
             </button>
-
             <a
               href="/Jerome-Boitenge-CV.pdf"
               download
-              className="px-6 py-3 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition"
+              className="inline-flex items-center justify-center rounded-2xl border border-primary px-6 py-3 text-sm font-semibold text-primary transition hover:-translate-y-0.5 hover:bg-primary hover:text-white"
             >
               Download CV
             </a>
