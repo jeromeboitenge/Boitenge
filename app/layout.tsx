@@ -5,7 +5,7 @@ import Footer from "./components/Footer";
 import { ThemeProvider } from "next-themes";
 
 export const metadata = {
-  title: "Jerome Boitenge | Software Engineer",
+  title: "Jerome Nzaramyimana | Software Engineer",
   description:
     "Jerome Nzaramyimana | Software Engineer | MERN Developer |Hardware And Software Maintenance|system Analyst| Rwanda",
   keywords: [
