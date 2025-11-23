@@ -6,23 +6,29 @@ import { ThemeProvider } from "next-themes";
 
 export const metadata = {
   title: "Jerome Boitenge | Software Engineer",
-  description: "Jerome Boitenge | Software Engineer | MERN Developer |Hardware And Software Maintenance|system Analyst| Rwanda",
+  description:
+    "Jerome Boitenge | Software Engineer | MERN Developer |Hardware And Software Maintenance|system Analyst| Rwanda",
   keywords: [
     "Jerome Boitenge",
     "Jerome Nzaramyimana",
     "Software Engineer Rwanda",
     "MERN Developer",
-    "React Developer Rwanda"
+    "React Developer Rwanda",
   ],
   authors: [{ name: "Jerome Boitenge" }],
 };
 
-
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta
+          name="google-site-verification"
+          content="hlBEraVPXXswe0AyXbaHOY1b00RHf8WCeCXpnQ4qtnQ"
+        />
+      </head>
+
       <body className="font-poppins bg-lightBg dark:bg-darkText">
-        {/* ThemeProvider MUST be inside body*/}
         <ThemeProvider attribute="class" defaultTheme="light">
           <Navbar />
           <main className="min-h-screen">{children}</main>
