@@ -5,9 +5,18 @@ import Footer from "./components/Footer";
 import { ThemeProvider } from "next-themes";
 
 export const metadata = {
-  title: "Jerome Boitenge | Full-Stack Software Engineer",
-  description: "Portfolio of Jerome Boitenge - Full-Stack Developer",
+  title: "Jerome Boitenge | Software Engineer",
+  description: "Jerome Boitenge | Software Engineer | MERN Developer |Hardware And Software Maintenance|system Analyst| Rwanda",
+  keywords: [
+    "Jerome Boitenge",
+    "Jerome Nzaramyimana",
+    "Software Engineer Rwanda",
+    "MERN Developer",
+    "React Developer Rwanda"
+  ],
+  authors: [{ name: "Jerome Boitenge" }],
 };
+
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
