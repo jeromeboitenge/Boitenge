@@ -3,7 +3,7 @@
 import ExperienceTimeline from "../components/ExperienceTimeline";
 import { motion } from "framer-motion";
 
-export default function About() {
+export default function AboutPage() {
   return (
     <section className="max-w-7xl mx-auto py-20 px-4 md:px-8">
 

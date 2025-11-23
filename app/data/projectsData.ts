@@ -1,104 +1,88 @@
-export interface ProjectItem {
+export interface ProjectData {
   id: number;
   title: string;
   description: string;
-  image: string;
-  tags: string[];
-  highlights: string[];
+  image: string; // Path to image in /public folder
+  tags: string[]; // Tech stack tags (must match icons in ProjectCard.tsx)
+  highlights: string[]; // Key achievements/impact
   demoLink: string;
   codeLink: string;
 }
 
-export const projectsData: ProjectItem[] = [
+export const projectsData: ProjectData[] = [
+  // --- PROJECT 1: Hotel Management System (Focus: Scalable Enterprise & FinTech) ---
   {
     id: 1,
-    title: "Hotel Operations Platform",
-    description:
-      "A centralized dashboard for reservations, payments, and housekeeping automation with real-time analytics and staff coordination.",
-    image: "/projects/hotel-suite.svg",
-    tags: ["Next.js", "TypeScript", "Tailwind CSS", "PostgreSQL", "Stripe"],
+    title: "HitamoSpace @UR (Event Platform)",
+    description: "A high-availability event management and ticketing system built for large university functions, capable of handling 25K+ concurrent attendees and multi-venue inventory.",
+    image: "/hitamoSpace.png", // Create this image path
+    tags: ["React", "Next.js", "Prisma", "MongoDB", "WebRTC"],
     highlights: [
-      "Reduced booking overhead by 38% with automated workflows",
-      "Designed KPI cockpit for 6 hotel departments",
-      "Integrated secure payments and audit-ready reporting",
-    ],
-    demoLink: "https://example.com/hotel-suite",
-    codeLink: "https://github.com/example/hotel-suite",
-  },
-  {
-    id: 2,
-    title: "HitamoSpace @UR",
-    description:
-      "A production event & venue platform for the University of Rwanda that powers proposals, ticketing, and facility logistics at scale.",
-    image: "/hitamoSpace.png",
-    tags: ["React", "Next.js", "Prisma", "MongoDB", "Tailwind CSS"],
-    highlights: [
-      "Scaled to 25K+ attendees across hybrid events",
-      "Built multi-venue inventory & pricing intelligence",
-      "Implemented QR admission with fraud-resistant checks",
+      "Successfully scaled to support 25K+ attendees across multiple hybrid events.",
+      "Implemented QR code verification and fraud-resistant checks for ticket security.",
     ],
     demoLink: "https://hitamospace.ur.ac.rw/",
-    codeLink: "https://github.com/example/event-os",
+    codeLink: "https://github.com/jeromeboitenge/hitamospace-event-platform",
   },
+
+  {
+    id: 2,
+    title: "Hotel Operations Platform",
+    description: "A centralized, full-stack dashboard for managing reservations, automated payments (Stripe integration), housekeeping workflows, and real-time staff coordination for a multi-chain boutique hotel group.",
+    image: "/project-hotel-management.jpg", // Create this image path
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "PostgreSQL", "Stripe"],
+    highlights: [
+      "Reduced booking overhead by 38% with automated check-in/out workflows.",
+      "Designed a secure, multi-tenant API using Next.js Server Actions for data integrity.",
+    ],
+    demoLink: "https://demo.hotelplatform.com",
+    codeLink: "https://github.com/jeromeboitenge/hotel-platform",
+  },
+
+  // --- PROJECT 2: HitamoSpace (Focus: High-Traffic Events & Real-time Booking) ---
+
+  // --- PROJECT 3: ExploreHub (Focus: Mapping, GeoSpatial & Collaborative Features) ---
   {
     id: 3,
     title: "ExploreHub Travel Network",
-    description:
-      "A community-driven travel guide that surfaces curated itineraries, immersive media, and geolocation search for explorers.",
-    image: "/projects/explorehub.svg",
-    tags: ["Next.js", "Mapbox", "Supabase", "Tailwind CSS"],
+    description: "A community-driven travel guide for explorers, featuring geo-spatial search (Mapbox), collaborative itinerary builders with offline sync capabilities, and rich media integration.",
+    image: "/project-explorehub.jpg", // Create this image path
+    tags: ["Next.js", "Mapbox", "Supabase", "TypeScript", "Redis"],
     highlights: [
-      "Indexed 1,200+ destinations with geospatial search",
-      "Collaborative itinerary builder with offline sync",
-      "Story-driven UI that boosts retention by 42%",
+      "Indexed 1,200+ global destinations with fast geospatial search functionality.",
+      "Achieved a 42% boost in user retention via collaborative, story-driven itinerary UI.",
     ],
-    demoLink: "https://example.com/explorehub",
-    codeLink: "https://github.com/example/explorehub",
+    demoLink: "https://demo.explorehub.com",
+    codeLink: "https://github.com/jeromeboitenge/explorehub-travel-network",
   },
+
+  // --- PROJECT 4: Placeholder (To test "View All" Button) ---
   {
     id: 4,
-    title: "AI Ops Insight Center",
-    description:
-      "Predictive monitoring dashboards with anomaly detection, alert routing, and AI-assisted remediation playbooks.",
-    image: "/projects/ai-analytics.svg",
-    tags: ["TypeScript", "Next.js", "TensorFlow", "Redis", "Tailwind CSS"],
+    title: "AI-Driven Task Manager",
+    description: "A highly performant task management platform featuring ML-based prioritization and real-time collaboration using WebSockets for enterprise teams.",
+    image: "/project-task-manager.jpg",
+    tags: ["NestJS", "PostgreSQL", "TensorFlow", "WebRTC"],
     highlights: [
-      "Cut incident response time from 2h to 18m",
-      "ML-driven anomaly scoring pipeline shipped to prod",
-      "Realtime collaboration layer with playbook templates",
+      "Integrated TensorFlow for automated task prioritization and deadline prediction.",
+      "Reduced user cognitive load with a clean, responsive UI based on atomic design principles.",
     ],
-    demoLink: "https://example.com/ai-insight",
-    codeLink: "https://github.com/example/ai-insight",
+    demoLink: "https://demo.taskmanager.com",
+    codeLink: "https://github.com/jeromeboitenge/ai-task-manager",
   },
+
+  // --- PROJECT 5: Placeholder (To test "View All" Button) ---
   {
     id: 5,
-    title: "FinTrack Billing Suite",
-    description:
-      "Recurring billing automation with revenue recognition, KPI snapshots, and CFO-ready exports for SaaS teams.",
-    image: "/projects/fintrack.svg",
-    tags: ["Next.js", "NestJS", "PostgreSQL", "Stripe", "Tailwind CSS"],
+    title: "Decentralized Voting System",
+    description: "A proof-of-concept application leveraging blockchain principles to ensure tamper-proof, transparent, and secure voting without reliance on a central authority.",
+    image: "/project-voting-app.jpg",
+    tags: ["React", "Node.js", "MongoDB", "TypeScript"],
     highlights: [
-      "Automated billing for $3M ARR SaaS products",
-      "Built RevRec engine meeting ASC 606 requirements",
-      "Modular analytics tiles powering exec dashboards",
+      "Achieved full immutability and auditability for all voting records via cryptographic hashing.",
+      "Designed public verification dashboards to ensure system transparency and trust.",
     ],
-    demoLink: "https://example.com/fintrack",
-    codeLink: "https://github.com/example/fintrack",
-  },
-  {
-    id: 6,
-    title: "Healthcare Telemedicine Hub",
-    description:
-      "HIPAA-ready telemedicine tools featuring patient triage, video consultations, and electronic health records syncing.",
-    image: "/projects/healthcare-suite.svg",
-    tags: ["Next.js", "TypeScript", "WebRTC", "Node.js", "Tailwind CSS"],
-    highlights: [
-      "Secure video consults with adaptive bitrate WebRTC",
-      "FHIR-compliant EHR synchronization service",
-      "Nurse triage tooling that halves intake time",
-    ],
-    demoLink: "https://example.com/healthcare-hub",
-    codeLink: "https://github.com/example/healthcare-hub",
+    demoLink: "https://demo.votingapp.com",
+    codeLink: "https://github.com/jeromeboitenge/decentralized-voting-system",
   },
 ];
-
