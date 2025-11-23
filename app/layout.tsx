@@ -7,7 +7,7 @@ import { ThemeProvider } from "next-themes";
 export const metadata = {
   title: "Jerome Boitenge | Software Engineer",
   description:
-    "Jerome Boitenge | Software Engineer | MERN Developer |Hardware And Software Maintenance|system Analyst| Rwanda",
+    "Jerome Nzaramyimana | Software Engineer | MERN Developer |Hardware And Software Maintenance|system Analyst| Rwanda",
   keywords: [
     "Jerome Boitenge",
     "Jerome Nzaramyimana",
