@@ -39,9 +39,7 @@ export const projectsData: ProjectData[] = [
     codeLink: "https://github.com/jeromeboitenge/hotel-platform",
   },
 
-  // --- PROJECT 2: HitamoSpace (Focus: High-Traffic Events & Real-time Booking) ---
 
-  // --- PROJECT 3: ExploreHub (Focus: Mapping, GeoSpatial & Collaborative Features) ---
   {
     id: 3,
     title: "ExploreHub Travel Network",
