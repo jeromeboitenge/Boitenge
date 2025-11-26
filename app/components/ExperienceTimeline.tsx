@@ -5,32 +5,27 @@ import { FaBriefcase, FaLaptopCode, FaGraduationCap, FaStar } from 'react-icons/
 const experiences = [
   {
     year: '2025',
-    title: 'Internship at Giraffe Space',
-    position: 'Full-Stack Developer Intern',
+    title: 'Internship at UR Hitamo space',
+    position: 'Frontend Developer & Documentalist Intern',
     desc: 'Developed Event Management System with Next.js, Prisma, and Tailwind. Collaborated in a 4-member dev team.',
     icon: <FaBriefcase />,
   },
   {
     year: '2024',
-    title: 'ExploreHub Platform',
-    position: 'Full-Stack Developer',
-    desc: 'Built a tourism platform in Rwanda using MERN stack, Google Maps integration, and user reviews.',
-    icon: <FaLaptopCode />,
-  },
-  {
-    year: '2024',
-    title: 'Freelance Web Developer',
-    position: 'React & Node.js Developer',
-    desc: 'Delivered small business websites, e-commerce platforms, and API integrations for local clients.',
-    icon: <FaStar />,
-  },
-  {
-    year: '2023',
-    title: 'University Projects',
+    title: 'University Class Projects',
     position: 'Student Developer',
-    desc: 'Developed multiple web apps and dashboards using React, Node.js, Tailwind, and MongoDB.',
+    desc: 'Developed multiple web apps and dashboards using React, Tailwind that includes  A voting system, Explore Hub',
     icon: <FaGraduationCap />,
   },
+  
+  {
+    year: '2023',
+    title: 'Freelance Web Developer',
+    position: 'React & Node.js Developer',
+    desc: 'Delivered small business websites, e-commerce platforms, and API integrations for local clients, advanced hotel management.',
+    icon: <FaStar />,
+  },
+  
   {
     year: '2022',
     title: 'Personal Projects & Open Source',
