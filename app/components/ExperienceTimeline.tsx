@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { FaBriefcase, FaLaptopCode, FaGraduationCap, FaStar } from "react-icons/fa";
 import { useState } from "react";
 
-// Experience data with tech badges and optional extra details
 const experiences = [
   {
     year: "2025",
@@ -47,42 +46,49 @@ const experiences = [
 export default function ExperienceTimeline() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-
   return (
-    <div className="relative ml-4 border-l-4 border-gradient-to-b from-primary to-accent">
+    <div className="relative ml-4 border-l-4 border-primary">
       {experiences.map((exp, index) => (
         <motion.div
           key={index}
           initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: index * 0.2 }}
-          className="mb-12 ml-6 relative cursor-pointer hover:scale-105 hover:shadow-xl transition-transform duration-300 rounded-lg p-4 bg-lightBg dark:bg-[#111]"
+          className="mb-12 ml-6 relative cursor-pointer hover:scale-105 hover:shadow-lg transition-transform duration-300 rounded-lg p-6 bg-lightBg dark:bg-[#111]"
           onClick={() => setActiveIndex(index === activeIndex ? null : index)}
         >
-          <span className="absolute -left-7 top-4 text-primary text-3xl">
+          {/* Icon */}
+          <span className="absolute -left-8 top-4 text-primary text-3xl">
             {exp.icon}
           </span>
-          <h3 className="text-xl md:text-2xl font-semibold text-darkText dark:text-white">
+
+          {/* Title */}
+          <h3 className="text-xl md:text-2xl font-semibold text-darkText dark:text-white group-hover:text-primary transition-colors">
             {exp.title}
           </h3>
-          <p className="text-sm md:text-base text-gray-500 dark:text-gray-300">
+
+          {/* Position & Year */}
+          <p className="text-sm md:text-base text-gray-500 dark:text-gray-300 mt-1">
             {exp.year} — {exp.position}
           </p>
+
+          {/* Description */}
           <p className="mt-2 text-gray-700 dark:text-gray-200 text-sm md:text-base">
             {exp.desc}
           </p>
 
           {/* Tech Badges */}
-          <div className="mt-3 flex flex-wrap gap-2">
-            {exp.tech.map((tech, idx) => (
-              <span
-                key={idx}
-                className="bg-accent/20 dark:bg-primary/30 text-accent dark:text-primary text-xs md:text-sm px-2 py-1 rounded-full font-medium"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
+<div className="mt-3 flex flex-wrap gap-2">
+  {exp.tech.map((tech, idx) => (
+    <span
+      key={idx}
+      className="bg-primary/20 dark:bg-primary/30 text-accent dark:text-primary text-xs md:text-sm px-2 py-1 rounded-full font-medium"
+    >
+      {tech}
+    </span>
+  ))}
+</div>
+
 
           {/* Expandable Details */}
           {activeIndex === index && (
@@ -90,11 +96,14 @@ export default function ExperienceTimeline() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               transition={{ duration: 0.3 }}
-              className="mt-3 text-gray-600 dark:text-gray-400 text-sm md:text-base bg-gray-50 dark:bg-gray-800 p-3 rounded"
+              className="mt-3 text-gray-600 dark:text-gray-400 text-sm md:text-base bg-primary/10 dark:bg-accent/20 p-3 rounded"
             >
               {exp.details}
             </motion.div>
           )}
+
+          {/* Accent hover line */}
+          <div className="absolute left-0 top-0 h-full w-1 bg-accent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded"></div>
         </motion.div>
       ))}
     </div>
