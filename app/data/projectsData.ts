@@ -29,7 +29,7 @@ export const projectsData: ProjectData[] = [
     id: 2,
     title: "Hotel Operations Platform",
     description: "A centralized, full-stack dashboard for managing reservations, automated payments (Stripe integration), housekeeping workflows, and real-time staff coordination for a multi-chain boutique hotel group.",
-    image: "/project-hotel-management.jpg", // Create this image path
+    image: "/projects/hotel.png", // Create this image path
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "PostgreSQL", "Stripe"],
     highlights: [
       "Reduced booking overhead by 38% with automated check-in/out workflows.",
