@@ -6,7 +6,7 @@ export interface ProjectData {
   tags: string[]; // Tech stack tags (must match icons in ProjectCard.tsx)
   highlights: string[]; // Key achievements/impact
   demoLink: string;
-  codeLink: string;
+
 }
 
 export const projectsData: ProjectData[] = [
@@ -22,7 +22,7 @@ export const projectsData: ProjectData[] = [
       "Implemented QR code verification and fraud-resistant checks for ticket security.",
     ],
     demoLink: "https://hitamospace.ur.ac.rw/",
-    codeLink: "https://github.com/jeromeboitenge/hitamospace-event-platform",
+
   },
 
   {
@@ -36,7 +36,7 @@ export const projectsData: ProjectData[] = [
       "Designed a secure, multi-tenant API using Next.js Server Actions for data integrity.",
     ],
     demoLink: "https://demo.hotelplatform.com",
-    codeLink: "https://github.com/jeromeboitenge/hotel-platform",
+
   },
 
 
@@ -51,10 +51,10 @@ export const projectsData: ProjectData[] = [
       "Achieved a 42% boost in user retention via collaborative, story-driven itinerary UI.",
     ],
     demoLink: "https://demo.explorehub.com",
-    codeLink: "https://github.com/jeromeboitenge/explorehub-travel-network",
+
   },
 
-  // --- PROJECT 4: Placeholder (To test "View All" Button) ---
+
   {
     id: 4,
     title: "AI-Driven Task Manager",
@@ -66,7 +66,7 @@ export const projectsData: ProjectData[] = [
       "Reduced user cognitive load with a clean, responsive UI based on atomic design principles.",
     ],
     demoLink: "https://demo.taskmanager.com",
-    codeLink: "https://github.com/jeromeboitenge/ai-task-manager",
+
   },
 
   // --- PROJECT 5: Placeholder (To test "View All" Button) ---
@@ -81,6 +81,6 @@ export const projectsData: ProjectData[] = [
       "Designed public verification dashboards to ensure system transparency and trust.",
     ],
     demoLink: "https://demo.votingapp.com",
-    codeLink: "https://github.com/jeromeboitenge/decentralized-voting-system",
+
   },
 ];
