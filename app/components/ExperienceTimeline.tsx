@@ -1,64 +1,100 @@
-'use client';
-import { motion } from 'framer-motion';
-import { FaBriefcase, FaLaptopCode, FaGraduationCap, FaStar } from 'react-icons/fa';
+"use client";
 
+import { motion } from "framer-motion";
+import { FaBriefcase, FaLaptopCode, FaGraduationCap, FaStar } from "react-icons/fa";
+import { useState } from "react";
+
+// Experience data with tech badges and optional extra details
 const experiences = [
   {
-    year: '2025',
-    title: 'Internship at UR Hitamo Space',
-    position: 'Frontend Developer & Documentalist Intern',
-    desc: 'Developed an Event Management System using Next.js, Prisma, and Tailwind. Collaborated in a 4-member dev team to deliver high-quality features.',
+    year: "2025",
+    title: "Internship at UR Hitamo Space",
+    position: "Frontend Developer & Documentalist Intern",
+    desc: "Developed Event Management System with Next.js, Prisma, and Tailwind. Collaborated in a 4-member dev team.",
     icon: <FaBriefcase />,
-    color: 'bg-primary text-white',
+    tech: ["Next.js", "Prisma", "Tailwind", "Framer Motion"],
+    details: "Focused on frontend pages, event scheduling features, and documentation of system modules."
   },
   {
-    year: '2024',
-    title: 'University Class Projects',
-    position: 'Student Developer',
-    desc: 'Built multiple web applications and dashboards using React and Tailwind, including a voting system and Explore Hub.',
+    year: "2024",
+    title: "University Class Projects",
+    position: "Student Developer",
+    desc: "Developed multiple web apps and dashboards using React & Tailwind, including a voting system and ExploreHub.",
     icon: <FaGraduationCap />,
-    color: 'bg-accent text-white',
+    tech: ["React", "Tailwind", "JavaScript", "Firebase"],
+    details: "Implemented user authentication, CRUD operations, and responsive UI for multiple university projects."
   },
   {
-    year: '2023',
-    title: 'Freelance Web Developer',
-    position: 'React & Node.js Developer',
-    desc: 'Delivered websites, e-commerce platforms, and API integrations for local clients, including an advanced hotel management system.',
+    year: "2023",
+    title: "Freelance Web Developer",
+    position: "React & Node.js Developer",
+    desc: "Delivered small business websites, e-commerce platforms, and API integrations for local clients, including an advanced hotel management system.",
     icon: <FaStar />,
-    color: 'bg-yellow-500 text-white',
+    tech: ["React", "Node.js", "Express", "MongoDB", "Tailwind"],
+    details: "Focused on full-stack development with responsive UI, secure authentication, and online payments."
   },
   {
-    year: '2022',
-    title: 'Personal Projects & Open Source',
-    position: 'Full-Stack Developer',
-    desc: 'Built hobby projects and contributed to open-source projects on GitHub to enhance coding skills and portfolio.',
+    year: "2022",
+    title: "Personal Projects & Open Source",
+    position: "Full-Stack Developer",
+    desc: "Built hobby projects and contributed to open-source projects on GitHub to improve coding skills.",
     icon: <FaLaptopCode />,
-    color: 'bg-green-500 text-white',
-  },
+    tech: ["React", "Node.js", "MongoDB", "Tailwind"],
+    details: "Explored APIs, GitHub collaboration, and improving code quality through best practices."
+  }
 ];
 
 export default function ExperienceTimeline() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+
   return (
-    <div className="relative border-l-4 border-primary ml-6 pl-6">
+    <div className="relative ml-4 border-l-4 border-gradient-to-b from-primary to-accent">
       {experiences.map((exp, index) => (
         <motion.div
           key={index}
-          initial={{ opacity: 0, x: -50 }}
+          initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
           whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: index * 0.3 }}
-          className="mb-12 relative"
+          transition={{ duration: 0.6, delay: index * 0.2 }}
+          className="mb-12 ml-6 relative cursor-pointer hover:scale-105 hover:shadow-xl transition-transform duration-300 rounded-lg p-4 bg-lightBg dark:bg-[#111]"
+          onClick={() => setActiveIndex(index === activeIndex ? null : index)}
         >
-          {/* Icon */}
-          <span className={`absolute -left-8 top-0 p-3 rounded-full flex items-center justify-center ${exp.color}`}>
+          <span className="absolute -left-7 top-4 text-primary text-3xl">
             {exp.icon}
           </span>
+          <h3 className="text-xl md:text-2xl font-semibold text-darkText dark:text-white">
+            {exp.title}
+          </h3>
+          <p className="text-sm md:text-base text-gray-500 dark:text-gray-300">
+            {exp.year} — {exp.position}
+          </p>
+          <p className="mt-2 text-gray-700 dark:text-gray-200 text-sm md:text-base">
+            {exp.desc}
+          </p>
 
-          {/* Card-like container */}
-          <div className="bg-gray-50 dark:bg-[#1a1a1a] p-5 rounded-lg shadow-md hover:shadow-lg transition">
-            <h3 className="text-2xl font-bold text-darkText dark:text-white">{exp.title}</h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{exp.year} — {exp.position}</p>
-            <p className="mt-3 text-gray-700 dark:text-gray-200 leading-relaxed">{exp.desc}</p>
+          {/* Tech Badges */}
+          <div className="mt-3 flex flex-wrap gap-2">
+            {exp.tech.map((tech, idx) => (
+              <span
+                key={idx}
+                className="bg-accent/20 dark:bg-primary/30 text-accent dark:text-primary text-xs md:text-sm px-2 py-1 rounded-full font-medium"
+              >
+                {tech}
+              </span>
+            ))}
           </div>
+
+          {/* Expandable Details */}
+          {activeIndex === index && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              transition={{ duration: 0.3 }}
+              className="mt-3 text-gray-600 dark:text-gray-400 text-sm md:text-base bg-gray-50 dark:bg-gray-800 p-3 rounded"
+            >
+              {exp.details}
+            </motion.div>
+          )}
         </motion.div>
       ))}
     </div>
