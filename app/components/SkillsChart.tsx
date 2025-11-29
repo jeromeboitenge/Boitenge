@@ -1,45 +1,44 @@
 "use client";
 
-import {
-  Radar,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer } from "recharts";
+import { motion } from "framer-motion";
 
-const data = [
-  { skill: "React", level: 90 },
-  { skill: "Next.js", level: 85 },
-  { skill: "Tailwind", level: 80 },
-  { skill: "Node.js", level: 75 },
-  { skill: "MongoDB", level: 70 },
+const skills = [
+  { subject: "React", A: 90 },
+  { subject: "Next.js", A: 85 },
+  { subject: "Tailwind", A: 80 },
+  { subject: "Node.js", A: 75 },
+  { subject: "MongoDB", A: 70 },
 ];
 
 export default function SkillsChart() {
   return (
-    <div className="w-full h-80 bg-lightBg dark:bg-[#111] rounded-lg shadow-md p-4">
-      <h3 className="text-xl font-semibold text-center mb-4 text-darkText dark:text-white">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.8 }}
+      className="w-full max-w-md mx-auto p-6 bg-lightBg dark:bg-darkText rounded-xl shadow-lg"
+    >
+      <h2 className="text-center text-darkText dark:text-lightBg font-bold text-xl mb-4">
         Skill Strength Overview
-      </h3>
+      </h2>
 
-      <ResponsiveContainer width="100%" height="100%">
-        <RadarChart data={data}>
-          <PolarGrid stroke="#6C63FF" />
-          <PolarAngleAxis dataKey="skill" stroke="#00C9FF" />
-          <PolarRadiusAxis angle={30} domain={[0, 100]} />
-          <Tooltip />
+      <ResponsiveContainer width="100%" height={350}>
+        <RadarChart cx="50%" cy="50%" outerRadius="70%" data={skills}>
+          <PolarGrid stroke="rgba(0,201,255,0.4)" />
+          <PolarAngleAxis
+            dataKey="subject"
+            tick={{ fill: "#00C9FF", fontSize: 14 }}
+          />
           <Radar
-            name="Skill Level"
-            dataKey="level"
+            name="Skills"
+            dataKey="A"
             stroke="#6C63FF"
             fill="#6C63FF"
-            fillOpacity={0.5}
+            fillOpacity={0.4}
           />
         </RadarChart>
       </ResponsiveContainer>
-    </div>
+    </motion.div>
   );
 }

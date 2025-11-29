@@ -1,90 +1,79 @@
 "use client";
-import { motion } from "framer-motion";
+
 import { useState } from "react";
+import { motion } from "framer-motion";
 import SkillCard from "../components/SkillCard";
 import SkillsChart from "../components/SkillsChart";
 import Certificates from "../components/Certificates";
 
-// Icons
-import {
-  FaReact,
-  FaNodeJs,
-  FaGitAlt,
-  FaLinux,
-  FaHtml5,
-  FaCss3Alt,
-} from "react-icons/fa";
-import {
-  SiNextdotjs,
-  SiTailwindcss,
-  SiExpress,
-  SiNestjs,
-  SiMongodb,
-  SiMysql,
-  SiPostman,
-  SiVscode,
-} from "react-icons/si";
-
-const skillData = {
-  Frontend: [
-    { name: "React", level: 90, icon: <FaReact />, experience: "3 years building UI apps" },
-    { name: "Next.js", level: 85, icon: <SiNextdotjs />, experience: "SEO + SSR websites" },
-    { name: "Tailwind CSS", level: 90, icon: <SiTailwindcss />, experience: "Fast UI development" },
-    { name: "HTML", level: 95, icon: <FaHtml5 />, experience: "Strong semantic HTML" },
-    { name: "CSS", level: 92, icon: <FaCss3Alt />, experience: "Animations + Responsive Design" },
-  ],
-  Backend: [
-    { name: "Node.js", level: 80, icon: <FaNodeJs />, experience: "REST APIs & Authentication" },
-    { name: "Express.js", level: 78, icon: <SiExpress />, experience: "Backend routing & middleware" },
-    { name: "NestJS", level: 70, icon: <SiNestjs />, experience: "Structured scalable APIs" },
-  ],
-  Databases: [
-    { name: "MongoDB", level: 85, icon: <SiMongodb />, experience: "MERN stack experience" },
-    { name: "MySQL", level: 82, icon: <SiMysql />, experience: "Relational DB models" },
-  ],
-  Tools: [
-    { name: "Git", level: 92, icon: <FaGitAlt />, experience: "Professional collaboration" },
-    { name: "VS Code", level: 95, icon: <SiVscode />, experience: "Daily coding environment" },
-    { name: "Ubuntu Linux", level: 88, icon: <FaLinux />, experience: "Servers & CLI tools" },
-    { name: "Postman", level: 90, icon: <SiPostman />, experience: "API testing & debugging" },
-  ],
+const skills = {
+  Frontend: ['React', 'Next.js', 'Tailwind CSS', 'HTML', 'CSS'],
+  Backend: ['Node.js', 'Express.js', 'NestJS'],
+  Databases: ['MongoDB', 'MySQL', 'Prisma', 'Neon'],
+  Tools: ['Git', 'Postman', 'VS Code', 'Ubuntu Linux'],
 };
 
+const filters = ["All", ...Object.keys(skills)];
+
 export default function Skills() {
-  const [selectedCategory, setSelectedCategory] = useState("Frontend");
+  const [activeFilter, setActiveFilter] = useState("All");
+
+  const filteredSkills =
+    activeFilter === "All"
+      ? Object.entries(skills)
+      : Object.entries(skills).filter(([category]) => category === activeFilter);
 
   return (
-    <section id="skills" className="max-w-7xl mx-auto py-20 px-4 md:px-8">
-      <motion.h2
-        className="text-4xl font-bold text-center mb-12"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-      >
-        Skills & Expertise 🚀
-      </motion.h2>
+    <section className="max-w-7xl mx-auto py-20 px-4 md:px-8">
+      <h2 className="text-4xl font-bold text-center text-darkText dark:text-white mb-8">
+        My Skills
+      </h2>
 
-      <div className="flex justify-center gap-3 mb-10">
-        {Object.keys(skillData).map((category) => (
-          <button
-            key={category}
-            onClick={() => setSelectedCategory(category)}
-            className={`px-5 py-2 rounded-full text-white 
-              ${selectedCategory === category ? "bg-primary" : "bg-accent"}`}
+      {/* Filter Buttons */}
+      <div className="flex flex-wrap justify-center gap-3 mb-10">
+        {filters.map((filter, idx) => (
+          <motion.button
+            key={idx}
+            whileHover={{ scale: 1.1 }}
+            onClick={() => setActiveFilter(filter)}
+            className={`px-4 py-2 rounded-full font medium transition 
+              ${
+                activeFilter === filter
+                  ? "bg-primary text-white shadow-lg"
+                  : "bg-lightBg dark:bg-darkText text-darkText dark:text-white border border-primary"
+              }
+            `}
           >
-            {category}
-          </button>
+            {filter}
+          </motion.button>
         ))}
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {skillData[selectedCategory].map((skill) => (
-          <SkillCard key={skill.name} {...skill} />
+      {/* Skill Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        {filteredSkills.map(([category, list], idx) => (
+          <motion.div
+            key={category}
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: idx * 0.2 }}
+            className="bg-lightBg dark:bg-[#111] shadow-md p-6 rounded-xl"
+          >
+            <h3 className="text-xl font-semibold text-primary mb-4">{category}</h3>
+            <div className="flex flex-wrap gap-3">
+              {list.map((skill) => (
+                <SkillCard key={skill} name={skill} />
+              ))}
+            </div>
+          </motion.div>
         ))}
       </div>
 
-      <SkillsChart />
-
-      <Certificates />
+      {/* Charts & Certificates */}
+      <div className="mt-16">
+        <SkillsChart />
+        <Certificates />
+      </div>
     </section>
   );
 }
