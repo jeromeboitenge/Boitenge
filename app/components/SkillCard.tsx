@@ -1,5 +1,4 @@
 "use client";
-
 import { motion } from "framer-motion";
 import {
   SiReact,
@@ -15,10 +14,12 @@ import {
   SiPrisma,
   SiGit,
   SiPostman,
-  SiVisualstudiocode,
   SiUbuntu,
   SiNeovim,
 } from "react-icons/si";
+
+import { VscVscode } from "react-icons/vsc";
+
 
 const iconMap: Record<string, JSX.Element> = {
   React: <SiReact />,
@@ -34,13 +35,14 @@ const iconMap: Record<string, JSX.Element> = {
   MongoDB: <SiMongodb />,
   MySQL: <SiMysql />,
   Prisma: <SiPrisma />,
-  Neon: <SiNeovim />, // nearest icon for Neon DB
+  Neon: <SiNeovim />,
 
   Git: <SiGit />,
   Postman: <SiPostman />,
-  "VS Code": <SiVisualstudiocode />,
+  "VS Code": <VscVscode />,
   "Ubuntu Linux": <SiUbuntu />,
 };
+
 
 export default function SkillCard({ name }: { name: string }) {
   return (
