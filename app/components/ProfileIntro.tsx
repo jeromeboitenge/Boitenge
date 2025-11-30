@@ -55,10 +55,10 @@ export default function ProfileIntro({ showButtons = false }) {
             </button>
             <a
               href="/Nzaramyimana-Jerome.pdf"
-              download
+              target="blank"
               className="inline-flex items-center justify-center rounded-2xl border border-primary px-6 py-3 text-sm font-semibold text-primary transition hover:-translate-y-0.5 hover:bg-primary hover:text-white"
             >
-              Download CV
+              View CV
             </a>
           </div>
         )}
