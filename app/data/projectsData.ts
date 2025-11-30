@@ -54,7 +54,6 @@ export const projectsData: ProjectData[] = [
 
   },
 
-
   {
     id: 4,
     title: "AI-Driven Task Manager",
