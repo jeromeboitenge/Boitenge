@@ -41,7 +41,7 @@ export default function AboutPage() {
 
         <div className="p-6 bg-lightBg dark:bg-darkText rounded-lg shadow hover:shadow-lg transition">
           <h3 className="text-xl font-semibold mb-2">Education</h3>
-          <p>Bachelor’s in Computer Science — University of Rwanda, specializing in software systems.</p>
+          <p>Bachelor’s in Computer Science  University of Rwanda, specializing in software systems.</p>
         </div>
 
         <div className="p-6 bg-lightBg dark:bg-darkText rounded-lg shadow hover:shadow-lg transition">
