@@ -44,7 +44,7 @@ export default function ProfileIntro({ showButtons = false }) {
           Hi, I’m NZARAMYIMANA Jerome
         </h1>
         <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-          I design and engineer premium digital experiences across React, Next.js, and Node.js — blending product
+          I design and engineer premium digital experiences across React, Next.js, and Node.js blending product
           thinking, design systems, and scalable infrastructure so launches feel effortless and polished.
         </p>
 
