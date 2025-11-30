@@ -54,7 +54,7 @@ export default function ProfileIntro({ showButtons = false }) {
               Hire Me
             </button>
             <a
-              href="/Nzaramyimana Jerome.pdf"
+              href="/Nzaramyimana-Jerome.pdf"
               download
               className="inline-flex items-center justify-center rounded-2xl border border-primary px-6 py-3 text-sm font-semibold text-primary transition hover:-translate-y-0.5 hover:bg-primary hover:text-white"
             >
