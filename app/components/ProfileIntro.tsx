@@ -57,12 +57,12 @@ export default function ProfileIntro({ showButtons = false }) {
               Let's build together
             </a>
             <a
-              href="/Nzaramyimana-Jerome.pdf"
+              href="https://drive.google.com/file/d/1jhl1MrnuTMItHuivMO-jI6WLrKJlv6Bt/view?usp=sharing"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 px-8 py-3.5 text-sm font-semibold text-slate-900 dark:text-white transition-all hover:-translate-y-1 hover:bg-slate-200 dark:hover:bg-slate-700 shadow-sm"
             >
-              View Resume
+              View CV
             </a>
           </div>
         )}

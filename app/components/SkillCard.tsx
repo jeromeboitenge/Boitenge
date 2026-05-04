@@ -49,7 +49,7 @@ export default function SkillCard({ name }: { name: string }) {
     <motion.div
       whileHover={{ scale: 1.08 }}
       className="flex items-center gap-2 px-4 py-2
-      bg-lightBg dark:bg-darkText text-darkText dark:text-lightBg
+      bg-lightBg dark:bg-darkText text-lightText dark:text-darkText
       border border-primary rounded-full shadow 
       hover:shadow-lg transition cursor-pointer"
     >

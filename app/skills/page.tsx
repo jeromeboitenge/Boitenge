@@ -40,7 +40,7 @@ export default function Skills() {
               ${
                 activeFilter === filter
                   ? "bg-primary text-white shadow-lg"
-                  : "bg-lightBg dark:bg-darkText text-darkText dark:text-white border border-primary"
+                  : "bg-lightBg dark:bg-darkText text-lightText dark:text-darkText border border-primary"
               }
             `}
           >
