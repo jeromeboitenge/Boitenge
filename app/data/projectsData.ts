@@ -82,4 +82,39 @@ export const projectsData: ProjectData[] = [
     demoLink: "https://demo.votingapp.com",
 
   },
+  {
+    id: 6,
+    title: "Smart Farm IoT Portal",
+    description: "A real-time farm management dashboard connecting sensors, irrigation controls, and crop analytics for smarter agricultural operations.",
+    image: "/project-smart-farm.jpg",
+    tags: ["Next.js", "Node.js", "PostgreSQL", "Socket.io"],
+    highlights: [
+      "Reduced water usage by 27% through automated, sensor-driven irrigation rules.",
+      "Built a live feed system for farm teams to monitor fields from mobile devices.",
+    ],
+    demoLink: "https://demo.smartfarm.io",
+  },
+  {
+    id: 7,
+    title: "E-Commerce Analytics Dashboard",
+    description: "A business intelligence platform for online stores that surfaces sales, inventory, and customer behavior trends in one clean dashboard.",
+    image: "/project-ecommerce-dashboard.jpg",
+    tags: ["React", "TypeScript", "Chart.js", "Firebase"],
+    highlights: [
+      "Delivered real-time sales insights with custom alerting for low-stock events.",
+      "Improved decision-making with cohesive product and revenue forecasting visuals.",
+    ],
+    demoLink: "https://demo.analyticsdashboard.com",
+  },
 ];
+
+// Add new projects here by copying a block like:
+// {
+//   id: 8,
+//   title: "Your Project Name",
+//   description: "Short description of the product and value.",
+//   image: "/your-project-image.jpg",
+//   tags: ["React", "Node.js", "PostgreSQL"],
+//   highlights: ["Impact statement one", "Impact statement two"],
+//   demoLink: "https://yourproject.com",
+// },

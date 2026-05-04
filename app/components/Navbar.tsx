@@ -6,14 +6,15 @@ import { FaMoon, FaSun, FaBars, FaTimes } from 'react-icons/fa';
 import { useTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
+import { usePathname } from 'next/navigation';
 
 const links = [
-  { name: 'Home', href: '#home' },
-  { name: 'About', href: '#about' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Experience', href: '#experience' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/about' },
+  { name: 'Skills', href: '/skills' },
+  { name: 'Projects', href: '/projects' },
+  { name: 'Experience', href: '/experience' },
+  { name: 'Contact', href: '/contact' },
 ];
 
 export default function Navbar() {
@@ -22,6 +23,7 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState('Home');
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
@@ -33,23 +35,22 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // SCROLL SPY LOGIC
+  // Set active section based on current page
   useEffect(() => {
-    const sections = document.querySelectorAll('section[id]');
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { threshold: 0.6 }
-    );
-
-    sections.forEach((sec) => observer.observe(sec));
-    return () => observer.disconnect();
-  }, []);
+    if (pathname === '/') {
+      setActiveSection('Home');
+    } else if (pathname === '/about') {
+      setActiveSection('About');
+    } else if (pathname === '/skills') {
+      setActiveSection('Skills');
+    } else if (pathname === '/projects') {
+      setActiveSection('Projects');
+    } else if (pathname === '/experience') {
+      setActiveSection('Experience');
+    } else if (pathname === '/contact') {
+      setActiveSection('Contact');
+    }
+  }, [pathname]);
 
   if (!mounted) return null;
 
@@ -75,7 +76,7 @@ export default function Navbar() {
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-1 items-center bg-lightBg/50 dark:bg-darkBg/50 backdrop-blur-md px-2 py-1 rounded-full border border-slate-200 dark:border-slate-800">
           {links.map((link) => (
-            <a
+            <Link
               key={link.name}
               href={link.href}
               className={clsx(
@@ -86,7 +87,7 @@ export default function Navbar() {
               )}
             >
               {link.name}
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -100,9 +101,9 @@ export default function Navbar() {
             {theme === 'dark' ? <FaSun className="text-amber-400" /> : <FaMoon />}
           </button>
           
-          <a href="#contact" className="px-5 py-2 rounded-full bg-primary text-white text-sm font-medium hover:bg-primary-600 transition-colors shadow-lg shadow-primary/20">
+          <Link href="/contact" className="px-5 py-2 rounded-full bg-primary text-white text-sm font-medium hover:bg-primary-600 transition-colors shadow-lg shadow-primary/20">
             Let's Talk
-          </a>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -129,7 +130,7 @@ export default function Navbar() {
             className="absolute top-20 left-4 right-4 glass-card p-4 rounded-3xl flex flex-col space-y-2 md:hidden"
           >
             {links.map((link) => (
-              <a
+              <Link
                 key={link.name}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
@@ -141,7 +142,7 @@ export default function Navbar() {
                 )}
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
             <a 
               href="#contact" 
