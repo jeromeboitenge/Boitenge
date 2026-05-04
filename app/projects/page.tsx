@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import ProjectCard from '../components/ProjectCard';
 import { ProjectData, projectsData } from '../data/projectsData'; 
 import { ArrowRight, ArrowLeft } from 'lucide-react'; 
@@ -21,6 +21,37 @@ export default function ProjectsPage() {
   const [showAll, setShowAll] = useState(false);
   const [draft, setDraft] = useState(emptyDraft);
   const [previewProjects, setPreviewProjects] = useState<ProjectData[]>([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showLoginForm, setShowLoginForm] = useState(false);
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [authError, setAuthError] = useState('');
+
+  useEffect(() => {
+    const storedAuth = typeof window !== 'undefined' ? localStorage.getItem('projectEditorAuth') : null;
+    if (storedAuth === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLoginSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!loginEmail.trim() || !loginPassword.trim()) {
+      setAuthError('Please enter both email and password.');
+      return;
+    }
+
+    setIsAuthenticated(true);
+    localStorage.setItem('projectEditorAuth', 'true');
+    setAuthError('');
+    setShowLoginForm(false);
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem('projectEditorAuth');
+  };
 
   const allProjects = [...projectsData, ...previewProjects];
   const projectsToShow = showAll
@@ -56,41 +87,98 @@ export default function ProjectsPage() {
 
         {/* === Conditional Buttons (Styling Updated for Dark Mode) === */}
         <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            {/* 1. View All Button (Primary/Accent Style - already fine) */}
-            {isMoreAvailable && (
-              <button
-                onClick={() => setShowAll(true)}
-                className="px-8 py-3 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition-all shadow-lg hover:shadow-primary/25 flex items-center gap-2"
-              >
-                View All Projects <ArrowRight size={18} />
-              </button>
-            )}
+          <button
+            type="button"
+            onClick={() => {
+              if (isAuthenticated) {
+                handleLogout();
+              } else {
+                setShowLoginForm((current) => !current);
+              }
+            }}
+            className="px-8 py-3 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition-all shadow-lg hover:shadow-primary/25"
+          >
+            {isAuthenticated ? 'Logout from project editor' : showLoginForm ? 'Cancel login' : 'Login to edit projects'}
+          </button>
 
-            {/* 2. View Less Button (Secondary/Outline Style) */}
-            {isViewLessAvailable && (
-              <button
-                onClick={() => {
-                  setShowAll(false);
-                  document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="px-8 py-3 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold hover:border-primary hover:text-primary transition-colors flex items-center gap-2 shadow-md"
-              >
-                <ArrowLeft size={18} /> View Less
-              </button>
-            )}
+          {isAuthenticated && isMoreAvailable && (
+            <button
+              onClick={() => setShowAll(true)}
+              className="px-8 py-3 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition-all shadow-lg hover:shadow-primary/25 flex items-center gap-2"
+            >
+              View All Projects <ArrowRight size={18} />
+            </button>
+          )}
+
+          {isAuthenticated && isViewLessAvailable && (
+            <button
+              onClick={() => {
+                setShowAll(false);
+                document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="px-8 py-3 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold hover:border-primary hover:text-primary transition-colors flex items-center gap-2 shadow-md"
+            >
+              <ArrowLeft size={18} /> View Less
+            </button>
+          )}
         </div>
 
+        {!isAuthenticated && showLoginForm && (
+          <div className="mx-auto mt-6 max-w-xl rounded-[2rem] border border-slate-200 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-950">
+            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-primary/80">Secure access</p>
+            <h3 className="mt-2 text-xl font-semibold text-slate-900 dark:text-white">Login to manage your projects</h3>
+            {authError && <p className="mt-3 text-sm text-red-500">{authError}</p>}
+            <form onSubmit={handleLoginSubmit} className="mt-6 grid gap-4">
+              <label className="grid gap-2 text-sm text-slate-700 dark:text-slate-200">
+                Email address
+                <input
+                  value={loginEmail}
+                  onChange={(event) => setLoginEmail(event.target.value)}
+                  placeholder="you@example.com"
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                />
+              </label>
+              <label className="grid gap-2 text-sm text-slate-700 dark:text-slate-200">
+                Password
+                <input
+                  type="password"
+                  value={loginPassword}
+                  onChange={(event) => setLoginPassword(event.target.value)}
+                  placeholder="Enter password"
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                />
+              </label>
+              <button
+                type="submit"
+                className="w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition hover:bg-primary/90"
+              >
+                Login
+              </button>
+            </form>
+          </div>
+        )}
+
         <div className="mt-14 grid gap-10 xl:grid-cols-[1.4fr_1fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-slate-50 p-8 dark:border-slate-800 dark:bg-slate-950">
-            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-primary/80">
-              Add a Project
-            </p>
-            <h2 className="mt-3 text-2xl font-bold text-slate-900 dark:text-white">
-              Submit project details instantly.
-            </h2>
-            <p className="mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300">
-              Fill the form below to preview a new project in this portfolio. To make it permanent, copy the generated project object into <code className="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-800 dark:bg-slate-800 dark:text-slate-100">app/data/projectsData.ts</code> and upload the image to <code className="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-800 dark:bg-slate-800 dark:text-slate-100">public/</code>.
-            </p>
+          <div className="relative rounded-[2rem] border border-slate-200 bg-slate-50 p-8 dark:border-slate-800 dark:bg-slate-950">
+            {!isAuthenticated && (
+              <div className="pointer-events-auto absolute inset-0 rounded-[2rem] bg-slate-950/75 backdrop-blur-sm" />
+            )}
+            <div className={`${!isAuthenticated ? 'opacity-60' : ''}`}>
+              <p className="text-sm font-semibold uppercase tracking-[0.35em] text-primary/80">
+                Add a Project
+              </p>
+              <h2 className="mt-3 text-2xl font-bold text-slate-900 dark:text-white">
+                Submit project details instantly.
+              </h2>
+              <p className="mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                Fill the form below to preview a new project in this portfolio. To make it permanent, copy the generated project object into <code className="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-800 dark:bg-slate-800 dark:text-slate-100">app/data/projectsData.ts</code> and upload the image to <code className="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-800 dark:bg-slate-800 dark:text-slate-100">public/</code>.
+              </p>
+
+              {!isAuthenticated && (
+                <p className="mt-4 rounded-3xl bg-primary/5 px-4 py-3 text-sm text-primary dark:bg-primary/10 dark:text-white">
+                  You must login before editing or adding projects.
+                </p>
+              )}
 
             <form
               onSubmit={(event) => {
@@ -116,6 +204,7 @@ export default function ProjectsPage() {
                   Project title
                   <input
                     required
+                    disabled={!isAuthenticated}
                     value={draft.title}
                     onChange={(event) => setDraft({ ...draft, title: event.target.value })}
                     placeholder="E-Commerce Analytics Dashboard"
@@ -126,6 +215,7 @@ export default function ProjectsPage() {
                   Demo link
                   <input
                     required
+                    disabled={!isAuthenticated}
                     value={draft.demoLink}
                     onChange={(event) => setDraft({ ...draft, demoLink: event.target.value })}
                     placeholder="https://your-demo-link.com"
@@ -138,6 +228,7 @@ export default function ProjectsPage() {
                 Description
                 <textarea
                   required
+                  disabled={!isAuthenticated}
                   value={draft.description}
                   onChange={(event) => setDraft({ ...draft, description: event.target.value })}
                   placeholder="A clean dashboard that helps stores analyze revenue, inventory, and user behavior in real time."
@@ -150,6 +241,7 @@ export default function ProjectsPage() {
                 <label className="grid gap-2 text-sm text-slate-700 dark:text-slate-200">
                   Tags (comma separated)
                   <input
+                    disabled={!isAuthenticated}
                     value={draft.tags}
                     onChange={(event) => setDraft({ ...draft, tags: event.target.value })}
                     placeholder="React, TypeScript, Firebase"
@@ -160,6 +252,7 @@ export default function ProjectsPage() {
                   Image path
                   <input
                     required
+                    disabled={!isAuthenticated}
                     value={draft.image}
                     onChange={(event) => setDraft({ ...draft, image: event.target.value })}
                     placeholder="/your-project-image.jpg"
@@ -171,6 +264,7 @@ export default function ProjectsPage() {
               <label className="grid gap-2 text-sm text-slate-700 dark:text-slate-200">
                 Highlights (comma separated)
                 <input
+                  disabled={!isAuthenticated}
                   value={draft.highlights}
                   onChange={(event) => setDraft({ ...draft, highlights: event.target.value })}
                   placeholder="Saved 30% dev time,Improved mobile performance"
@@ -180,11 +274,13 @@ export default function ProjectsPage() {
 
               <button
                 type="submit"
-                className="w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition hover:bg-primary/90"
+                disabled={!isAuthenticated}
+                className="w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Preview this project
               </button>
             </form>
+            </div>
           </div>
 
           <div className="rounded-[1.75rem] bg-slate-900 p-6 text-slate-100 shadow-xl shadow-slate-900/30">
