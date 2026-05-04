@@ -1,80 +1,80 @@
 "use client";
 
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  LabelList,
-  Rectangle,
-} from "recharts";
 import { motion } from "framer-motion";
+import { FaReact, FaNodeJs, FaDatabase, FaToolbox } from "react-icons/fa";
+import { SiNextdotjs, SiTailwindcss, SiMongodb, SiTypescript } from "react-icons/si";
 
-const skills = [
-  { name: "React", level: 90 },
-  { name: "Next.js", level: 85 },
-  { name: "Tailwind", level: 80 },
-  { name: "Node.js", level: 75 },
-  { name: "MongoDB", level: 70 },
+const skillCategories = [
+  {
+    title: "Frontend Development",
+    icon: <FaReact className="text-4xl text-sky-400 mb-4" />,
+    skills: ["React", "Next.js", "Tailwind CSS", "TypeScript", "Framer Motion"],
+    colSpan: "md:col-span-2",
+  },
+  {
+    title: "Backend & APIs",
+    icon: <FaNodeJs className="text-4xl text-green-500 mb-4" />,
+    skills: ["Node.js", "Express", "RESTful APIs", "GraphQL"],
+    colSpan: "md:col-span-1",
+  },
+  {
+    title: "Databases",
+    icon: <FaDatabase className="text-4xl text-blue-500 mb-4" />,
+    skills: ["MongoDB", "PostgreSQL", "Prisma ORM", "Redis"],
+    colSpan: "md:col-span-1",
+  },
+  {
+    title: "Tools & DevOps",
+    icon: <FaToolbox className="text-4xl text-orange-500 mb-4" />,
+    skills: ["Git & GitHub", "Docker", "AWS / Vercel", "CI/CD"],
+    colSpan: "md:col-span-2",
+  },
 ];
 
 export default function SkillsChart() {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.8 }}
-      className="w-full max-w-3xl mx-auto p-8 
-      bg-gradient-to-br from-lightBg to-white dark:from-darkText dark:to-[#222]
-      rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800"
-    >
-      <motion.h2
+    <div className="w-full max-w-6xl mx-auto py-10">
+      <motion.div
         initial={{ y: 20, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="text-center font-extrabold text-2xl md:text-3xl 
-      text-darkText dark:text-lightBg mb-8 tracking-wide"
+        viewport={{ once: true }}
+        className="text-center mb-16"
       >
-        💡 Skill Strength Overview
-      </motion.h2>
+        <span className="text-primary font-semibold tracking-wider uppercase text-sm">Technical Arsenal</span>
+        <h2 className="text-3xl md:text-5xl font-display font-bold text-slate-900 dark:text-white mt-2">
+          Skills & Technologies
+        </h2>
+      </motion.div>
 
-      <ResponsiveContainer width="100%" height={330}>
-        <BarChart data={skills} layout="vertical" barCategoryGap="25%">
-          <YAxis
-            dataKey="name"
-            type="category"
-            tick={{ fill: "#00C9FF", fontSize: 15, fontWeight: 600 }}
-            width={100}
-          />
-          <XAxis type="number" domain={[0, 100]} hide />
-          <Tooltip
-            cursor={{ fill: "transparent" }}
-            contentStyle={{
-              background: "#111",
-              borderRadius: "10px",
-              border: "none",
-              color: "#fff",
-              padding: "8px 12px",
-            }}
-          />
-          <Bar
-            dataKey="level"
-            radius={[10, 10, 10, 10]}
-            fill="#6C63FF"
-            className="transition-all duration-300"
-            activeBar={<Rectangle fill="#00C9FF" />}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {skillCategories.map((category, idx) => (
+          <motion.div
+            key={category.title}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: idx * 0.1 }}
+            viewport={{ once: true }}
+            className={`glass-card rounded-[2rem] p-8 flex flex-col hover:-translate-y-1 transition-transform duration-300 ${category.colSpan}`}
           >
-            <LabelList
-              dataKey="level"
-              position="right"
-              style={{ fill: "#6C63FF", fontWeight: 600 }}
-              formatter={(val) => `${val}%`}
-            />
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
-    </motion.div>
+            {category.icon}
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">
+              {category.title}
+            </h3>
+            
+            <div className="flex flex-wrap gap-3 mt-auto">
+              {category.skills.map((skill, sIdx) => (
+                <span
+                  key={sIdx}
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-primary dark:hover:border-primary hover:text-primary dark:hover:text-primary transition-colors cursor-default"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
   );
 }

@@ -3,11 +3,24 @@ import { ReactNode } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { ThemeProvider } from "next-themes";
+import { Inter, Outfit } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+});
 
 export const metadata = {
   title: "Jerome Nzaramyimana | Software Engineer",
   description:
-    "Jerome Nzaramyimana | Software Engineer | MERN Developer |Hardware And Software Maintenance|system Analyst| Rwanda",
+    "Jerome Nzaramyimana | Software Engineer | MERN Developer | Hardware And Software Maintenance | System Analyst | Rwanda",
   keywords: [
     "Jerome Boitenge",
     "Jerome Nzaramyimana",
@@ -20,7 +33,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${outfit.variable}`}>
       <head>
         <meta
           name="google-site-verification"
@@ -28,10 +41,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
 
-      <body className="font-poppins bg-lightBg dark:bg-darkText">
-        <ThemeProvider attribute="class" defaultTheme="light">
+      <body className="font-sans bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText transition-colors duration-300">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Navbar />
-          <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen pt-20">{children}</main>
           <Footer />
         </ThemeProvider>
       </body>

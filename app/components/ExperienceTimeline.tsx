@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { FaBriefcase, FaLaptopCode, FaGraduationCap, FaStar } from "react-icons/fa";
-import { useState } from "react";
 
 const experiences = [
   {
@@ -12,7 +11,6 @@ const experiences = [
     desc: "Developed Event Management System with Next.js, Prisma, and Tailwind. Collaborated in a 4-member dev team.",
     icon: <FaBriefcase />,
     tech: ["Next.js", "Prisma", "Tailwind", "Framer Motion"],
-    details: "Focused on frontend pages, event scheduling features, and documentation of system modules."
   },
   {
     year: "2024",
@@ -21,7 +19,6 @@ const experiences = [
     desc: "Developed multiple web apps and dashboards using React & Tailwind, including a voting system and ExploreHub.",
     icon: <FaGraduationCap />,
     tech: ["React", "Tailwind", "JavaScript", "Firebase"],
-    details: "Implemented user authentication, CRUD operations, and responsive UI for multiple university projects."
   },
   {
     year: "2023",
@@ -30,7 +27,6 @@ const experiences = [
     desc: "Delivered small business websites, e-commerce platforms, and API integrations for local clients, including an advanced hotel management system.",
     icon: <FaStar />,
     tech: ["React", "Node.js", "Express", "MongoDB", "Tailwind"],
-    details: "Focused on full-stack development with responsive UI, secure authentication, and online payments."
   },
   {
     year: "2022",
@@ -39,73 +35,73 @@ const experiences = [
     desc: "Built hobby projects and contributed to open-source projects on GitHub to improve coding skills.",
     icon: <FaLaptopCode />,
     tech: ["React", "Node.js", "MongoDB", "Tailwind"],
-    details: "Explored APIs, GitHub collaboration, and improving code quality through best practices."
   }
 ];
 
 export default function ExperienceTimeline() {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
   return (
-    <div className="relative ml-4 border-l-4 border-primary">
-      {experiences.map((exp, index) => (
-        <motion.div
-          key={index}
-          initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: index * 0.2 }}
-          className="mb-12 ml-6 relative cursor-pointer hover:scale-105 hover:shadow-lg transition-transform duration-300 rounded-lg p-6 bg-lightBg dark:bg-[#111]"
-          onClick={() => setActiveIndex(index === activeIndex ? null : index)}
-        >
-          {/* Icon */}
-          <span className="absolute -left-8 top-4 text-primary text-3xl">
-            {exp.icon}
-          </span>
+    <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6">
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        className="text-center mb-16"
+      >
+        <span className="text-primary font-semibold tracking-wider uppercase text-sm">Career Journey</span>
+        <h2 className="text-3xl md:text-5xl font-display font-bold text-slate-900 dark:text-white mt-2">
+          My Experience
+        </h2>
+      </motion.div>
 
-          {/* Title */}
-          <h3 className="text-xl md:text-2xl font-semibold text-darkText dark:text-white group-hover:text-primary transition-colors">
-            {exp.title}
-          </h3>
+      <div className="relative border-l border-slate-200 dark:border-slate-800 ml-3 md:ml-6 space-y-12">
+        {experiences.map((exp, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: index * 0.1 }}
+            viewport={{ once: true }}
+            className="relative pl-8 md:pl-12"
+          >
+            {/* Glowing Node */}
+            <div className="absolute -left-5 top-1 bg-white dark:bg-slate-900 border-4 border-primary w-10 h-10 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,98,143,0.4)] z-10">
+              <span className="text-primary text-sm">{exp.icon}</span>
+            </div>
 
-          {/* Position & Year */}
-          <p className="text-sm md:text-base text-gray-500 dark:text-gray-300 mt-1">
-            {exp.year} — {exp.position}
-          </p>
+            <div className="glass-card p-6 md:p-8 rounded-[2rem] group hover:-translate-y-1 transition-transform duration-300">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
+                <div>
+                  <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                    {exp.title}
+                  </h3>
+                  <p className="text-primary font-medium mt-1">
+                    {exp.position}
+                  </p>
+                </div>
+                <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-sm font-semibold text-slate-600 dark:text-slate-300 w-fit">
+                  {exp.year}
+                </span>
+              </div>
 
-          {/* Description */}
-          <p className="mt-2 text-gray-700 dark:text-gray-200 text-sm md:text-base">
-            {exp.desc}
-          </p>
+              <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
+                {exp.desc}
+              </p>
 
-          {/* Tech Badges */}
-<div className="mt-3 flex flex-wrap gap-2">
-  {exp.tech.map((tech, idx) => (
-    <span
-      key={idx}
-      className="bg-primary/20 dark:bg-primary/30 text-accent dark:text-primary text-xs md:text-sm px-2 py-1 rounded-full font-medium"
-    >
-      {tech}
-    </span>
-  ))}
-</div>
-
-
-          {/* Expandable Details */}
-          {activeIndex === index && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              transition={{ duration: 0.3 }}
-              className="mt-3 text-gray-600 dark:text-gray-400 text-sm md:text-base bg-primary/10 dark:bg-accent/20 p-3 rounded"
-            >
-              {exp.details}
-            </motion.div>
-          )}
-
-          {/* Accent hover line */}
-          <div className="absolute left-0 top-0 h-full w-1 bg-accent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded"></div>
-        </motion.div>
-      ))}
+              <div className="flex flex-wrap gap-2">
+                {exp.tech.map((tech, idx) => (
+                  <span
+                    key={idx}
+                    className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-semibold uppercase tracking-wider"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 }

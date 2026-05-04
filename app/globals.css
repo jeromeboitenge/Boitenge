@@ -2,14 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html.dark {
+    color-scheme: dark;
+  }
+  
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
 
-html.dark {
-  color-scheme: dark;
-}
-html {
-  font-size: 18px; /* Default is 16px; increasing by ~2px */
+  body {
+    @apply bg-lightBg text-lightText antialiased selection:bg-primary selection:text-white dark:bg-darkBg dark:text-darkText;
+  }
 }
 
-body {
-  @apply font-poppins bg-lightBg text-darkText;
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 dark:bg-slate-900/70 dark:border-slate-800/50 shadow-lg;
+  }
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-lg border border-white/40 dark:bg-slate-800/80 dark:border-slate-700/50 shadow-xl;
+  }
 }
