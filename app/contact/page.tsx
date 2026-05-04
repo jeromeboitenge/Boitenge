@@ -83,7 +83,7 @@ export default function ContactPage() {
           transition={{ duration: 0.7 }}
           className="bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-700 shadow-lg rounded-2xl p-8 flex flex-col gap-6"
         >
-          <h3 className="text-3xl font-semibold text-darkText dark:text-white">Let’s Talk Via</h3>
+          <h3 className="text-3xl font-semibold text-slate-900 dark:text-white">Let’s Talk Via</h3>
          
 
           {/* Contact Links */}
@@ -103,7 +103,7 @@ export default function ContactPage() {
                 target="_blank"
               >
                 <span className={`${item.color} text-3xl`}>{item.icon}</span>
-                <span className="text-lg text-darkText dark:text-white transition group-hover:text-primary">
+                <span className="text-lg text-slate-900 dark:text-white transition group-hover:text-primary">
                   {item.label}
                 </span>
               </motion.a>
