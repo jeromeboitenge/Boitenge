@@ -36,11 +36,11 @@ export default function Skills() {
             key={idx}
             whileHover={{ scale: 1.1 }}
             onClick={() => setActiveFilter(filter)}
-            className={`px-4 py-2 rounded-full font medium transition 
+            className={`px-4 py-2 rounded-full font-medium transition 
               ${
                 activeFilter === filter
                   ? "bg-primary text-white shadow-lg"
-                  : "bg-lightBg dark:bg-darkText text-lightText dark:text-darkText border border-primary"
+                  : "bg-lightBg dark:bg-darkCard text-lightText dark:text-darkText border border-primary"
               }
             `}
           >
