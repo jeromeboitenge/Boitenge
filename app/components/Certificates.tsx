@@ -62,7 +62,7 @@ const certificates = [
 export default function Certificates() {
   return (
     <div className="mt-16">
-      <div className="grid gap-10 xl:grid-cols-[1.1fr_0.9fr]">
+      <div className="grid gap-10 xl:grid-cols-[1.05fr_0.95fr]">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -71,61 +71,80 @@ export default function Certificates() {
           className="rounded-[2rem] border border-slate-200 bg-slate-50 p-8 shadow-xl shadow-slate-200/40 dark:border-slate-800 dark:bg-slate-950 dark:shadow-slate-900/40"
         >
           <div className="flex flex-col gap-6">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.35em] text-primary/80">
-                Certifications Profile
-              </p>
-              <h2 className="mt-4 text-3xl font-bold text-slate-900 dark:text-white">
-                {profile.name}
-              </h2>
-              <p className="mt-2 text-sm font-semibold text-primary">
-                {profile.title}
-              </p>
+            <div className="grid gap-4 sm:grid-cols-[1fr_auto] items-start">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.35em] text-primary/80">
+                  Certifications Profile
+                </p>
+                <h2 className="mt-4 text-3xl font-bold text-slate-900 dark:text-white">
+                  {profile.name}
+                </h2>
+                <p className="mt-3 max-w-xl text-sm font-semibold text-slate-700 dark:text-slate-300">
+                  {profile.title}
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+                  4 Certificates
+                </span>
+                <a
+                  href="https://boitenge.vercel.app"
+                  className="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
+                >
+                  View portfolio
+                </a>
+              </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl bg-white p-5 shadow-sm dark:bg-slate-900">
-                <h3 className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500 dark:text-slate-400">
-                  Contact
-                </h3>
-                <ul className="mt-4 space-y-3 text-sm text-slate-700 dark:text-slate-300">
+            <div className="grid gap-4 lg:grid-cols-2">
+              <div className="rounded-3xl bg-white p-6 shadow-sm dark:bg-slate-900">
+                <div className="flex items-center justify-between gap-4">
+                  <h3 className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500 dark:text-slate-400">
+                    Contact
+                  </h3>
+                  <span className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400 dark:text-slate-500">
+                    Profile
+                  </span>
+                </div>
+                <ul className="mt-5 space-y-3 text-sm text-slate-700 dark:text-slate-300">
                   <li>
-                    <span className="font-semibold">Email:</span> {profile.email}
+                    <span className="font-semibold text-slate-900 dark:text-white">Email:</span> {profile.email}
                   </li>
                   <li>
-                    <span className="font-semibold">Phone:</span> {profile.phone}
+                    <span className="font-semibold text-slate-900 dark:text-white">Phone:</span> {profile.phone}
                   </li>
                   <li>
-                    <span className="font-semibold">Location:</span> {profile.location}
+                    <span className="font-semibold text-slate-900 dark:text-white">Location:</span> {profile.location}
                   </li>
                   <li>
-                    <span className="font-semibold">GitHub:</span> {profile.github}
+                    <span className="font-semibold text-slate-900 dark:text-white">GitHub:</span> {profile.github}
                   </li>
                   <li>
-                    <span className="font-semibold">Portfolio:</span> {profile.portfolio}
+                    <span className="font-semibold text-slate-900 dark:text-white">Portfolio:</span> {profile.portfolio}
                   </li>
                 </ul>
               </div>
 
-              <div className="rounded-3xl bg-white p-5 shadow-sm dark:bg-slate-900">
+              <div className="rounded-3xl bg-white p-6 shadow-sm dark:bg-slate-900">
                 <h3 className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500 dark:text-slate-400">
                   Profile Summary
                 </h3>
-                <p className="mt-4 text-sm leading-7 text-slate-700 dark:text-slate-300">
+                <p className="mt-5 text-sm leading-7 text-slate-700 dark:text-slate-300">
                   {profile.summary}
                 </p>
               </div>
             </div>
 
-            <div className="rounded-3xl bg-white p-5 shadow-sm dark:bg-slate-900">
+            <div className="rounded-3xl bg-slate-100 p-6 shadow-sm dark:bg-slate-900">
               <h3 className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500 dark:text-slate-400">
                 Technical Skills
               </h3>
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-5 grid gap-2 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4">
                 {technicalSkills.map((skill) => (
                   <span
                     key={skill}
-                    className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                    className="rounded-full bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm dark:bg-slate-800 dark:text-slate-200"
                   >
                     {skill}
                   </span>

@@ -23,9 +23,14 @@ export default function ProjectsPage() {
   const [previewProjects, setPreviewProjects] = useState<ProjectData[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(false);
+  const [showSignupForm, setShowSignupForm] = useState(false);
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [signupEmail, setSignupEmail] = useState('');
+  const [signupPassword, setSignupPassword] = useState('');
+  const [signupConfirmPassword, setSignupConfirmPassword] = useState('');
   const [authError, setAuthError] = useState('');
+  const [authSuccess, setAuthSuccess] = useState('');
 
   useEffect(() => {
     const storedAuth = typeof window !== 'undefined' ? localStorage.getItem('projectEditorAuth') : null;
@@ -34,23 +39,91 @@ export default function ProjectsPage() {
     }
   }, []);
 
+  const getStoredUser = () => {
+    if (typeof window === 'undefined') return null;
+    const raw = localStorage.getItem('projectEditorUser');
+    if (!raw) return null;
+
+    try {
+      return JSON.parse(raw) as { email: string; password: string };
+    } catch {
+      return null;
+    }
+  };
+
+  const saveUser = (email: string, password: string) => {
+    localStorage.setItem('projectEditorUser', JSON.stringify({ email, password }));
+  };
+
   const handleLoginSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    setAuthError('');
+    setAuthSuccess('');
 
     if (!loginEmail.trim() || !loginPassword.trim()) {
       setAuthError('Please enter both email and password.');
       return;
     }
 
+    const storedUser = getStoredUser();
+    if (!storedUser) {
+      setAuthError('No account found yet. Please sign up first.');
+      return;
+    }
+
+    if (loginEmail.trim() !== storedUser.email || loginPassword !== storedUser.password) {
+      setAuthError('Incorrect email or password.');
+      return;
+    }
+
     setIsAuthenticated(true);
     localStorage.setItem('projectEditorAuth', 'true');
-    setAuthError('');
+    setAuthSuccess('Logged in successfully. You can now make changes.');
     setShowLoginForm(false);
+    setLoginPassword('');
+  };
+
+  const handleSignupSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setAuthError('');
+    setAuthSuccess('');
+
+    if (!signupEmail.trim() || !signupPassword.trim() || !signupConfirmPassword.trim()) {
+      setAuthError('Fill in all signup fields.');
+      return;
+    }
+
+    if (!signupEmail.includes('@') || !signupEmail.includes('.')) {
+      setAuthError('Enter a valid email address.');
+      return;
+    }
+
+    if (signupPassword.length < 6) {
+      setAuthError('Password must be at least 6 characters.');
+      return;
+    }
+
+    if (signupPassword !== signupConfirmPassword) {
+      setAuthError('Passwords do not match.');
+      return;
+    }
+
+    saveUser(signupEmail.trim(), signupPassword);
+    setIsAuthenticated(true);
+    localStorage.setItem('projectEditorAuth', 'true');
+    setAuthSuccess('Account created and logged in successfully.');
+    setShowSignupForm(false);
+    setSignupEmail('');
+    setSignupPassword('');
+    setSignupConfirmPassword('');
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('projectEditorAuth');
+    setAuthSuccess('Logged out successfully.');
   };
 
   const allProjects = [...projectsData, ...previewProjects];
@@ -94,12 +167,30 @@ export default function ProjectsPage() {
                 handleLogout();
               } else {
                 setShowLoginForm((current) => !current);
+                setShowSignupForm(false);
               }
             }}
             className="px-8 py-3 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition-all shadow-lg hover:shadow-primary/25"
           >
-            {isAuthenticated ? 'Logout from project editor' : showLoginForm ? 'Cancel login' : 'Login to edit projects'}
+            {isAuthenticated
+              ? 'Logout from project editor'
+              : showLoginForm
+              ? 'Cancel login'
+              : 'Login to edit projects'}
           </button>
+
+          {!isAuthenticated && (
+            <button
+              type="button"
+              onClick={() => {
+                setShowSignupForm((current) => !current);
+                setShowLoginForm(false);
+              }}
+              className="px-8 py-3 rounded-full border border-primary bg-white text-primary font-semibold hover:bg-primary/10 transition-all shadow-md"
+            >
+              {showSignupForm ? 'Cancel signup' : 'Sign up to edit'}
+            </button>
+          )}
 
           {isAuthenticated && isMoreAvailable && (
             <button
@@ -122,6 +213,13 @@ export default function ProjectsPage() {
             </button>
           )}
         </div>
+
+        {authSuccess && (
+          <p className="mt-4 text-center text-sm text-emerald-500">{authSuccess}</p>
+        )}
+        {authError && !showSignupForm && !showLoginForm && (
+          <p className="mt-4 text-center text-sm text-red-500">{authError}</p>
+        )}
 
         {!isAuthenticated && showLoginForm && (
           <div className="mx-auto mt-6 max-w-xl rounded-[2rem] border border-slate-200 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-950">
@@ -153,6 +251,51 @@ export default function ProjectsPage() {
                 className="w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition hover:bg-primary/90"
               >
                 Login
+              </button>
+            </form>
+          </div>
+        )}
+
+        {!isAuthenticated && showSignupForm && (
+          <div className="mx-auto mt-6 max-w-xl rounded-[2rem] border border-slate-200 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-950">
+            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-primary/80">Create access</p>
+            <h3 className="mt-2 text-xl font-semibold text-slate-900 dark:text-white">Sign up to edit portfolio content</h3>
+            {authError && <p className="mt-3 text-sm text-red-500">{authError}</p>}
+            <form onSubmit={handleSignupSubmit} className="mt-6 grid gap-4">
+              <label className="grid gap-2 text-sm text-slate-700 dark:text-slate-200">
+                Email address
+                <input
+                  value={signupEmail}
+                  onChange={(event) => setSignupEmail(event.target.value)}
+                  placeholder="you@example.com"
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                />
+              </label>
+              <label className="grid gap-2 text-sm text-slate-700 dark:text-slate-200">
+                Password
+                <input
+                  type="password"
+                  value={signupPassword}
+                  onChange={(event) => setSignupPassword(event.target.value)}
+                  placeholder="Enter password"
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                />
+              </label>
+              <label className="grid gap-2 text-sm text-slate-700 dark:text-slate-200">
+                Confirm password
+                <input
+                  type="password"
+                  value={signupConfirmPassword}
+                  onChange={(event) => setSignupConfirmPassword(event.target.value)}
+                  placeholder="Repeat password"
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                />
+              </label>
+              <button
+                type="submit"
+                className="w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition hover:bg-primary/90"
+              >
+                Sign Up
               </button>
             </form>
           </div>
