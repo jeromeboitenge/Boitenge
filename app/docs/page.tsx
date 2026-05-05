@@ -18,7 +18,7 @@ export default function DocsPage() {
     SwaggerUI({
       dom_id: '#swagger-ui',
       url: '/api/swagger.json',
-      presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+      presets: [SwaggerUI.presets.apis, SwaggerUIStandalonePreset],
       layout: 'BaseLayout',
     });
   }, [bundleLoaded, presetLoaded]);
