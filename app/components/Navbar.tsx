@@ -14,6 +14,7 @@ const links = [
   { name: 'Skills', href: '/skills' },
   { name: 'Projects', href: '/projects' },
   { name: 'Experience', href: '/experience' },
+  { name: 'Docs', href: '/docs' },
   { name: 'Contact', href: '/contact' },
 ];
 
@@ -49,6 +50,8 @@ export default function Navbar() {
       setActiveSection('Experience');
     } else if (pathname === '/contact') {
       setActiveSection('Contact');
+    } else if (pathname === '/docs') {
+      setActiveSection('Docs');
     }
   }, [pathname]);
 
