@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import ProjectCard from '../components/ProjectCard';
 import { ProjectData, projectsData } from '../data/projectsData'; 
-import { ArrowRight, ArrowLeft } from 'lucide-react'; 
+import { ArrowRight, ArrowLeft, User } from 'lucide-react'; 
 
 // Define the number of projects to show by default
 const DEFAULT_PROJECTS_COUNT = 3;
@@ -31,11 +31,31 @@ export default function ProjectsPage() {
   const [signupConfirmPassword, setSignupConfirmPassword] = useState('');
   const [authError, setAuthError] = useState('');
   const [authSuccess, setAuthSuccess] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [showAuthMenu, setShowAuthMenu] = useState(false);
+  const [editingProjectId, setEditingProjectId] = useState<number | null>(null);
 
   useEffect(() => {
     const storedAuth = typeof window !== 'undefined' ? localStorage.getItem('projectEditorAuth') : null;
     if (storedAuth === 'true') {
+      const storedUser = getStoredUser();
       setIsAuthenticated(true);
+      if (storedUser?.email) {
+        setUserEmail(storedUser.email);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      if (hash === '#login') {
+        setShowLoginForm(true);
+        setShowSignupForm(false);
+      } else if (hash === '#signup') {
+        setShowSignupForm(true);
+        setShowLoginForm(false);
+      }
     }
   }, []);
 
@@ -79,6 +99,7 @@ export default function ProjectsPage() {
 
     setIsAuthenticated(true);
     localStorage.setItem('projectEditorAuth', 'true');
+    setUserEmail(storedUser.email);
     setAuthSuccess('Logged in successfully. You can now make changes.');
     setShowLoginForm(false);
     setLoginPassword('');
@@ -113,6 +134,7 @@ export default function ProjectsPage() {
     saveUser(signupEmail.trim(), signupPassword);
     setIsAuthenticated(true);
     localStorage.setItem('projectEditorAuth', 'true');
+    setUserEmail(signupEmail.trim());
     setAuthSuccess('Account created and logged in successfully.');
     setShowSignupForm(false);
     setSignupEmail('');
@@ -123,15 +145,46 @@ export default function ProjectsPage() {
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('projectEditorAuth');
+    setUserEmail('');
     setAuthSuccess('Logged out successfully.');
   };
 
+  const handleEditPreviewProject = (project: ProjectData) => {
+    setDraft({
+      title: project.title,
+      description: project.description,
+      image: project.image,
+      tags: project.tags.join(', '),
+      highlights: project.highlights.join(', '),
+      demoLink: project.demoLink,
+    });
+    setEditingProjectId(project.id);
+    setShowAll(true);
+    setShowLoginForm(false);
+    setShowSignupForm(false);
+  };
+
+  const handleDeletePreviewProject = (id: number) => {
+    setPreviewProjects((current) => current.filter((project) => project.id !== id));
+    if (editingProjectId === id) {
+      setEditingProjectId(null);
+      setDraft(emptyDraft);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingProjectId(null);
+    setDraft(emptyDraft);
+  };
+
   const allProjects = [...projectsData, ...previewProjects];
+  const defaultVisibleCount = Math.min(DEFAULT_PROJECTS_COUNT, projectsData.length);
+  const currentVisibleCount = showAll ? allProjects.length : defaultVisibleCount + previewProjects.length;
   const projectsToShow = showAll
     ? allProjects
     : [...projectsData.slice(0, DEFAULT_PROJECTS_COUNT), ...previewProjects];
 
-  const isMoreAvailable = projectsData.length > DEFAULT_PROJECTS_COUNT && !showAll;
+  const isMoreAvailable = allProjects.length > currentVisibleCount && !showAll;
   const isViewLessAvailable = showAll;
 
   return (
@@ -140,16 +193,83 @@ export default function ProjectsPage() {
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         
         {/* === Header Section (Ensure Text is Dark Mode Ready) === */}
-        <div className="mx-auto max-w-3xl text-center space-y-6 animate-fade-up">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.4em] text-primary/70">
-            Featured Work
-          </p>
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl"> {/* ⬅️ FIX 2: Dark text for dark mode */}
-            My Projects
-          </h1>
-          <p className="text-lg text-slate-600 dark:text-gray-400 sm:text-xl"> {/* ⬅️ FIX 3: Dark text for dark mode */}
-            A collection of the software I’ve designed, developed, and deployed.
-          </p>
+        <div className="mx-auto max-w-7xl grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div className="max-w-3xl space-y-6 text-center lg:text-left animate-fade-up">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.4em] text-primary/70">
+              Featured Work
+            </p>
+            <h1 className="text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl"> {/* ⬅️ FIX 2: Dark text for dark mode */}
+              My Projects
+            </h1>
+            <p className="text-lg text-slate-600 dark:text-gray-400 sm:text-xl"> {/* ⬅️ FIX 3: Dark text for dark mode */}
+              A collection of the software I’ve designed, developed, and deployed.
+            </p>
+            <div className="mt-4 flex flex-col gap-2 text-sm text-slate-500 dark:text-slate-400 sm:flex-row sm:items-center sm:gap-6">
+              <span>Showing {currentVisibleCount} of {allProjects.length} projects</span>
+              {isMoreAvailable && <span className="font-semibold text-primary">Browse more projects below</span>}
+            </div>
+          </div>
+
+          <div className="relative flex flex-col items-center gap-3 lg:items-end lg:justify-end">
+            <button
+              type="button"
+              onClick={() => setShowAuthMenu((current) => !current)}
+              className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+              aria-label="Open login signup menu"
+            >
+              <User className="h-5 w-5" />
+            </button>
+
+            {userEmail && (
+              <span className="text-xs text-slate-500 dark:text-slate-400">{userEmail}</span>
+            )}
+
+            {showAuthMenu && (
+              <div className="absolute right-0 top-14 z-20 w-56 rounded-3xl border border-slate-200 bg-white p-4 shadow-xl dark:border-slate-800 dark:bg-slate-950">
+                {isAuthenticated ? (
+                  <div className="space-y-3">
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">Logged in as</p>
+                    <p className="truncate rounded-2xl bg-slate-100 px-3 py-2 text-sm text-slate-600 dark:bg-slate-900 dark:text-slate-300">{userEmail}</p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleLogout();
+                        setShowAuthMenu(false);
+                      }}
+                      className="w-full rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary/90"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowLoginForm(true);
+                        setShowSignupForm(false);
+                        setShowAuthMenu(false);
+                      }}
+                      className="w-full rounded-full border border-primary bg-white px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary/10"
+                    >
+                      Login
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowSignupForm(true);
+                        setShowLoginForm(false);
+                        setShowAuthMenu(false);
+                      }}
+                      className="w-full rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary/90"
+                    >
+                      Sign up
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -158,50 +278,17 @@ export default function ProjectsPage() {
           ))}
         </div>
 
-        {/* === Conditional Buttons (Styling Updated for Dark Mode) === */}
         <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-          <button
-            type="button"
-            onClick={() => {
-              if (isAuthenticated) {
-                handleLogout();
-              } else {
-                setShowLoginForm((current) => !current);
-                setShowSignupForm(false);
-              }
-            }}
-            className="px-8 py-3 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition-all shadow-lg hover:shadow-primary/25"
-          >
-            {isAuthenticated
-              ? 'Logout from project editor'
-              : showLoginForm
-              ? 'Cancel login'
-              : 'Login to edit projects'}
-          </button>
-
-          {!isAuthenticated && (
-            <button
-              type="button"
-              onClick={() => {
-                setShowSignupForm((current) => !current);
-                setShowLoginForm(false);
-              }}
-              className="px-8 py-3 rounded-full border border-primary bg-white text-primary font-semibold hover:bg-primary/10 transition-all shadow-md"
-            >
-              {showSignupForm ? 'Cancel signup' : 'Sign up to edit'}
-            </button>
-          )}
-
-          {isAuthenticated && isMoreAvailable && (
+          {isMoreAvailable && (
             <button
               onClick={() => setShowAll(true)}
               className="px-8 py-3 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition-all shadow-lg hover:shadow-primary/25 flex items-center gap-2"
             >
-              View All Projects <ArrowRight size={18} />
+              View More Projects <ArrowRight size={18} />
             </button>
           )}
 
-          {isAuthenticated && isViewLessAvailable && (
+          {isViewLessAvailable && (
             <button
               onClick={() => {
                 setShowAll(false);
@@ -326,18 +413,28 @@ export default function ProjectsPage() {
             <form
               onSubmit={(event) => {
                 event.preventDefault();
-                const nextId = allProjects.length + 1;
-                const newProject: ProjectData = {
-                  id: nextId,
+                const normalizedProject = {
+                  id: editingProjectId ?? allProjects.length + 1,
                   title: draft.title.trim(),
                   description: draft.description.trim(),
                   image: draft.image.trim() || '/your-project-image.jpg',
                   tags: draft.tags.split(',').map((tag) => tag.trim()).filter(Boolean),
                   highlights: draft.highlights.split(',').map((item) => item.trim()).filter(Boolean),
                   demoLink: draft.demoLink.trim(),
-                };
-                setPreviewProjects((current) => [...current, newProject]);
+                } as ProjectData;
+
+                if (editingProjectId !== null) {
+                  setPreviewProjects((current) =>
+                    current.map((project) =>
+                      project.id === editingProjectId ? normalizedProject : project
+                    )
+                  );
+                } else {
+                  setPreviewProjects((current) => [...current, normalizedProject]);
+                }
+
                 setDraft(emptyDraft);
+                setEditingProjectId(null);
                 setShowAll(true);
               }}
               className="mt-8 grid gap-4"
@@ -415,14 +512,67 @@ export default function ProjectsPage() {
                 />
               </label>
 
-              <button
-                type="submit"
-                disabled={!isAuthenticated}
-                className="w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Preview this project
-              </button>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                {editingProjectId !== null && (
+                  <button
+                    type="button"
+                    onClick={handleCancelEdit}
+                    className="w-full rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 sm:w-auto"
+                  >
+                    Cancel edit
+                  </button>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={!isAuthenticated}
+                  className="w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+                >
+                  {editingProjectId !== null ? 'Save project preview' : 'Preview this project'}
+                </button>
+              </div>
             </form>
+
+            {isAuthenticated && previewProjects.length > 0 && (
+              <div className="mt-8 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">Preview projects</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Manage preview items before making them permanent.</p>
+                  </div>
+                  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">{previewProjects.length} pending</span>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  {previewProjects.map((project) => (
+                    <div key={project.id} className="grid gap-3 rounded-3xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <h4 className="font-semibold text-slate-900 dark:text-white">{project.title}</h4>
+                          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400 line-clamp-2">{project.description}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleEditPreviewProject(project)}
+                            className="rounded-full border border-primary px-3 py-1 text-xs font-semibold text-primary transition hover:bg-primary/10"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeletePreviewProject(project.id)}
+                            className="rounded-full border border-red-300 px-3 py-1 text-xs font-semibold text-red-600 transition hover:bg-red-100 dark:border-red-600 dark:hover:bg-red-600/10"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             </div>
           </div>
 

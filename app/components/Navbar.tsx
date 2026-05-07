@@ -7,6 +7,7 @@ import { useTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 import { usePathname } from 'next/navigation';
+import { User } from 'lucide-react';
 
 const links = [
   { name: 'Home', href: '/' },
@@ -24,6 +25,7 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState('Home');
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [showAuthMenu, setShowAuthMenu] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -107,6 +109,36 @@ export default function Navbar() {
           <Link href="/contact" className="px-5 py-2 rounded-full bg-primary text-white text-sm font-medium hover:bg-primary-600 transition-colors shadow-lg shadow-primary/20">
             Let's Talk
           </Link>
+
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setShowAuthMenu((current) => !current)}
+              className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+              aria-label="Open login signup menu"
+            >
+              <User className="h-5 w-5" />
+            </button>
+
+            {showAuthMenu && (
+              <div className="absolute right-0 top-14 z-20 w-44 rounded-3xl border border-slate-200 bg-white p-3 shadow-xl dark:border-slate-800 dark:bg-slate-950">
+                <Link
+                  href="/projects#login"
+                  onClick={() => setShowAuthMenu(false)}
+                  className="block rounded-2xl px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-900"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/projects#signup"
+                  onClick={() => setShowAuthMenu(false)}
+                  className="mt-2 block rounded-2xl px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-900"
+                >
+                  Sign up
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Mobile Menu Button */}
