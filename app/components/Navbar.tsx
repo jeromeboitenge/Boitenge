@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { FaMoon, FaSun, FaBars, FaTimes } from 'react-icons/fa';
+import { FaMoon, FaSun, FaBars, FaTimes, FaUser, FaSignOutAlt, FaCog } from 'react-icons/fa';
 import { useTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 import { usePathname } from 'next/navigation';
-import { User } from 'lucide-react';
+import { useAuth } from './auth/AuthProvider';
 
 const links = [
   { name: 'Home', href: '/' },
@@ -21,7 +21,9 @@ const links = [
 
 export default function Navbar() {
   const { theme, setTheme } = useTheme();
+  const { user, isAuthenticated, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const [activeSection, setActiveSection] = useState('Home');
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -34,8 +36,20 @@ export default function Navbar() {
       setScrolled(window.scrollY > 20);
     };
 
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest('.user-menu-container')) {
+        setShowUserMenu(false);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    document.addEventListener('click', handleClickOutside);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('click', handleClickOutside);
+    };
   }, []);
 
   // Set active section based on current page
@@ -56,6 +70,15 @@ export default function Navbar() {
       setActiveSection('Docs');
     }
   }, [pathname]);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setShowUserMenu(false);
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
   if (!mounted) return null;
 
@@ -105,8 +128,55 @@ export default function Navbar() {
           >
             {theme === 'dark' ? <FaSun className="text-amber-400" /> : <FaMoon />}
           </button>
+
+          {/* Authentication Controls */}
+          {isAuthenticated ? (
+            <div className="relative user-menu-container">
+              <button
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                className="flex items-center space-x-2 px-3 py-2 rounded-full bg-primary text-white hover:bg-primary-600 transition-colors shadow-lg shadow-primary/20"
+              >
+                <FaUser className="text-sm" />
+                <span className="text-sm font-medium">{user?.name || 'Admin'}</span>
+              </button>
+
+              <AnimatePresence>
+                {showUserMenu && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                    className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 py-1 z-50"
+                  >
+                    <Link
+                      href="/admin"
+                      className="flex items-center space-x-2 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
+                      onClick={() => setShowUserMenu(false)}
+                    >
+                      <FaCog className="text-xs" />
+                      <span>Admin Dashboard</span>
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center space-x-2 w-full px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 text-left"
+                    >
+                      <FaSignOutAlt className="text-xs" />
+                      <span>Sign Out</span>
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <Link 
+              href="/admin/login" 
+              className="px-5 py-2 rounded-full bg-primary text-white text-sm font-medium hover:bg-primary-600 transition-colors shadow-lg shadow-primary/20"
+            >
+              Sign In
+            </Link>
+          )}
           
-          <Link href="/contact" className="px-5 py-2 rounded-full bg-primary text-white text-sm font-medium hover:bg-primary-600 transition-colors shadow-lg shadow-primary/20">
+          <Link href="/contact" className="px-5 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
             Let's Talk
           </Link>
 
@@ -117,7 +187,7 @@ export default function Navbar() {
               className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               aria-label="Open login signup menu"
             >
-              <User className="h-5 w-5" />
+              <FaUser className="h-5 w-5" />
             </button>
 
             {showAuthMenu && (
@@ -149,6 +219,24 @@ export default function Navbar() {
           >
             {theme === 'dark' ? <FaSun className="text-amber-400" /> : <FaMoon />}
           </button>
+          
+          {/* Mobile Auth Button */}
+          {isAuthenticated ? (
+            <button
+              onClick={() => setShowUserMenu(!showUserMenu)}
+              className="p-2 rounded-full bg-primary text-white"
+            >
+              <FaUser />
+            </button>
+          ) : (
+            <Link 
+              href="/admin/login" 
+              className="p-2 rounded-full bg-primary text-white"
+            >
+              <FaUser />
+            </Link>
+          )}
+          
           <button onClick={() => setIsOpen(!isOpen)} className="text-2xl text-lightText dark:text-darkText">
             {isOpen ? <FaTimes /> : <FaBars />}
           </button>

@@ -6,13 +6,13 @@ This implementation plan transforms a static Next.js portfolio into a dynamic, d
 
 ## Tasks
 
-- [-] 1. Set up authentication foundation and core types
+- [x] 1. Set up authentication foundation and core types
   - Create TypeScript interfaces for authentication (User, LoginCredentials, AuthContextType)
   - Set up project structure for authentication components
   - Install required dependencies (zustand, zod, jose for JWT handling)
   - _Requirements: 1.1, 1.2_
 
-- [ ] 2. Implement authentication service and state management
+- [-] 2. Implement authentication service and state management
   - [ ] 2.1 Create authentication store with Zustand
     - Implement login, logout, and session management functions
     - Add persistent storage for authentication state
