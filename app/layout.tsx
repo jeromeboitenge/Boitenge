@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { ThemeProvider } from "next-themes";
 import { Inter, Outfit } from "next/font/google";
+import { AuthProvider } from "./components/auth";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -49,9 +50,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
       <body className="font-sans bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText transition-colors duration-300">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Navbar />
-          <main className="min-h-screen pt-20">{children}</main>
-          <Footer />
+          <AuthProvider>
+            <Navbar />
+            <main className="min-h-screen pt-20">{children}</main>
+            <Footer />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
