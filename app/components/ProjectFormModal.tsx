@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Project, ProjectInput } from '@/types';
 import Modal from './Modal';
 import toast from 'react-hot-toast';
+import { FaUpload, FaImage, FaTimes } from 'react-icons/fa';
 
 interface ProjectFormModalProps {
   isOpen: boolean;
@@ -26,6 +27,8 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
   });
   const [techInput, setTechInput] = useState('');
   const [highlightInput, setHighlightInput] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -54,13 +57,84 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
         isPublished: true
       });
     }
+    setImageFile(null);
   }, [project, isOpen]);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const selectedFile = e.target.files[0];
+      // Validate file type
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      if (!validTypes.includes(selectedFile.type)) {
+        toast.error('Please upload an image file (JPG, PNG, WebP)');
+        return;
+      }
+      // Validate file size (max 5MB)
+      if (selectedFile.size > 5 * 1024 * 1024) {
+        toast.error('Image size must be less than 5MB');
+        return;
+      }
+      setImageFile(selectedFile);
+    }
+  };
+
+  const uploadImageToCloudinary = async (): Promise<string | null> => {
+    if (!imageFile) return null;
+
+    setUploading(true);
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', imageFile);
+      uploadFormData.append('resource', 'project-images');
+      uploadFormData.append('publicId', `project-${Date.now()}`);
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout for uploads
+
+      const response = await fetch('https://portifolio-backend-ptck.onrender.com/api/uploads', {
+        method: 'POST',
+        body: uploadFormData,
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Upload response:', errorText);
+        throw new Error(`Upload failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.secure_url || data.url;
+    } catch (error) {
+      console.error('Upload error:', error);
+      if (error instanceof Error && error.name === 'AbortError') {
+        toast.error('Upload timeout - please try again');
+      } else {
+        toast.error('Failed to upload project image');
+      }
+      return null;
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
+      // Upload image if provided
+      let projectImageUrl = formData.imageUrl;
+      if (imageFile) {
+        const uploadedUrl = await uploadImageToCloudinary();
+        if (!uploadedUrl) {
+          setIsSubmitting(false);
+          return;
+        }
+        projectImageUrl = uploadedUrl;
+      }
       const url = project 
         ? `https://portifolio-backend-ptck.onrender.com/api/projects/${project.id}`
         : 'https://portifolio-backend-ptck.onrender.com/api/projects';
@@ -71,13 +145,18 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
       const authData = token ? JSON.parse(token) : null;
       const accessToken = authData?.state?.user ? 'dummy-token' : null;
 
+      const payload = {
+        ...formData,
+        imageUrl: projectImageUrl
+      };
+
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
           ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       });
 
       if (!response.ok) throw new Error('Failed to save project');
@@ -180,15 +259,51 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
           {/* Image URL */}
           <div className="md:col-span-2">
             <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-              Image URL
+              Project Image
             </label>
-            <input
-              type="url"
-              value={formData.imageUrl}
-              onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-              className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary"
-              placeholder="https://example.com/image.jpg or /hotel.png"
-            />
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <label className="flex-1 cursor-pointer">
+                  <div className="flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-primary dark:hover:border-primary transition-colors">
+                    <FaUpload className="text-slate-400" />
+                    <span className="text-sm text-slate-600 dark:text-slate-400">
+                      {imageFile ? imageFile.name : 'Upload project screenshot'}
+                    </span>
+                  </div>
+                  <input
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.webp"
+                    onChange={handleImageChange}
+                    className="hidden"
+                  />
+                </label>
+                {imageFile && (
+                  <button
+                    type="button"
+                    onClick={() => setImageFile(null)}
+                    className="p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30"
+                  >
+                    <FaTimes />
+                  </button>
+                )}
+              </div>
+              {imageFile && (
+                <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-xl">
+                  <FaImage className="text-primary" />
+                  <span className="text-sm text-slate-700 dark:text-slate-300 flex-1">{imageFile.name}</span>
+                  <span className="text-xs text-slate-500">{(imageFile.size / 1024).toFixed(2)} KB</span>
+                </div>
+              )}
+              {formData.imageUrl && !imageFile && (
+                <div className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl">
+                  <FaImage className="text-slate-400" />
+                  <span className="text-sm text-slate-600 dark:text-slate-400 flex-1">Current: {formData.imageUrl}</span>
+                </div>
+              )}
+              <p className="text-xs text-slate-500">
+                Accepted formats: JPG, PNG, WebP (Max 5MB). Upload a new image to replace the current one.
+              </p>
+            </div>
           </div>
 
           {/* Technologies */}
@@ -290,10 +405,22 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
           </button>
           <button
             type="submit"
-            disabled={isSubmitting}
-            className="flex-1 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary/90 disabled:opacity-50"
+            disabled={isSubmitting || uploading}
+            className="flex-1 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary/90 disabled:opacity-50 flex items-center justify-center gap-2"
           >
-            {isSubmitting ? 'Saving...' : project ? 'Update Project' : 'Create Project'}
+            {uploading ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/30 border-t-white"></div>
+                Uploading Image...
+              </>
+            ) : isSubmitting ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/30 border-t-white"></div>
+                Saving...
+              </>
+            ) : (
+              project ? 'Update Project' : 'Create Project'
+            )}
           </button>
         </div>
       </form>

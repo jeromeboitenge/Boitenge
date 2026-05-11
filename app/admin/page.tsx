@@ -15,6 +15,8 @@ import { FaProjectDiagram, FaCode, FaBriefcase, FaCertificate, FaPlus, FaEdit, F
 import { motion, AnimatePresence } from 'framer-motion';
 import ProjectFormModal from '@/components/ProjectFormModal';
 import SkillFormModal from '@/components/SkillFormModal';
+import CertificateFormModal from '@/components/CertificateFormModal';
+import ExperienceFormModal from '@/components/ExperienceFormModal';
 import toast, { Toaster } from 'react-hot-toast';
 
 type TabType = 'projects' | 'skills' | 'experience' | 'certificates';
@@ -69,14 +71,37 @@ export default function AdminDashboard() {
     if (!confirm('Are you sure you want to delete this item?')) return;
     
     try {
+      const endpoints = {
+        projects: `https://portifolio-backend-ptck.onrender.com/api/projects/${id}`,
+        skills: `https://portifolio-backend-ptck.onrender.com/api/skills/${id}`,
+        experience: `https://portifolio-backend-ptck.onrender.com/api/experience/${id}`,
+        certificates: `https://portifolio-backend-ptck.onrender.com/api/certificates/${id}`
+      };
+
+      const response = await fetch(endpoints[type], {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) throw new Error('Failed to delete');
+
+      toast.success('Item deleted successfully!');
+      
+      // Update local state immediately
       if (type === 'projects') {
-        await apiClient.deleteProject(id);
         setProjects(projects.filter(p => p.id !== id));
+      } else if (type === 'skills') {
+        setSkills(skills.filter(s => s.id !== id));
+      } else if (type === 'experience') {
+        setExperiences(experiences.filter(e => e.id !== id));
+      } else if (type === 'certificates') {
+        setCertificates(certificates.filter(c => c.id !== id));
       }
-      // Add delete handlers for other types when backend supports them
+      
+      // Refresh from backend
+      await fetchAllData();
     } catch (error) {
       console.error('Error deleting item:', error);
-      alert('Failed to delete item');
+      toast.error('Failed to delete item');
     }
   };
 
@@ -400,14 +425,56 @@ function SkillsManager({ skills, onRefresh }: { skills: Skill[]; onRefresh: () =
 
 // Experience Manager Component
 function ExperienceManager({ experiences, onRefresh }: { experiences: Experience[]; onRefresh: () => void }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedExperience, setSelectedExperience] = useState<Experience | undefined>();
+
+  const handleEdit = (experience: Experience) => {
+    setSelectedExperience(experience);
+    setIsModalOpen(true);
+  };
+
+  const handleAdd = () => {
+    setSelectedExperience(undefined);
+    setIsModalOpen(true);
+  };
+
+  const handleSuccess = () => {
+    onRefresh();
+    setIsModalOpen(false);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this experience?')) return;
+    
+    try {
+      await fetch(`https://portifolio-backend-ptck.onrender.com/api/experience/${id}`, {
+        method: 'DELETE',
+      });
+      toast.success('Experience deleted!');
+      onRefresh();
+    } catch (error) {
+      toast.error('Failed to delete experience');
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Manage Experience</h2>
-        <button className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-primary/30 transition-all">
+        <button 
+          onClick={handleAdd}
+          className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-primary/30 transition-all"
+        >
           <FaPlus /> Add Experience
         </button>
       </div>
+
+      <ExperienceFormModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={handleSuccess}
+        experience={selectedExperience}
+      />
 
       <div className="space-y-4">
         {experiences.map((exp) => (
@@ -425,10 +492,16 @@ function ExperienceManager({ experiences, onRefresh }: { experiences: Experience
                 </p>
               </div>
               <div className="flex gap-2">
-                <button className="p-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors">
+                <button 
+                  onClick={() => handleEdit(exp)}
+                  className="p-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors"
+                >
                   <FaEdit />
                 </button>
-                <button className="p-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg transition-colors">
+                <button 
+                  onClick={() => handleDelete(exp.id)}
+                  className="p-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg transition-colors"
+                >
                   <FaTrash />
                 </button>
               </div>
@@ -454,14 +527,56 @@ function ExperienceManager({ experiences, onRefresh }: { experiences: Experience
 
 // Certificates Manager Component
 function CertificatesManager({ certificates, onRefresh }: { certificates: Certificate[]; onRefresh: () => void }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCertificate, setSelectedCertificate] = useState<Certificate | undefined>();
+
+  const handleEdit = (certificate: Certificate) => {
+    setSelectedCertificate(certificate);
+    setIsModalOpen(true);
+  };
+
+  const handleAdd = () => {
+    setSelectedCertificate(undefined);
+    setIsModalOpen(true);
+  };
+
+  const handleSuccess = () => {
+    onRefresh();
+    setIsModalOpen(false);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this certificate?')) return;
+    
+    try {
+      await fetch(`https://portifolio-backend-ptck.onrender.com/api/certificates/${id}`, {
+        method: 'DELETE',
+      });
+      toast.success('Certificate deleted!');
+      onRefresh();
+    } catch (error) {
+      toast.error('Failed to delete certificate');
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Manage Certificates</h2>
-        <button className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-primary/30 transition-all">
+        <button 
+          onClick={handleAdd}
+          className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-primary/30 transition-all"
+        >
           <FaPlus /> Add Certificate
         </button>
       </div>
+
+      <CertificateFormModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={handleSuccess}
+        certificate={selectedCertificate}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {certificates.map((cert) => (
@@ -495,10 +610,16 @@ function CertificatesManager({ certificates, onRefresh }: { certificates: Certif
             )}
 
             <div className="flex gap-2 mt-4">
-              <button className="flex-1 flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-lg font-semibold text-sm transition-colors">
+              <button 
+                onClick={() => handleEdit(cert)}
+                className="flex-1 flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-lg font-semibold text-sm transition-colors"
+              >
                 <FaEdit /> Edit
               </button>
-              <button className="flex-1 flex items-center justify-center gap-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 px-4 py-2 rounded-lg font-semibold text-sm transition-colors">
+              <button 
+                onClick={() => handleDelete(cert.id)}
+                className="flex-1 flex items-center justify-center gap-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 px-4 py-2 rounded-lg font-semibold text-sm transition-colors"
+              >
                 <FaTrash /> Delete
               </button>
             </div>

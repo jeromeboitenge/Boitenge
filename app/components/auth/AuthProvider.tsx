@@ -37,12 +37,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         try {
           await refreshAuth();
         } catch (error) {
-          console.error('Auth initialization failed:', error);
+          // Silently fail - user can re-login if needed
+          console.warn('Auth initialization failed:', error);
         }
       }
     };
     
-    initAuth();
+    // Don't auto-refresh on mount to avoid errors
+    // initAuth();
     
     return () => {
       mounted = false;
