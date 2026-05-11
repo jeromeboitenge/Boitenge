@@ -1,6 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { apiClient } from "@/lib/api-client";
+import type { Certificate } from "@/types/content";
 
 const profile = {
   name: "Jerome Nzaramyimana",
@@ -32,34 +35,47 @@ const technicalSkills = [
   "Hardware Maintenance",
 ];
 
-const certificates = [
-  {
-    title: "Artificial Intelligence Certification",
-    description:
-      "Covers supervised and unsupervised learning, neural network architectures, model training and evaluation, AI application development, and ethical AI deployment.",
-    link: "#",
-  },
-  {
-    title: "Node.js Development Certification",
-    description:
-      "Validates advanced server-side JavaScript skills, RESTful API development, Express.js security, database integration, authentication, testing, and production deployment.",
-    link: "#",
-  },
-  {
-    title: "Cybersecurity Fundamentals Certification",
-    description:
-      "Establishes a foundation in network security, threat mitigation, cryptography basics, secure coding, and protecting user data across digital systems.",
-    link: "#",
-  },
-  {
-    title: "Frontiers in Intelligent Transportation Systems",
-    description:
-      "Recognises participation in research around intelligent transportation, AI, IoT, data analytics and embedded systems for smarter transport networks.",
-    link: "#",
-  },
-];
-
 export default function Certificates() {
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCertificates = async () => {
+      try {
+        setIsLoading(true);
+        const data = await apiClient.getCertificates();
+        setCertificates(data.sort((a, b) => a.order - b.order));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load certificates');
+        console.error('Error fetching certificates:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCertificates();
+  }, []);
+  if (isLoading) {
+    return (
+      <div className="mt-16">
+        <div className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mt-16">
+        <div className="text-center py-20">
+          <p className="text-red-500 dark:text-red-400">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-16">
       <div className="grid gap-10 xl:grid-cols-[1.05fr_0.95fr]">
@@ -86,7 +102,7 @@ export default function Certificates() {
 
               <div className="flex flex-col gap-3">
                 <span className="inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
-                  4 Certificates
+                  {certificates.length} Certificates
                 </span>
                 <a
                   href="https://boitenge.vercel.app"
@@ -165,14 +181,14 @@ export default function Certificates() {
               </h3>
             </div>
             <div className="rounded-full bg-primary/5 px-4 py-2 text-sm font-semibold text-primary">
-              4 Certificates
+              {certificates.length} Certificates
             </div>
           </div>
 
           <div className="grid gap-6">
             {certificates.map((cert, idx) => (
               <motion.div
-                key={cert.title}
+                key={cert.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -181,18 +197,18 @@ export default function Certificates() {
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <h4 className="text-xl font-semibold text-slate-900 dark:text-white">
-                    {cert.title}
+                    {cert.name}
                   </h4>
                   <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-slate-500 dark:bg-slate-800 dark:text-slate-300">
-                    Certificate
+                    {cert.issuer}
                   </span>
                 </div>
-                <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
-                  {cert.description}
+                <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+                  Issued: {cert.issueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
                 </p>
-                {cert.link !== "#" ? (
+                {cert.credentialUrl ? (
                   <a
-                    href={cert.link}
+                    href={cert.credentialUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-5 inline-flex text-sm font-semibold text-primary hover:text-primary/90"
