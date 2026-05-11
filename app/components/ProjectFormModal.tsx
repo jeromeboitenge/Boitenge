@@ -88,11 +88,30 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
       uploadFormData.append('resource', 'project-images');
       uploadFormData.append('publicId', `project-${Date.now()}`);
 
+      // Get real auth token from localStorage
+      const authStorage = localStorage.getItem('auth-storage');
+      let accessToken = null;
+      
+      if (authStorage) {
+        try {
+          const authData = JSON.parse(authStorage);
+          accessToken = authData?.state?.token || null;
+        } catch (e) {
+          console.error('Failed to parse auth data:', e);
+        }
+      }
+
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout for uploads
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+      const headers: Record<string, string> = {};
+      if (accessToken) {
+        headers['Authorization'] = `Bearer ${accessToken}`;
+      }
 
       const response = await fetch('https://portifolio-backend-ptck.onrender.com/api/uploads', {
         method: 'POST',
+        headers,
         body: uploadFormData,
         signal: controller.signal,
       });
@@ -111,6 +130,8 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
       console.error('Upload error:', error);
       if (error instanceof Error && error.name === 'AbortError') {
         toast.error('Upload timeout - please try again');
+      } else if (error instanceof Error && error.message.includes('401')) {
+        toast.error('Authentication required. Please login again.');
       } else {
         toast.error('Failed to upload project image');
       }

@@ -5,6 +5,7 @@ import { Certificate } from '@/types';
 import Modal from './Modal';
 import toast from 'react-hot-toast';
 import { FaUpload, FaFile, FaTimes } from 'react-icons/fa';
+import { apiClient } from '@/lib/api-client';
 
 interface CertificateFormModalProps {
   isOpen: boolean;
@@ -72,37 +73,11 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
 
     setUploading(true);
     try {
-      const uploadFormData = new FormData();
-      uploadFormData.append('file', file);
-      uploadFormData.append('resource', 'certificates');
-      uploadFormData.append('publicId', `certificate-${Date.now()}`);
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-
-      const response = await fetch('https://portifolio-backend-ptck.onrender.com/api/uploads', {
-        method: 'POST',
-        body: uploadFormData,
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Upload response:', errorText);
-        throw new Error(`Upload failed: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return data.secure_url || data.url;
+      const result = await apiClient.uploadImage(file);
+      return result.data.url;
     } catch (error) {
       console.error('Upload error:', error);
-      if (error instanceof Error && error.name === 'AbortError') {
-        toast.error('Upload timeout - please try again');
-      } else {
-        toast.error('Failed to upload certificate document');
-      }
+      toast.error('Failed to upload certificate document');
       return null;
     } finally {
       setUploading(false);
