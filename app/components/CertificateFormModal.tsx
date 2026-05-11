@@ -72,23 +72,37 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
 
     setUploading(true);
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('resource', 'certificates');
-      formData.append('publicId', `certificate-${Date.now()}`);
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+      uploadFormData.append('resource', 'certificates');
+      uploadFormData.append('publicId', `certificate-${Date.now()}`);
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
       const response = await fetch('https://portifolio-backend-ptck.onrender.com/api/uploads', {
         method: 'POST',
-        body: formData,
+        body: uploadFormData,
+        signal: controller.signal,
       });
 
-      if (!response.ok) throw new Error('Upload failed');
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Upload response:', errorText);
+        throw new Error(`Upload failed: ${response.status}`);
+      }
 
       const data = await response.json();
       return data.secure_url || data.url;
     } catch (error) {
       console.error('Upload error:', error);
-      toast.error('Failed to upload certificate document');
+      if (error instanceof Error && error.name === 'AbortError') {
+        toast.error('Upload timeout - please try again');
+      } else {
+        toast.error('Failed to upload certificate document');
+      }
       return null;
     } finally {
       setUploading(false);
