@@ -30,8 +30,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Initialize authentication on mount
   useEffect(() => {
-    refreshAuth();
-  }, [refreshAuth]);
+    let mounted = true;
+    
+    const initAuth = async () => {
+      if (mounted && isAuthenticated) {
+        try {
+          await refreshAuth();
+        } catch (error) {
+          console.error('Auth initialization failed:', error);
+        }
+      }
+    };
+    
+    initAuth();
+    
+    return () => {
+      mounted = false;
+    };
+  }, []); // Empty dependency array - only run once on mount
 
   const contextValue: AuthContextType = {
     user,

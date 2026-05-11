@@ -21,6 +21,7 @@ import {
 class ApiClientImpl implements ApiClient {
   private baseUrl: string;
   private token: string | null = null;
+  private useLocalFallback: boolean = false;
 
   constructor(baseUrl: string = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://portifolio-backend-ptck.onrender.com') {
     this.baseUrl = baseUrl;
@@ -42,10 +43,17 @@ class ApiClientImpl implements ApiClient {
     }
 
     try {
+      // Add timeout for backend requests
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
       const response = await fetch(url, {
         ...options,
         headers,
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         await this.handleErrorResponse(response);
@@ -53,6 +61,29 @@ class ApiClientImpl implements ApiClient {
 
       return await response.json();
     } catch (error) {
+      // If backend fails or times out, try local API as fallback
+      if (!this.useLocalFallback && this.baseUrl !== '/api') {
+        console.warn('Backend unavailable or timeout, falling back to local API');
+        this.useLocalFallback = true;
+        const localUrl = `/api${endpoint}`;
+        
+        try {
+          const localResponse = await fetch(localUrl, {
+            ...options,
+            headers: {
+              'Content-Type': 'application/json',
+              ...(options.headers as Record<string, string> || {}),
+            },
+          });
+          
+          if (localResponse.ok) {
+            return await localResponse.json();
+          }
+        } catch (localError) {
+          console.error('Local API also failed:', localError);
+        }
+      }
+      
       if (error instanceof Error) {
         throw error;
       }
@@ -84,6 +115,11 @@ class ApiClientImpl implements ApiClient {
 
   setToken(token: string | null): void {
     this.token = token;
+  }
+
+  useLocalApi(): void {
+    this.baseUrl = '/api';
+    this.useLocalFallback = true;
   }
 
   // Authentication methods
@@ -361,6 +397,85 @@ class ApiClientImpl implements ApiClient {
     }));
   }
 
+  async createSkill(skill: Partial<Skill>): Promise<Skill> {
+    const response = await this.request<{
+      id: string;
+      title: string;
+      category: string;
+      level: string;
+      iconUrl?: string;
+      yearsExperience: number;
+      proficiency: number;
+      isActive: boolean;
+      order: number;
+      createdAt: string;
+      updatedAt: string;
+    }>('/api/skills', {
+      method: 'POST',
+      body: JSON.stringify({
+        title: skill.name,
+        category: skill.category,
+        proficiency: skill.proficiency,
+        yearsExperience: skill.yearsOfExperience,
+        order: skill.order,
+        isActive: skill.isVisible ?? true,
+        level: 'intermediate' // Default level
+      }),
+    });
+
+    return {
+      id: response.id,
+      name: response.title,
+      category: response.category.toLowerCase() as 'frontend' | 'backend' | 'database' | 'tools' | 'other',
+      proficiency: response.proficiency,
+      yearsOfExperience: response.yearsExperience,
+      order: response.order,
+      isVisible: response.isActive
+    };
+  }
+
+  async updateSkill(id: string, skill: Partial<Skill>): Promise<Skill> {
+    const response = await this.request<{
+      id: string;
+      title: string;
+      category: string;
+      level: string;
+      iconUrl?: string;
+      yearsExperience: number;
+      proficiency: number;
+      isActive: boolean;
+      order: number;
+      createdAt: string;
+      updatedAt: string;
+    }>(`/api/skills/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        ...(skill.name && { title: skill.name }),
+        ...(skill.category && { category: skill.category }),
+        ...(skill.proficiency !== undefined && { proficiency: skill.proficiency }),
+        ...(skill.yearsOfExperience !== undefined && { yearsExperience: skill.yearsOfExperience }),
+        ...(skill.order !== undefined && { order: skill.order }),
+        ...(skill.isVisible !== undefined && { isActive: skill.isVisible })
+      }),
+    });
+
+    return {
+      id: response.id,
+      name: response.title,
+      category: response.category.toLowerCase() as 'frontend' | 'backend' | 'database' | 'tools' | 'other',
+      proficiency: response.proficiency,
+      yearsOfExperience: response.yearsExperience,
+      order: response.order,
+      isVisible: response.isActive
+    };
+  }
+
+  async deleteSkill(id: string): Promise<void> {
+    await this.request(`/api/skills/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
   async getExperience(): Promise<Experience[]> {
     const experiences = await this.request<Array<{
       id: string;
@@ -385,6 +500,86 @@ class ApiClientImpl implements ApiClient {
       order: exp.order,
       isVisible: true
     }));
+  }
+
+  async createExperience(experience: Partial<Experience>): Promise<Experience> {
+    const response = await this.request<{
+      id: string;
+      position: string;
+      company: string;
+      startDate: string;
+      endDate?: string;
+      description: string;
+      points: string[];
+      order: number;
+    }>('/api/experience', {
+      method: 'POST',
+      body: JSON.stringify({
+        company: experience.company,
+        position: experience.position,
+        description: experience.description,
+        startDate: experience.startDate?.toISOString(),
+        endDate: experience.endDate?.toISOString(),
+        points: experience.achievements || [],
+        order: experience.order
+      }),
+    });
+
+    return {
+      id: response.id,
+      company: response.company,
+      position: response.position,
+      description: response.description,
+      startDate: new Date(response.startDate),
+      endDate: response.endDate ? new Date(response.endDate) : undefined,
+      technologies: experience.technologies || [],
+      achievements: response.points,
+      order: response.order,
+      isVisible: true
+    };
+  }
+
+  async updateExperience(id: string, experience: Partial<Experience>): Promise<Experience> {
+    const response = await this.request<{
+      id: string;
+      position: string;
+      company: string;
+      startDate: string;
+      endDate?: string;
+      description: string;
+      points: string[];
+      order: number;
+    }>(`/api/experience/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        ...(experience.company && { company: experience.company }),
+        ...(experience.position && { position: experience.position }),
+        ...(experience.description && { description: experience.description }),
+        ...(experience.startDate && { startDate: experience.startDate.toISOString() }),
+        ...(experience.endDate !== undefined && { endDate: experience.endDate?.toISOString() }),
+        ...(experience.achievements && { points: experience.achievements }),
+        ...(experience.order !== undefined && { order: experience.order })
+      }),
+    });
+
+    return {
+      id: response.id,
+      company: response.company,
+      position: response.position,
+      description: response.description,
+      startDate: new Date(response.startDate),
+      endDate: response.endDate ? new Date(response.endDate) : undefined,
+      technologies: experience.technologies || [],
+      achievements: response.points,
+      order: response.order,
+      isVisible: true
+    };
+  }
+
+  async deleteExperience(id: string): Promise<void> {
+    await this.request(`/api/experience/${id}`, {
+      method: 'DELETE',
+    });
   }
 
   async getCertificates(): Promise<Certificate[]> {

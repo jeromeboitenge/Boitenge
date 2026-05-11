@@ -44,7 +44,7 @@ export const projectsData: ProjectData[] = [
     id: 3,
     title: "ExploreHub Travel Network",
     description: "A community-driven travel guide for explorers, featuring geo-spatial search (Mapbox), collaborative itinerary builders with offline sync capabilities, and rich media integration.",
-    image: "/project-explorehub.jpg", // Create this image path
+    image: "/hotel.png",
     tags: ["Next.js", "Mapbox", "Supabase", "TypeScript", "Redis"],
     highlights: [
       "Indexed 1,200+ global destinations with fast geospatial search functionality.",
@@ -58,7 +58,7 @@ export const projectsData: ProjectData[] = [
     id: 4,
     title: "AI-Driven Task Manager",
     description: "A highly performant task management platform featuring ML-based prioritization and real-time collaboration using WebSockets for enterprise teams.",
-    image: "/project-task-manager.jpg",
+    image: "/hotel.png",
     tags: ["NestJS", "PostgreSQL", "TensorFlow", "WebRTC"],
     highlights: [
       "Integrated TensorFlow for automated task prioritization and deadline prediction.",
@@ -68,12 +68,11 @@ export const projectsData: ProjectData[] = [
 
   },
 
-  // --- PROJECT 5: Placeholder (To test "View All" Button) ---
   {
     id: 5,
     title: "Decentralized Voting System",
     description: "A proof-of-concept application leveraging blockchain principles to ensure tamper-proof, transparent, and secure voting without reliance on a central authority.",
-    image: "/project-voting-app.jpg",
+    image: "/hotel.png",
     tags: ["React", "Node.js", "MongoDB", "TypeScript"],
     highlights: [
       "Achieved full immutability and auditability for all voting records via cryptographic hashing.",
@@ -86,7 +85,7 @@ export const projectsData: ProjectData[] = [
     id: 6,
     title: "Smart Farm IoT Portal",
     description: "A real-time farm management dashboard connecting sensors, irrigation controls, and crop analytics for smarter agricultural operations.",
-    image: "/project-smart-farm.jpg",
+    image: "/hotel.png",
     tags: ["Next.js", "Node.js", "PostgreSQL", "Socket.io"],
     highlights: [
       "Reduced water usage by 27% through automated, sensor-driven irrigation rules.",
@@ -98,7 +97,7 @@ export const projectsData: ProjectData[] = [
     id: 7,
     title: "E-Commerce Analytics Dashboard",
     description: "A business intelligence platform for online stores that surfaces sales, inventory, and customer behavior trends in one clean dashboard.",
-    image: "/project-ecommerce-dashboard.jpg",
+    image: "/hotel.png",
     tags: ["React", "TypeScript", "Chart.js", "Firebase"],
     highlights: [
       "Delivered real-time sales insights with custom alerting for low-stock events.",

@@ -5,6 +5,8 @@ import Footer from "./components/Footer";
 import { ThemeProvider } from "next-themes";
 import { Inter, Outfit } from "next/font/google";
 import { AuthProvider } from "./components/auth";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import { BackendStatusToast } from "./components/BackendStatusToast";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -51,11 +53,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
       <body className="font-sans bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText transition-colors duration-300">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <AuthProvider>
-            <Navbar />
-            <main className="min-h-screen pt-20">{children}</main>
-            <Footer />
-          </AuthProvider>
+          <ErrorBoundary>
+            <AuthProvider>
+              <BackendStatusToast />
+              <Navbar />
+              <main className="min-h-screen pt-20">{children}</main>
+              <Footer />
+            </AuthProvider>
+          </ErrorBoundary>
         </ThemeProvider>
       </body>
     </html>
