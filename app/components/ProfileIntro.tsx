@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import PublicLocationDisplay from "./PublicLocationDisplay";
 
 const badges = ["Full-stack Engineer", "Design Systems", "Hardware & Software Maintenance"];
 
@@ -108,14 +109,8 @@ export default function ProfileIntro({ showButtons = false }) {
               priority
             />
             
-            <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 glass px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl flex items-center justify-between">
-              <span className="text-[9px] xs:text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-800 dark:text-white">
-                Kigali, Rwanda
-              </span>
-              <span className="relative flex h-2.5 w-2.5 sm:h-3 sm:w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-emerald-500"></span>
-              </span>
+            <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 glass px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl">
+              <PublicLocationDisplay />
             </div>
           </div>
         </div>

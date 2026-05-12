@@ -7,6 +7,7 @@ import { Inter, Outfit } from "next/font/google";
 import { AuthProvider } from "./components/auth";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { BackendStatusToast } from "./components/BackendStatusToast";
+import LocationTracker from "./components/LocationTracker";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <ErrorBoundary>
             <AuthProvider>
               <BackendStatusToast />
+              <LocationTracker />
               <Navbar />
               <main className="min-h-screen pt-20">{children}</main>
               <Footer />
