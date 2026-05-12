@@ -19,6 +19,7 @@ import CertificateFormModal from '@/components/CertificateFormModal';
 import ExperienceFormModal from '@/components/ExperienceFormModal';
 import AdminDiagnostics from '@/components/AdminDiagnostics';
 import RoleChecker from '@/components/RoleChecker';
+import CertificateViewer from '@/components/CertificateViewer';
 import toast, { Toaster } from 'react-hot-toast';
 
 type TabType = 'projects' | 'skills' | 'experience' | 'certificates' | 'messages';
@@ -688,6 +689,7 @@ function ExperienceManager({ experiences, onRefresh }: { experiences: Experience
 function CertificatesManager({ certificates, onRefresh }: { certificates: Certificate[]; onRefresh: () => void }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCertificate, setSelectedCertificate] = useState<Certificate | undefined>();
+  const [viewingCertificate, setViewingCertificate] = useState<Certificate | null>(null);
 
   const handleEdit = (certificate: Certificate) => {
     setSelectedCertificate(certificate);
@@ -773,14 +775,12 @@ function CertificatesManager({ certificates, onRefresh }: { certificates: Certif
             </div>
 
             {cert.credentialUrl && (
-              <a 
-                href={cert.credentialUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-primary hover:text-primary/80 font-semibold mb-4 block"
+              <button
+                onClick={() => setViewingCertificate(cert)}
+                className="text-sm text-primary hover:text-primary/80 font-semibold mb-4 flex items-center gap-2"
               >
-                View Credential →
-              </a>
+                <FaEye /> View Certificate
+              </button>
             )}
 
             <div className="flex gap-2 mt-4">
@@ -800,6 +800,18 @@ function CertificatesManager({ certificates, onRefresh }: { certificates: Certif
           </motion.div>
         ))}
       </div>
+
+      {/* Certificate Viewer Modal */}
+      {viewingCertificate && (
+        <CertificateViewer
+          isOpen={!!viewingCertificate}
+          onClose={() => setViewingCertificate(null)}
+          certificateName={viewingCertificate.name}
+          certificateUrl={viewingCertificate.imageUrl || viewingCertificate.credentialUrl}
+          issuer={viewingCertificate.issuer}
+          issueDate={viewingCertificate.issueDate}
+        />
+      )}
     </div>
   );
 }

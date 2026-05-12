@@ -21,8 +21,10 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
     issueDate: '',
     description: '',
     credentialUrl: '',
+    skills: [] as string[],
     order: 0
   });
+  const [skillInput, setSkillInput] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,8 +35,9 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
         name: certificate.name,
         issuer: certificate.issuer,
         issueDate: certificate.issueDate.toISOString().split('T')[0],
-        description: `Certificate in ${certificate.name}`,
+        description: certificate.description || `Certificate in ${certificate.name}`,
         credentialUrl: certificate.credentialUrl || '',
+        skills: certificate.skills || [],
         order: certificate.order
       });
     } else {
@@ -44,10 +47,12 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
         issueDate: new Date().toISOString().split('T')[0],
         description: '',
         credentialUrl: '',
+        skills: [],
         order: 0
       });
     }
     setFile(null);
+    setSkillInput('');
   }, [certificate, isOpen]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,6 +153,7 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
         date: new Date(formData.issueDate).toISOString(),
         description: formData.description || `Certificate in ${formData.name}`,
         url: documentUrl,
+        skills: formData.skills,
         order: formData.order
       };
 
@@ -228,15 +234,74 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
         {/* Description */}
         <div>
           <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-            Description
+            Description *
           </label>
           <textarea
             rows={3}
+            required
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary"
-            placeholder="Brief description of the certification..."
+            placeholder="Brief description of what this certification covers and validates..."
           />
+        </div>
+
+        {/* Skills */}
+        <div>
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+            Related Skills
+          </label>
+          <div className="space-y-3">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={skillInput}
+                onChange={(e) => setSkillInput(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (skillInput.trim() && !formData.skills.includes(skillInput.trim())) {
+                      setFormData({ ...formData, skills: [...formData.skills, skillInput.trim()] });
+                      setSkillInput('');
+                    }
+                  }
+                }}
+                className="flex-1 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary"
+                placeholder="Add a skill (press Enter)"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  if (skillInput.trim() && !formData.skills.includes(skillInput.trim())) {
+                    setFormData({ ...formData, skills: [...formData.skills, skillInput.trim()] });
+                    setSkillInput('');
+                  }
+                }}
+                className="px-6 py-3 bg-primary/10 text-primary rounded-xl font-semibold hover:bg-primary/20"
+              >
+                Add
+              </button>
+            </div>
+            {formData.skills.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {formData.skills.map((skill, idx) => (
+                  <span
+                    key={idx}
+                    className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-semibold"
+                  >
+                    {skill}
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, skills: formData.skills.filter((_, i) => i !== idx) })}
+                      className="hover:text-primary/70"
+                    >
+                      <FaTimes className="text-xs" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Certificate Document Upload */}

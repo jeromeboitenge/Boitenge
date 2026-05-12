@@ -609,6 +609,7 @@ class ApiClientImpl implements ApiClient {
       date: string;
       description?: string;
       url?: string;
+      skills?: string[];
       order: number;
     }>>('/api/certificates');
 
@@ -617,10 +618,12 @@ class ApiClientImpl implements ApiClient {
       name: cert.title,
       issuer: cert.issuer,
       issueDate: new Date(cert.date),
-      expiryDate: undefined, // Backend doesn't have expiry date
+      expiryDate: undefined,
       credentialId: undefined,
       credentialUrl: cert.url,
-      imageUrl: undefined,
+      imageUrl: cert.url,
+      description: cert.description,
+      skills: cert.skills,
       order: cert.order,
       isVisible: true
     }));

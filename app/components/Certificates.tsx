@@ -4,6 +4,9 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { apiClient } from "@/lib/api-client";
 import type { Certificate } from "@/types/content";
+import CertificateViewer from "./CertificateViewer";
+import CertificateCard from "./CertificateCard";
+import { FaAward, FaCertificate, FaGraduationCap } from "react-icons/fa";
 
 const profile = {
   name: "Jerome Nzaramyimana",
@@ -39,6 +42,7 @@ export default function Certificates() {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedCertificate, setSelectedCertificate] = useState<Certificate | null>(null);
 
   useEffect(() => {
     const fetchCertificates = async () => {
@@ -58,9 +62,10 @@ export default function Certificates() {
   }, []);
   if (isLoading) {
     return (
-      <div className="mt-16">
-        <div className="flex justify-center items-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary mx-auto mb-4"></div>
+          <p className="text-slate-600 dark:text-slate-400">Loading certificates...</p>
         </div>
       </div>
     );
@@ -68,163 +73,133 @@ export default function Certificates() {
 
   if (error) {
     return (
-      <div className="mt-16">
-        <div className="text-center py-20">
-          <p className="text-red-500 dark:text-red-400">{error}</p>
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="text-center">
+          <div className="w-20 h-20 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-4">
+            <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <p className="text-red-500 dark:text-red-400 text-lg font-semibold">{error}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="mt-16">
-      <div className="grid gap-10 xl:grid-cols-[1.05fr_0.95fr]">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="rounded-[2rem] border border-slate-200 bg-slate-50 p-8 shadow-xl shadow-slate-200/40 dark:border-slate-800 dark:bg-slate-950 dark:shadow-slate-900/40"
+          className="text-center mb-16"
         >
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-4 sm:grid-cols-[1fr_auto] items-start">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
+            <FaGraduationCap className="text-primary" />
+            <span className="text-sm font-semibold text-primary uppercase tracking-wider">
+              Professional Certifications
+            </span>
+          </div>
+          
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
+            Certificates & 
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-600 to-pink-600">
+              {" "}Credentials
+            </span>
+          </h1>
+          
+          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+            Verified professional certifications and credentials that demonstrate expertise 
+            and commitment to continuous learning in technology and development.
+          </p>
+        </motion.div>
+
+        {/* Stats Bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
+        >
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-lg">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <FaCertificate className="text-2xl text-primary" />
+              </div>
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.35em] text-primary/80">
-                  Certifications Profile
-                </p>
-                <h2 className="mt-4 text-3xl font-bold text-slate-900 dark:text-white">
-                  {profile.name}
-                </h2>
-                <p className="mt-3 max-w-xl text-sm font-semibold text-slate-700 dark:text-slate-300">
-                  {profile.title}
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <span className="inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
-                  {certificates.length} Certificates
-                </span>
-                <a
-                  href="https://boitenge.vercel.app"
-                  className="inline-flex items-center justify-center rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
-                >
-                  View portfolio
-                </a>
+                <p className="text-3xl font-bold text-slate-900 dark:text-white">{certificates.length}</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Total Certificates</p>
               </div>
             </div>
-
-            <div className="grid gap-4 lg:grid-cols-2">
-              <div className="rounded-3xl bg-white p-6 shadow-sm dark:bg-slate-900">
-                <div className="flex items-center justify-between gap-4">
-                  <h3 className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500 dark:text-slate-400">
-                    Contact
-                  </h3>
-                  <span className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400 dark:text-slate-500">
-                    Profile
-                  </span>
-                </div>
-                <ul className="mt-5 space-y-3 text-sm text-slate-700 dark:text-slate-300">
-                  <li>
-                    <span className="font-semibold text-slate-900 dark:text-white">Email:</span> {profile.email}
-                  </li>
-                  <li>
-                    <span className="font-semibold text-slate-900 dark:text-white">Phone:</span> {profile.phone}
-                  </li>
-                  <li>
-                    <span className="font-semibold text-slate-900 dark:text-white">Location:</span> {profile.location}
-                  </li>
-                  <li>
-                    <span className="font-semibold text-slate-900 dark:text-white">GitHub:</span> {profile.github}
-                  </li>
-                  <li>
-                    <span className="font-semibold text-slate-900 dark:text-white">Portfolio:</span> {profile.portfolio}
-                  </li>
-                </ul>
+          </div>
+          
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-lg">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
+                <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
               </div>
-
-              <div className="rounded-3xl bg-white p-6 shadow-sm dark:bg-slate-900">
-                <h3 className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500 dark:text-slate-400">
-                  Profile Summary
-                </h3>
-                <p className="mt-5 text-sm leading-7 text-slate-700 dark:text-slate-300">
-                  {profile.summary}
-                </p>
+              <div>
+                <p className="text-3xl font-bold text-slate-900 dark:text-white">{certificates.length}</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Verified</p>
               </div>
             </div>
-
-            <div className="rounded-3xl bg-slate-100 p-6 shadow-sm dark:bg-slate-900">
-              <h3 className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500 dark:text-slate-400">
-                Technical Skills
-              </h3>
-              <div className="mt-5 grid gap-2 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4">
-                {technicalSkills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="rounded-full bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm dark:bg-slate-800 dark:text-slate-200"
-                  >
-                    {skill}
-                  </span>
-                ))}
+          </div>
+          
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-lg">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
+                <FaAward className="text-2xl text-purple-600 dark:text-purple-400" />
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-slate-900 dark:text-white">
+                  {new Set(certificates.map(c => c.issuer)).size}
+                </p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Organizations</p>
               </div>
             </div>
           </div>
         </motion.div>
 
-        <div className="space-y-6">
-          <div className="flex items-center justify-between rounded-[2rem] border border-slate-200 bg-slate-50 p-8 shadow-xl shadow-slate-200/40 dark:border-slate-800 dark:bg-slate-950 dark:shadow-slate-900/40">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.35em] text-primary/80">
-                Certification Highlights
-              </p>
-              <h3 className="mt-3 text-2xl font-bold text-slate-900 dark:text-white">
-                Verified credentials
-              </h3>
-            </div>
-            <div className="rounded-full bg-primary/5 px-4 py-2 text-sm font-semibold text-primary">
-              {certificates.length} Certificates
-            </div>
-          </div>
-
-          <div className="grid gap-6">
+        {/* Certificates Grid */}
+        {certificates.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-20 bg-white dark:bg-slate-900 rounded-3xl border-2 border-dashed border-slate-300 dark:border-slate-700"
+          >
+            <FaCertificate className="text-6xl text-slate-300 dark:text-slate-700 mx-auto mb-4" />
+            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">No Certificates Yet</h3>
+            <p className="text-slate-600 dark:text-slate-400">Certificates will appear here once added</p>
+          </motion.div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {certificates.map((cert, idx) => (
-              <motion.div
+              <CertificateCard
                 key={cert.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
-              >
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <h4 className="text-xl font-semibold text-slate-900 dark:text-white">
-                    {cert.name}
-                  </h4>
-                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-slate-500 dark:bg-slate-800 dark:text-slate-300">
-                    {cert.issuer}
-                  </span>
-                </div>
-                <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                  Issued: {cert.issueDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
-                </p>
-                {cert.credentialUrl ? (
-                  <a
-                    href={cert.credentialUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-5 inline-flex text-sm font-semibold text-primary hover:text-primary/90"
-                  >
-                    View certificate link
-                  </a>
-                ) : (
-                  <p className="mt-5 text-sm font-medium text-slate-500 dark:text-slate-400">
-                    Certificate link available on request.
-                  </p>
-                )}
-              </motion.div>
+                certificate={cert}
+                index={idx}
+                onView={setSelectedCertificate}
+              />
             ))}
           </div>
-        </div>
+        )}
       </div>
+
+      {/* Certificate Viewer Modal */}
+      {selectedCertificate && (
+        <CertificateViewer
+          isOpen={!!selectedCertificate}
+          onClose={() => setSelectedCertificate(null)}
+          certificateName={selectedCertificate.name}
+          certificateUrl={selectedCertificate.imageUrl || selectedCertificate.credentialUrl}
+          issuer={selectedCertificate.issuer}
+          issueDate={selectedCertificate.issueDate}
+        />
+      )}
     </div>
   );
 }

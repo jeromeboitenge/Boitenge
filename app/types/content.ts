@@ -62,6 +62,8 @@ export interface Certificate {
   credentialId?: string;
   credentialUrl?: string;
   imageUrl?: string;
+  description?: string;
+  skills?: string[];
   order: number;
   isVisible: boolean;
 }
