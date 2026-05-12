@@ -85,6 +85,15 @@ export interface UploadResponse {
   };
 }
 
+export interface Message {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  isRead: boolean;
+  createdAt: Date;
+}
+
 export interface Profile {
   id: string;
   name: string;
@@ -126,13 +135,4 @@ export interface ProfileInput {
   };
   about?: string;
   services?: string[];
-}
-
-export interface Message {
-  id: string;
-  name: string;
-  email: string;
-  message: string;
-  isRead: boolean;
-  createdAt: Date;
 }

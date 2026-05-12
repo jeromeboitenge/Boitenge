@@ -4,7 +4,7 @@
  */
 
 import { User, LoginCredentials, AuthResponse } from './auth';
-import { Project, ProjectInput, Skill, Experience, Certificate, UploadResponse, Profile, ProfileInput } from './content';
+import { Project, ProjectInput, Skill, Experience, Certificate, UploadResponse, Profile, ProfileInput, Message } from './content';
 
 export interface ApiError extends Error {
   status: number;
@@ -38,10 +38,13 @@ export interface ApiClient {
   updateProject(id: string, project: Partial<ProjectInput>): Promise<Project>;
   deleteProject(id: string): Promise<void>;
   
-  // Other content types
+  // Other content methods
   getSkills(): Promise<Skill[]>;
   getExperience(): Promise<Experience[]>;
   getCertificates(): Promise<Certificate[]>;
+  getMessages(): Promise<Message[]>;
+  markMessageAsRead(id: string): Promise<void>;
+  deleteMessage(id: string): Promise<void>;
   
   // File operations
   uploadImage(file: File): Promise<UploadResponse>;

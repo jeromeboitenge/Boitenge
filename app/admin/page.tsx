@@ -11,15 +11,17 @@ import { AuthGuard } from '@/components/auth';
 import { useAuth } from '@/components/auth';
 import { apiClient } from '@/lib/api-client';
 import { Project, Skill, Experience, Certificate, Message } from '@/types';
-import { FaProjectDiagram, FaCode, FaBriefcase, FaCertificate, FaPlus, FaEdit, FaTrash, FaEye, FaEnvelope, FaEnvelopeOpen } from 'react-icons/fa';
+import { FaProjectDiagram, FaCode, FaBriefcase, FaCertificate, FaPlus, FaEdit, FaTrash, FaEye, FaEnvelope, FaEnvelopeOpen, FaChartLine, FaClock, FaCheckCircle } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProjectFormModal from '@/components/ProjectFormModal';
 import SkillFormModal from '@/components/SkillFormModal';
 import CertificateFormModal from '@/components/CertificateFormModal';
 import ExperienceFormModal from '@/components/ExperienceFormModal';
+import AdminDiagnostics from '@/components/AdminDiagnostics';
+import RoleChecker from '@/components/RoleChecker';
 import toast, { Toaster } from 'react-hot-toast';
 
-type TabType = 'projects' | 'skills' | 'experience' | 'certificates';
+type TabType = 'projects' | 'skills' | 'experience' | 'certificates' | 'messages';
 
 export default function AdminDashboard() {
   const { user, logout } = useAuth();
@@ -28,8 +30,15 @@ export default function AdminDashboard() {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState({ projects: 0, skills: 0, experience: 0, certificates: 0 });
+  const [stats, setStats] = useState({ projects: 0, skills: 0, experience: 0, certificates: 0, messages: 0 });
+  const [quickStats, setQuickStats] = useState({
+    totalMessages: 0,
+    unreadMessages: 0,
+    recentMessages: 0,
+    responseRate: 100
+  });
 
   useEffect(() => {
     fetchAllData();
@@ -38,26 +47,57 @@ export default function AdminDashboard() {
   const fetchAllData = async () => {
     try {
       setIsLoading(true);
-      const [projectsData, skillsData, experienceData, certificatesData] = await Promise.all([
+      
+      // Ensure token is set in apiClient
+      const authStorage = localStorage.getItem('auth-storage');
+      if (authStorage) {
+        try {
+          const authData = JSON.parse(authStorage);
+          const token = authData?.state?.token;
+          if (token) {
+            apiClient.setToken(token);
+          }
+        } catch (e) {
+          console.error('Failed to parse auth data:', e);
+        }
+      }
+      
+      // Fetch all data including messages
+      const [projectsData, skillsData, experienceData, certificatesData, messagesData] = await Promise.all([
         apiClient.getProjects(),
         apiClient.getSkills(),
         apiClient.getExperience(),
         apiClient.getCertificates(),
+        apiClient.getMessages(),
       ]);
       
       setProjects(projectsData);
       setSkills(skillsData);
       setExperiences(experienceData);
       setCertificates(certificatesData);
+      setMessages(messagesData);
       
       setStats({
         projects: projectsData.length,
         skills: skillsData.length,
         experience: experienceData.length,
         certificates: certificatesData.length,
+        messages: messagesData.filter(m => !m.isRead).length,
+      });
+      
+      // Calculate quick stats
+      const last24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      const recentMsgs = messagesData.filter(m => new Date(m.createdAt) > last24Hours);
+      
+      setQuickStats({
+        totalMessages: messagesData.length,
+        unreadMessages: messagesData.filter(m => !m.isRead).length,
+        recentMessages: recentMsgs.length,
+        responseRate: messagesData.length > 0 ? Math.round((messagesData.filter(m => m.isRead).length / messagesData.length) * 100) : 100
       });
     } catch (error) {
       console.error('Error fetching data:', error);
+      toast.error('Failed to load data. Please refresh the page.');
     } finally {
       setIsLoading(false);
     }
@@ -125,6 +165,7 @@ export default function AdminDashboard() {
   };
 
   const tabs = [
+    { id: 'messages' as TabType, label: 'Messages', icon: <FaEnvelope />, count: stats.messages },
     { id: 'projects' as TabType, label: 'Projects', icon: <FaProjectDiagram />, count: stats.projects },
     { id: 'skills' as TabType, label: 'Skills', icon: <FaCode />, count: stats.skills },
     { id: 'experience' as TabType, label: 'Experience', icon: <FaBriefcase />, count: stats.experience },
@@ -134,17 +175,21 @@ export default function AdminDashboard() {
   return (
     <AuthGuard>
       <Toaster position="top-right" />
+      <AdminDiagnostics />
+      <RoleChecker />
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
         {/* Header */}
-        <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+        <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-lg">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center py-6">
               <div>
-                <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-                  Portfolio <span className="text-primary">Admin</span>
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                  <span className="text-primary">Portfolio</span>
+                  <span className="text-slate-600 dark:text-slate-400">Admin</span>
                 </h1>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                  Welcome back, {user?.name}
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                  Welcome back, <span className="font-semibold">{user?.name}</span>
                 </p>
               </div>
               <button
@@ -157,30 +202,80 @@ export default function AdminDashboard() {
           </div>
         </header>
 
+        {/* Quick Stats Bar */}
+        <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                  <FaEnvelope className="text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Total Messages</p>
+                  <p className="text-lg font-bold text-slate-900 dark:text-white">{quickStats.totalMessages}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                  <FaClock className="text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Unread</p>
+                  <p className="text-lg font-bold text-slate-900 dark:text-white">{quickStats.unreadMessages}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                  <FaChartLine className="text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Last 24h</p>
+                  <p className="text-lg font-bold text-slate-900 dark:text-white">{quickStats.recentMessages}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                  <FaCheckCircle className="text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Response Rate</p>
+                  <p className="text-lg font-bold text-slate-900 dark:text-white">{quickStats.responseRate}%</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Stats Cards */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
             {tabs.map((tab) => (
               <motion.div
                 key={tab.id}
-                whileHover={{ y: -4 }}
-                className={`bg-white dark:bg-slate-900 rounded-2xl p-6 border-2 transition-all cursor-pointer ${
+                whileHover={{ y: -4, scale: 1.02 }}
+                className={`bg-white dark:bg-slate-900 rounded-2xl p-6 border-2 transition-all cursor-pointer shadow-lg ${
                   activeTab === tab.id
-                    ? 'border-primary shadow-lg shadow-primary/20'
+                    ? 'border-primary shadow-primary/30'
                     : 'border-slate-200 dark:border-slate-800 hover:border-primary/50'
                 }`}
                 onClick={() => setActiveTab(tab.id)}
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
+                    <p className={`text-xs font-semibold uppercase tracking-wider mb-2 ${
+                      activeTab === tab.id ? 'text-primary' : 'text-slate-500 dark:text-slate-400'
+                    }`}>
                       {tab.label}
                     </p>
-                    <p className="text-3xl font-bold text-slate-900 dark:text-white mt-2">
+                    <p className={`text-4xl font-bold ${
+                      activeTab === tab.id ? 'text-primary' : 'text-slate-900 dark:text-white'
+                    }`}>
                       {tab.count}
                     </p>
                   </div>
-                  <div className={`text-4xl ${activeTab === tab.id ? 'text-primary' : 'text-slate-400'}`}>
+                  <div className={`text-5xl ${
+                    activeTab === tab.id ? 'text-primary/30' : 'text-slate-300 dark:text-slate-600'
+                  }`}>
                     {tab.icon}
                   </div>
                 </div>
@@ -233,6 +328,7 @@ export default function AdminDashboard() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
               >
+                {activeTab === 'messages' && <MessagesManager messages={messages} onRefresh={fetchAllData} />}
                 {activeTab === 'projects' && <ProjectsManager projects={projects} onDelete={handleDelete} onRefresh={fetchAllData} />}
                 {activeTab === 'skills' && <SkillsManager skills={skills} onRefresh={fetchAllData} />}
                 {activeTab === 'experience' && <ExperienceManager experiences={experiences} onRefresh={fetchAllData} />}
@@ -286,7 +382,20 @@ function ProjectsManager({ projects, onDelete, onRefresh }: { projects: Project[
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {projects.map((project) => (
+        {projects.length === 0 ? (
+          <div className="col-span-2 text-center py-20 bg-white dark:bg-slate-900 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700">
+            <FaProjectDiagram className="text-6xl text-slate-300 dark:text-slate-700 mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No Projects Yet</h3>
+            <p className="text-slate-600 dark:text-slate-400 mb-6">Get started by creating your first project</p>
+            <button 
+              onClick={handleAdd}
+              className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-primary/30 transition-all"
+            >
+              <FaPlus /> Create Your First Project
+            </button>
+          </div>
+        ) : (
+          projects.map((project) => (
           <motion.div
             key={project.id}
             whileHover={{ y: -4 }}
@@ -336,7 +445,8 @@ function ProjectsManager({ projects, onDelete, onRefresh }: { projects: Project[
               </div>
             </div>
           </motion.div>
-        ))}
+        ))
+        )}
       </div>
     </div>
   );
@@ -690,6 +800,162 @@ function CertificatesManager({ certificates, onRefresh }: { certificates: Certif
           </motion.div>
         ))}
       </div>
+    </div>
+  );
+}
+
+// Messages Manager Component
+function MessagesManager({ messages, onRefresh }: { messages: Message[]; onRefresh: () => void }) {
+  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+
+  const handleMarkAsRead = async (id: string) => {
+    try {
+      await apiClient.markMessageAsRead(id);
+      toast.success('Message marked as read');
+      onRefresh();
+    } catch (error) {
+      toast.error('Failed to mark message as read');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this message?')) return;
+    
+    try {
+      const authStorage = localStorage.getItem('auth-storage');
+      let accessToken = null;
+      
+      if (authStorage) {
+        try {
+          const authData = JSON.parse(authStorage);
+          accessToken = authData?.state?.token || null;
+        } catch (e) {
+          console.error('Failed to parse auth data:', e);
+        }
+      }
+
+      await fetch(`https://portifolio-backend-ptck.onrender.com/api/messages/${id}`, {
+        method: 'DELETE',
+        headers: {
+          ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
+        }
+      });
+      toast.success('Message deleted!');
+      onRefresh();
+    } catch (error) {
+      toast.error('Failed to delete message');
+    }
+  };
+
+  const unreadMessages = messages.filter(m => !m.isRead);
+  const readMessages = messages.filter(m => m.isRead);
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Contact Messages</h2>
+        <div className="flex items-center gap-2">
+          <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold">
+            {unreadMessages.length} Unread
+          </span>
+        </div>
+      </div>
+
+      {/* Unread Messages */}
+      {unreadMessages.length > 0 && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+            <FaEnvelope className="text-primary" />
+            Unread Messages
+          </h3>
+          {unreadMessages.map((message) => (
+            <motion.div
+              key={message.id}
+              whileHover={{ x: 4 }}
+              className="bg-primary/5 dark:bg-primary/10 rounded-2xl border-2 border-primary/20 p-6 hover:border-primary/50 transition-all"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">{message.name}</h3>
+                    <span className="px-2 py-1 bg-primary text-white rounded-full text-xs font-semibold">NEW</span>
+                  </div>
+                  <a href={`mailto:${message.email}`} className="text-sm text-primary hover:underline font-medium">
+                    {message.email}
+                  </a>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    {message.createdAt.toLocaleString()}
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleMarkAsRead(message.id)}
+                    className="p-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors"
+                    title="Mark as read"
+                  >
+                    <FaEnvelopeOpen />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(message.id)}
+                    className="p-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg transition-colors"
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
+              </div>
+              <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
+                <p className="text-slate-700 dark:text-slate-300 whitespace-pre-wrap">{message.message}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
+
+      {/* Read Messages */}
+      {readMessages.length > 0 && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-slate-600 dark:text-slate-400 flex items-center gap-2">
+            <FaEnvelopeOpen className="text-slate-400" />
+            Read Messages
+          </h3>
+          {readMessages.map((message) => (
+            <motion.div
+              key={message.id}
+              whileHover={{ x: 4 }}
+              className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 hover:border-slate-300 dark:hover:border-slate-700 transition-all opacity-75"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{message.name}</h3>
+                  <a href={`mailto:${message.email}`} className="text-sm text-slate-600 dark:text-slate-400 hover:text-primary hover:underline">
+                    {message.email}
+                  </a>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    {message.createdAt.toLocaleString()}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleDelete(message.id)}
+                  className="p-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg transition-colors"
+                >
+                  <FaTrash />
+                </button>
+              </div>
+              <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-4">
+                <p className="text-slate-700 dark:text-slate-300 whitespace-pre-wrap">{message.message}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
+
+      {messages.length === 0 && (
+        <div className="text-center py-20">
+          <FaEnvelope className="text-6xl text-slate-300 dark:text-slate-700 mx-auto mb-4" />
+          <p className="text-slate-600 dark:text-slate-400 text-lg">No messages yet</p>
+          <p className="text-slate-500 dark:text-slate-500 text-sm mt-2">Messages from your contact form will appear here</p>
+        </div>
+      )}
     </div>
   );
 }

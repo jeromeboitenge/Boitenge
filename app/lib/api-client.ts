@@ -12,6 +12,7 @@ import {
   Skill, 
   Experience, 
   Certificate, 
+  Message,
   UploadResponse,
   ValidationError,
   AuthenticationError,
@@ -44,6 +45,11 @@ class ApiClientImpl implements ApiClient {
       headers['Authorization'] = `Bearer ${this.token}`;
     }
 
+    console.log(`API Request: ${options.method || 'GET'} ${url}`, {
+      hasToken: !!this.token,
+      useLocalFallback: this.useLocalFallback
+    });
+
     try {
       // Add timeout for backend requests
       const controller = new AbortController();
@@ -58,11 +64,18 @@ class ApiClientImpl implements ApiClient {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
+        console.error(`API Error: ${response.status} ${response.statusText}`);
         await this.handleErrorResponse(response);
       }
 
-      return await response.json();
+      const data = await response.json();
+      console.log(`API Response: ${options.method || 'GET'} ${url}`, {
+        dataLength: Array.isArray(data) ? data.length : 'N/A'
+      });
+      return data;
     } catch (error) {
+      console.error(`API Request Failed: ${url}`, error);
+      
       // If backend fails or times out, try local API as fallback
       if (!this.useLocalFallback && this.baseUrl !== '/api') {
         console.warn('Backend unavailable or timeout, falling back to local API');
@@ -79,7 +92,11 @@ class ApiClientImpl implements ApiClient {
           });
           
           if (localResponse.ok) {
-            return await localResponse.json();
+            const localData = await localResponse.json();
+            console.log(`Local API Fallback Success: ${localUrl}`, {
+              dataLength: Array.isArray(localData) ? localData.length : 'N/A'
+            });
+            return localData;
           }
         } catch (localError) {
           console.error('Local API also failed:', localError);
@@ -607,6 +624,49 @@ class ApiClientImpl implements ApiClient {
       order: cert.order,
       isVisible: true
     }));
+  }
+
+  async getMessages(): Promise<Message[]> {
+    try {
+      console.log('Fetching messages from backend...');
+      const messages = await this.request<Array<{
+        id: string;
+        name: string;
+        email: string;
+        message: string;
+        isRead: boolean;
+        createdAt: string;
+      }>>('/api/messages');
+
+      console.log(`Successfully fetched ${messages.length} messages`);
+      return messages.map(msg => ({
+        id: msg.id,
+        name: msg.name,
+        email: msg.email,
+        message: msg.message,
+        isRead: msg.isRead,
+        createdAt: new Date(msg.createdAt)
+      }));
+    } catch (error) {
+      console.error('Failed to fetch messages:', error);
+      if (error instanceof Error) {
+        console.error('Error details:', error.message);
+      }
+      // Return empty array if endpoint doesn't exist or fails
+      return [];
+    }
+  }
+
+  async markMessageAsRead(id: string): Promise<void> {
+    await this.request(`/api/messages/${id}/read`, {
+      method: 'PATCH',
+    });
+  }
+
+  async deleteMessage(id: string): Promise<void> {
+    await this.request(`/api/messages/${id}`, {
+      method: 'DELETE',
+    });
   }
 
   // File upload method

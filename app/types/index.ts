@@ -24,7 +24,8 @@ export type {
   ContentState,
   UploadResponse,
   Profile,
-  ProfileInput
+  ProfileInput,
+  Message
 } from './content';
 
 // API types

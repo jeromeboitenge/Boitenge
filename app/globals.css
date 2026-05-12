@@ -33,12 +33,9 @@
   }
 
   /* Improve tap targets on mobile - minimum 44x44px */
-  button, a, [role="button"] {
+  .touch-target {
     min-height: 44px;
     min-width: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
   }
 
   /* Responsive images and videos */

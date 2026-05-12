@@ -25,13 +25,31 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
     setStatus("sending");
 
     try {
-      const response = await fetch("https://portifolio-backend-ptck.onrender.com/api/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+      // Send to both backend (for admin dashboard) and Formspree (for email)
+      const [backendResponse, localResponse, emailResponse] = await Promise.allSettled([
+        fetch("https://portifolio-backend-ptck.onrender.com/api/messages", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        }),
+        fetch("/api/messages", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        }),
+        fetch("https://formspree.io/f/mkgyjkll", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        })
+      ]);
 
-      if (response.ok) {
+      // Success if at least one succeeds
+      const backendSuccess = backendResponse.status === 'fulfilled' && backendResponse.value.ok;
+      const localSuccess = localResponse.status === 'fulfilled' && localResponse.value.ok;
+      const emailSuccess = emailResponse.status === 'fulfilled' && emailResponse.value.ok;
+
+      if (backendSuccess || localSuccess || emailSuccess) {
         setForm({ name: "", email: "", message: "" });
         setStatus("success");
         if (onSuccess) onSuccess();

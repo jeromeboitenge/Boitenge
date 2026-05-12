@@ -2,10 +2,20 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 
 const badges = ["Full-stack Engineer", "Design Systems", "Hardware & Software Maintenance"];
 
 export default function ProfileIntro({ showButtons = false }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Show content immediately, animate when mounted
+  const MotionDiv = mounted ? motion.div : 'div';
+  
   return (
     <div className="relative pt-20 pb-10 sm:pt-24 md:py-32 flex flex-col md:flex-row items-center gap-8 sm:gap-12 md:gap-20 px-4 sm:px-6 md:px-8 lg:px-0">
       
@@ -16,24 +26,31 @@ export default function ProfileIntro({ showButtons = false }) {
       </div>
 
       {/* TEXT CONTENT */}
-      <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+      <MotionDiv
+        {...(mounted ? {
+          initial: { opacity: 0, x: -50 },
+          whileInView: { opacity: 1, x: 0 },
+          transition: { duration: 0.8, ease: "easeOut" }
+        } : {})}
         className="flex-1 space-y-4 sm:space-y-6 md:space-y-8 text-center md:text-left z-10 w-full max-w-3xl"
       >
         <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:justify-start">
-          {badges.map((badge, idx) => (
-            <motion.span
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + idx * 0.1 }}
-              key={badge}
-              className="rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 sm:px-3 sm:py-1.5 text-[9px] xs:text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 shadow-sm border border-slate-200 dark:border-slate-700"
-            >
-              {badge}
-            </motion.span>
-          ))}
+          {badges.map((badge, idx) => {
+            const BadgeMotion = mounted ? motion.span : 'span';
+            return (
+              <BadgeMotion
+                {...(mounted ? {
+                  initial: { opacity: 0, y: 10 },
+                  animate: { opacity: 1, y: 0 },
+                  transition: { delay: 0.3 + idx * 0.1 }
+                } : {})}
+                key={badge}
+                className="rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 sm:px-3 sm:py-1.5 text-[9px] xs:text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 shadow-sm border border-slate-200 dark:border-slate-700"
+              >
+                {badge}
+              </BadgeMotion>
+            );
+          })}
         </div>
         
         <div className="space-y-2 sm:space-y-3 md:space-y-4">
@@ -66,13 +83,15 @@ export default function ProfileIntro({ showButtons = false }) {
             </a>
           </div>
         )}
-      </motion.div>
+      </MotionDiv>
 
       {/* IMAGE CONTENT */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9, rotate: -5 }}
-        whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+      <MotionDiv
+        {...(mounted ? {
+          initial: { opacity: 0, scale: 0.9, rotate: -5 },
+          whileInView: { opacity: 1, scale: 1, rotate: 0 },
+          transition: { duration: 0.8, ease: "easeOut", delay: 0.2 }
+        } : {})}
         className="relative flex-shrink-0 z-10 w-full max-w-[240px] xs:max-w-[280px] sm:max-w-[320px] md:max-w-md"
       >
         <div className="relative w-full aspect-square">
@@ -100,7 +119,7 @@ export default function ProfileIntro({ showButtons = false }) {
             </div>
           </div>
         </div>
-      </motion.div>
+      </MotionDiv>
     </div>
   );
 }
