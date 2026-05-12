@@ -153,9 +153,10 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
         date: new Date(formData.issueDate).toISOString(),
         description: formData.description || `Certificate in ${formData.name}`,
         url: documentUrl,
-        skills: formData.skills,
         order: formData.order
       };
+
+      console.log('Sending payload:', payload);
 
       const response = await fetch(url, {
         method,
@@ -168,16 +169,41 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
 
       if (!response.ok) {
         const errorText = await response.text();
-        toast.error(`Failed to save certificate: ${response.status}`);
+        console.error('Error response:', errorText);
+        let errorMessage = `Failed to save certificate: ${response.status}`;
+        try {
+          const errorJson = JSON.parse(errorText);
+          if (errorJson.message) {
+            errorMessage = errorJson.message;
+          } else if (errorJson.error) {
+            errorMessage = errorJson.error;
+          }
+        } catch (e) {
+          // Use default error message
+        }
+        toast.error(errorMessage);
         throw new Error('Failed to save certificate');
       }
 
       const result = await response.json();
 
+      // Store skills in localStorage temporarily (until backend supports it)
+      if (formData.skills.length > 0) {
+        try {
+          const skillsStorage = localStorage.getItem('certificate-skills') || '{}';
+          const skills = JSON.parse(skillsStorage);
+          skills[result.id || certificate?.id] = formData.skills;
+          localStorage.setItem('certificate-skills', JSON.stringify(skills));
+        } catch (e) {
+          console.error('Failed to store skills:', e);
+        }
+      }
+
       toast.success(certificate ? 'Certificate updated!' : 'Certificate created!');
       onSuccess();
       onClose();
     } catch (error) {
+      console.error('Submit error:', error);
       toast.error('Failed to save certificate');
     } finally {
       setIsSubmitting(false);

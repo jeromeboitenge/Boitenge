@@ -613,6 +613,17 @@ class ApiClientImpl implements ApiClient {
       order: number;
     }>>('/api/certificates');
 
+    // Load skills from localStorage (temporary until backend supports it)
+    let skillsStorage: Record<string, string[]> = {};
+    try {
+      const stored = localStorage.getItem('certificate-skills');
+      if (stored) {
+        skillsStorage = JSON.parse(stored);
+      }
+    } catch (e) {
+      console.error('Failed to load skills from storage:', e);
+    }
+
     return certificates.map(cert => ({
       id: cert.id,
       name: cert.title,
@@ -623,7 +634,7 @@ class ApiClientImpl implements ApiClient {
       credentialUrl: cert.url,
       imageUrl: cert.url,
       description: cert.description,
-      skills: cert.skills,
+      skills: cert.skills || skillsStorage[cert.id] || [],
       order: cert.order,
       isVisible: true
     }));
