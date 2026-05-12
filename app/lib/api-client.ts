@@ -389,7 +389,7 @@ class ApiClientImpl implements ApiClient {
     return skills.map(skill => ({
       id: skill.id,
       name: skill.title,
-      category: skill.category.toLowerCase() as 'frontend' | 'backend' | 'database' | 'tools' | 'other',
+      category: skill.category.toLowerCase(),
       proficiency: skill.proficiency,
       yearsOfExperience: skill.yearsExperience,
       order: skill.order,
@@ -426,7 +426,7 @@ class ApiClientImpl implements ApiClient {
     return {
       id: response.id,
       name: response.title,
-      category: response.category.toLowerCase() as 'frontend' | 'backend' | 'database' | 'tools' | 'other',
+      category: response.category.toLowerCase(),
       proficiency: response.proficiency,
       yearsOfExperience: response.yearsExperience,
       order: response.order,
@@ -462,7 +462,7 @@ class ApiClientImpl implements ApiClient {
     return {
       id: response.id,
       name: response.title,
-      category: response.category.toLowerCase() as 'frontend' | 'backend' | 'database' | 'tools' | 'other',
+      category: response.category.toLowerCase(),
       proficiency: response.proficiency,
       yearsOfExperience: response.yearsExperience,
       order: response.order,
