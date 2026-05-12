@@ -71,6 +71,18 @@ export default function AdminDashboard() {
     if (!confirm('Are you sure you want to delete this item?')) return;
     
     try {
+      const authStorage = localStorage.getItem('auth-storage');
+      let accessToken = null;
+      
+      if (authStorage) {
+        try {
+          const authData = JSON.parse(authStorage);
+          accessToken = authData?.state?.token || null;
+        } catch (e) {
+          console.error('Failed to parse auth data:', e);
+        }
+      }
+
       const endpoints = {
         projects: `https://portifolio-backend-ptck.onrender.com/api/projects/${id}`,
         skills: `https://portifolio-backend-ptck.onrender.com/api/skills/${id}`,
@@ -80,9 +92,16 @@ export default function AdminDashboard() {
 
       const response = await fetch(endpoints[type], {
         method: 'DELETE',
+        headers: {
+          ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
+        }
       });
 
-      if (!response.ok) throw new Error('Failed to delete');
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Delete error:', response.status, errorText);
+        throw new Error('Failed to delete');
+      }
 
       toast.success('Item deleted successfully!');
       
@@ -347,8 +366,23 @@ function SkillsManager({ skills, onRefresh }: { skills: Skill[]; onRefresh: () =
     if (!confirm('Are you sure you want to delete this skill?')) return;
     
     try {
+      const authStorage = localStorage.getItem('auth-storage');
+      let accessToken = null;
+      
+      if (authStorage) {
+        try {
+          const authData = JSON.parse(authStorage);
+          accessToken = authData?.state?.token || null;
+        } catch (e) {
+          console.error('Failed to parse auth data:', e);
+        }
+      }
+
       await fetch(`https://portifolio-backend-ptck.onrender.com/api/skills/${id}`, {
         method: 'DELETE',
+        headers: {
+          ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
+        }
       });
       toast.success('Skill deleted!');
       onRefresh();
@@ -447,8 +481,23 @@ function ExperienceManager({ experiences, onRefresh }: { experiences: Experience
     if (!confirm('Are you sure you want to delete this experience?')) return;
     
     try {
+      const authStorage = localStorage.getItem('auth-storage');
+      let accessToken = null;
+      
+      if (authStorage) {
+        try {
+          const authData = JSON.parse(authStorage);
+          accessToken = authData?.state?.token || null;
+        } catch (e) {
+          console.error('Failed to parse auth data:', e);
+        }
+      }
+
       await fetch(`https://portifolio-backend-ptck.onrender.com/api/experience/${id}`, {
         method: 'DELETE',
+        headers: {
+          ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
+        }
       });
       toast.success('Experience deleted!');
       onRefresh();
@@ -549,8 +598,23 @@ function CertificatesManager({ certificates, onRefresh }: { certificates: Certif
     if (!confirm('Are you sure you want to delete this certificate?')) return;
     
     try {
+      const authStorage = localStorage.getItem('auth-storage');
+      let accessToken = null;
+      
+      if (authStorage) {
+        try {
+          const authData = JSON.parse(authStorage);
+          accessToken = authData?.state?.token || null;
+        } catch (e) {
+          console.error('Failed to parse auth data:', e);
+        }
+      }
+
       await fetch(`https://portifolio-backend-ptck.onrender.com/api/certificates/${id}`, {
         method: 'DELETE',
+        headers: {
+          ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
+        }
       });
       toast.success('Certificate deleted!');
       onRefresh();

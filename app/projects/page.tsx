@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import ProjectCard from '../components/ProjectCard';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { apiClient } from '@/lib/api-client';
@@ -33,10 +33,12 @@ export default function ProjectsPage() {
     fetchProjects();
   }, []);
 
+  const projectsToShow = useMemo(() => {
+    return showAll ? projects : projects.slice(0, DEFAULT_PROJECTS_COUNT);
+  }, [showAll, projects]);
+
   const defaultVisibleCount = Math.min(DEFAULT_PROJECTS_COUNT, projects.length);
   const currentVisibleCount = showAll ? projects.length : defaultVisibleCount;
-  const projectsToShow = showAll ? projects : projects.slice(0, DEFAULT_PROJECTS_COUNT);
-
   const isMoreAvailable = projects.length > currentVisibleCount && !showAll;
   const isViewLessAvailable = showAll;
 
@@ -90,6 +92,7 @@ export default function ProjectsPage() {
                   tags={project.technologies}
                   highlights={project.highlights}
                   demoLink={project.liveUrl || '#'}
+                  codeLink={project.githubUrl}
                 />
               ))}
             </div>

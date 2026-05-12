@@ -42,6 +42,7 @@ export interface SessionData {
 
 export interface AuthState {
   user: User | null;
+  token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
@@ -49,6 +50,7 @@ export interface AuthState {
 
 export interface AuthStore extends AuthState {
   login: (credentials: LoginCredentials) => Promise<void>;
+  signup: (userData: { email: string; password: string; name: string; phoneNumber?: string }) => Promise<void>;
   logout: () => void;
   refreshAuth: () => Promise<void>;
   clearError: () => void;

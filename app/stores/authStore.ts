@@ -88,6 +88,7 @@ export const useAuthStore = create<AuthStore>()(
   persist(
     (set, get) => ({
       user: null,
+      token: null,
       isAuthenticated: false,
       isLoading: false,
       error: null,
@@ -106,7 +107,8 @@ export const useAuthStore = create<AuthStore>()(
           }
           
           set({ 
-            user: response.data.user, 
+            user: response.data.user,
+            token: response.data.token,
             isAuthenticated: true, 
             isLoading: false,
             error: null
@@ -130,6 +132,7 @@ export const useAuthStore = create<AuthStore>()(
             error: errorMessage, 
             isLoading: false,
             user: null,
+            token: null,
             isAuthenticated: false
           });
           
@@ -159,7 +162,8 @@ export const useAuthStore = create<AuthStore>()(
           }
           
           set({ 
-            user: response.data.user, 
+            user: response.data.user,
+            token: response.data.token,
             isAuthenticated: true, 
             isLoading: false,
             error: null
@@ -183,6 +187,7 @@ export const useAuthStore = create<AuthStore>()(
             error: errorMessage, 
             isLoading: false,
             user: null,
+            token: null,
             isAuthenticated: false
           });
           
@@ -211,7 +216,8 @@ export const useAuthStore = create<AuthStore>()(
           // Always clear local state regardless of backend response
           apiClient.setToken(null);
           set({ 
-            user: null, 
+            user: null,
+            token: null,
             isAuthenticated: false, 
             error: null,
             isLoading: false
@@ -243,7 +249,8 @@ export const useAuthStore = create<AuthStore>()(
             apiClient.setToken(response.data.token);
             
             set({ 
-              user: response.data.user, 
+              user: response.data.user,
+              token: response.data.token,
               isAuthenticated: true, 
               isLoading: false,
               error: null
@@ -264,7 +271,8 @@ export const useAuthStore = create<AuthStore>()(
           apiClient.setToken(null);
           
           set({ 
-            user: null, 
+            user: null,
+            token: null,
             isAuthenticated: false, 
             isLoading: false,
             error: isManualRefresh ? 'Session expired. Please log in again.' : null
@@ -283,18 +291,14 @@ export const useAuthStore = create<AuthStore>()(
       name: 'auth-storage',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ 
-        user: state.user, 
+        user: state.user,
+        token: state.token,
         isAuthenticated: state.isAuthenticated 
       }),
       onRehydrateStorage: () => (state) => {
-        // Set up token refresh on app initialization if user is authenticated
-        if (state?.isAuthenticated && state?.user) {
-          // Attempt to refresh token on app start
-          setTimeout(() => {
-            state.refreshAuth().catch(() => {
-              // Silent fail - refreshAuth will handle cleanup
-            });
-          }, 100);
+        // Set token in apiClient if user is authenticated
+        if (state?.isAuthenticated && state?.user && state?.token) {
+          apiClient.setToken(state.token);
         }
       }
     }

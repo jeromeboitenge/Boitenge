@@ -27,12 +27,13 @@ export interface ProjectInput {
   imageUrl?: string;
   highlights: string[];
   order: number;
+  isPublished?: boolean;
 }
 
 export interface Skill {
   id: string;
   name: string;
-  category: 'frontend' | 'backend' | 'database' | 'tools' | 'other';
+  category: string; // Changed to string to allow custom categories
   proficiency: number; // 1-100
   yearsOfExperience: number;
   order: number;
@@ -82,4 +83,47 @@ export interface UploadResponse {
     filename: string;
     size: number;
   };
+}
+
+export interface Profile {
+  id: string;
+  name: string;
+  title: string;
+  bio: string;
+  badges: string[];
+  location: string;
+  locationUrl?: string;
+  email: string;
+  phone: string;
+  cvUrl?: string;
+  imageUrl?: string;
+  social: {
+    twitter?: string;
+    linkedin?: string;
+    github?: string;
+  };
+  about: string;
+  services: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ProfileInput {
+  name?: string;
+  title?: string;
+  bio?: string;
+  badges?: string[];
+  location?: string;
+  locationUrl?: string;
+  email?: string;
+  phone?: string;
+  cvUrl?: string;
+  imageUrl?: string;
+  social?: {
+    twitter?: string;
+    linkedin?: string;
+    github?: string;
+  };
+  about?: string;
+  services?: string[];
 }

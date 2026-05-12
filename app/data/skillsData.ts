@@ -1,7 +1,7 @@
 export interface SkillData {
   id: string;
   name: string;
-  category: 'frontend' | 'backend' | 'database' | 'tools' | 'other';
+  category: string;
   proficiency: number;
   yearsOfExperience: number;
   order: number;

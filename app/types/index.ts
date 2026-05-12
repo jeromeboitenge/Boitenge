@@ -22,7 +22,9 @@ export type {
   Experience,
   Certificate,
   ContentState,
-  UploadResponse
+  UploadResponse,
+  Profile,
+  ProfileInput
 } from './content';
 
 // API types

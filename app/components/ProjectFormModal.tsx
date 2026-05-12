@@ -162,14 +162,38 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
       
       const method = project ? 'PATCH' : 'POST';
       
-      const token = localStorage.getItem('auth-storage');
-      const authData = token ? JSON.parse(token) : null;
-      const accessToken = authData?.state?.user ? 'dummy-token' : null;
+      const authStorage = localStorage.getItem('auth-storage');
+      let accessToken = null;
+      
+      if (authStorage) {
+        try {
+          const authData = JSON.parse(authStorage);
+          accessToken = authData?.state?.token || null;
+        } catch (e) {
+          console.error('Failed to parse auth data:', e);
+        }
+      }
 
-      const payload = {
-        ...formData,
+      const payload: any = {
+        title: formData.title,
+        description: formData.description,
+        technologies: formData.technologies,
+        highlights: formData.highlights,
+        order: formData.order,
         imageUrl: projectImageUrl
       };
+
+      // Only add liveUrl if it's a valid URL
+      if (formData.liveUrl && formData.liveUrl.trim()) {
+        payload.liveUrl = formData.liveUrl;
+      }
+      
+      // Store githubUrl in localStorage for frontend use (backend doesn't support it)
+      if (formData.githubUrl && formData.githubUrl.trim()) {
+        const projectGithubUrls = JSON.parse(localStorage.getItem('project-github-urls') || '{}');
+        projectGithubUrls[project?.id || 'new'] = formData.githubUrl;
+        localStorage.setItem('project-github-urls', JSON.stringify(projectGithubUrls));
+      }
 
       const response = await fetch(url, {
         method,
@@ -180,7 +204,11 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
         body: JSON.stringify(payload)
       });
 
-      if (!response.ok) throw new Error('Failed to save project');
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('Save project error:', response.status, errorData);
+        throw new Error(`Failed to save project: ${response.status}`);
+      }
 
       toast.success(project ? 'Project updated!' : 'Project created!');
       onSuccess();

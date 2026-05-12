@@ -639,6 +639,72 @@ class ApiClientImpl implements ApiClient {
       }
     };
   }
+
+  // Profile methods
+  async getProfile(): Promise<Profile> {
+    const profile = await this.request<{
+      id: string;
+      name: string;
+      title: string;
+      bio: string;
+      badges: string[];
+      location: string;
+      locationUrl?: string;
+      email: string;
+      phone: string;
+      cvUrl?: string;
+      imageUrl?: string;
+      social: {
+        twitter?: string;
+        linkedin?: string;
+        github?: string;
+      };
+      about: string;
+      services: string[];
+      createdAt: string;
+      updatedAt: string;
+    }>('/api/profile');
+
+    return {
+      ...profile,
+      createdAt: new Date(profile.createdAt),
+      updatedAt: new Date(profile.updatedAt)
+    };
+  }
+
+  async updateProfile(profileData: ProfileInput): Promise<Profile> {
+    const profile = await this.request<{
+      id: string;
+      name: string;
+      title: string;
+      bio: string;
+      badges: string[];
+      location: string;
+      locationUrl?: string;
+      email: string;
+      phone: string;
+      cvUrl?: string;
+      imageUrl?: string;
+      social: {
+        twitter?: string;
+        linkedin?: string;
+        github?: string;
+      };
+      about: string;
+      services: string[];
+      createdAt: string;
+      updatedAt: string;
+    }>('/api/profile', {
+      method: 'POST',
+      body: JSON.stringify(profileData),
+    });
+
+    return {
+      ...profile,
+      createdAt: new Date(profile.createdAt),
+      updatedAt: new Date(profile.updatedAt)
+    };
+  }
 }
 
 // Export singleton instance

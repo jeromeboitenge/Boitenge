@@ -5,7 +5,6 @@ import Skills from './skills/page';
 import Projects from './projects/page';
 import Experience from './experience/page';
 import Contact from './contact/page';
-import { motion } from 'framer-motion';
 
 export default function HomePage() {
   return (

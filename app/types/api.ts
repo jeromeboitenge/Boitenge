@@ -4,7 +4,7 @@
  */
 
 import { User, LoginCredentials, AuthResponse } from './auth';
-import { Project, ProjectInput, Skill, Experience, Certificate, UploadResponse } from './content';
+import { Project, ProjectInput, Skill, Experience, Certificate, UploadResponse, Profile, ProfileInput } from './content';
 
 export interface ApiError extends Error {
   status: number;
@@ -26,6 +26,10 @@ export interface ApiClient {
   login(credentials: LoginCredentials): Promise<AuthResponse>;
   logout(): Promise<void>;
   refreshToken(): Promise<AuthResponse>;
+  
+  // Profile
+  getProfile(): Promise<Profile>;
+  updateProfile(profile: ProfileInput): Promise<Profile>;
   
   // Projects
   getProjects(): Promise<Project[]>;

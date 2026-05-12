@@ -84,6 +84,7 @@ export default function ProfileIntro({ showButtons = false }) {
               src="/Nzaramyimana-Jerome.jpeg"
               alt="Jerome Nzaramyimana"
               fill
+              sizes="(max-width: 768px) 280px, 448px"
               className="object-cover transition-transform duration-700 hover:scale-105"
               priority
             />
