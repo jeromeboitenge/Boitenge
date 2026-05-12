@@ -15,7 +15,9 @@ import {
   UploadResponse,
   ValidationError,
   AuthenticationError,
-  AuthorizationError
+  AuthorizationError,
+  Profile,
+  ProfileInput
 } from '@/types';
 
 class ApiClientImpl implements ApiClient {
@@ -625,17 +627,33 @@ class ApiClientImpl implements ApiClient {
     });
 
     if (!response.ok) {
-      await this.handleErrorResponse(response);
+      const errorText = await response.text();
+      throw new Error(`Upload failed: ${response.status}`);
     }
 
     const result = await response.json();
     
+    // Try to find URL in various possible locations
+    const url = result.secure_url || 
+                result.url || 
+                result.data?.url || 
+                result.data?.secure_url ||
+                result.fileUrl ||
+                result.data?.fileUrl;
+    
+    if (!url) {
+      throw new Error('Upload succeeded but no URL was returned');
+    }
+    
+    const filename = result.original_filename || result.filename || result.data?.filename || file.name;
+    const size = result.bytes || result.size || result.data?.size || file.size;
+    
     return {
       success: true,
       data: {
-        url: result.secure_url,
-        filename: result.original_filename || 'uploaded-image',
-        size: result.bytes
+        url,
+        filename,
+        size
       }
     };
   }

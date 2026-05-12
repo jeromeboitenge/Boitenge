@@ -54,6 +54,18 @@ export default function ExperienceFormModal({ isOpen, onClose, onSuccess, experi
     setIsSubmitting(true);
 
     try {
+      const authStorage = localStorage.getItem('auth-storage');
+      let accessToken = null;
+      
+      if (authStorage) {
+        try {
+          const authData = JSON.parse(authStorage);
+          accessToken = authData?.state?.token || null;
+        } catch (e) {
+          // Silent fail
+        }
+      }
+
       const url = experience 
         ? `https://portifolio-backend-ptck.onrender.com/api/experience/${experience.id}`
         : 'https://portifolio-backend-ptck.onrender.com/api/experience';
@@ -63,8 +75,8 @@ export default function ExperienceFormModal({ isOpen, onClose, onSuccess, experi
       const payload = {
         position: formData.position,
         company: formData.company,
-        startDate: formData.startDate,
-        endDate: formData.endDate || null,
+        startDate: new Date(formData.startDate).toISOString(),
+        endDate: formData.endDate ? new Date(formData.endDate).toISOString() : null,
         description: formData.description,
         points: formData.achievements,
         order: formData.order
@@ -74,18 +86,20 @@ export default function ExperienceFormModal({ isOpen, onClose, onSuccess, experi
         method,
         headers: {
           'Content-Type': 'application/json',
+          ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
         },
         body: JSON.stringify(payload)
       });
 
-      if (!response.ok) throw new Error('Failed to save experience');
+      if (!response.ok) {
+        throw new Error('Failed to save experience');
+      }
 
       toast.success(experience ? 'Experience updated!' : 'Experience created!');
       onSuccess();
       onClose();
     } catch (error) {
       toast.error('Failed to save experience');
-      console.error(error);
     } finally {
       setIsSubmitting(false);
     }

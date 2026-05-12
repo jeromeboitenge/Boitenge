@@ -112,7 +112,7 @@ export default function SkillFormModal({ isOpen, onClose, onSuccess, skill }: Sk
           const authData = JSON.parse(authStorage);
           accessToken = authData?.state?.token || null;
         } catch (e) {
-          console.error('Failed to parse auth data:', e);
+          // Silent fail
         }
       }
 
@@ -142,8 +142,6 @@ export default function SkillFormModal({ isOpen, onClose, onSuccess, skill }: Sk
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('API Error:', response.status, errorText);
         throw new Error('Failed to save skill');
       }
 
@@ -152,7 +150,6 @@ export default function SkillFormModal({ isOpen, onClose, onSuccess, skill }: Sk
       onClose();
     } catch (error) {
       toast.error('Failed to save skill');
-      console.error(error);
     } finally {
       setIsSubmitting(false);
     }

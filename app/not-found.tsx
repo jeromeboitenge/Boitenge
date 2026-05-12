@@ -1,0 +1,34 @@
+import Link from 'next/link';
+
+export default function NotFound() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4">
+      <div className="max-w-md w-full text-center">
+        <div className="mb-8">
+          <h1 className="text-9xl font-bold text-primary mb-4">404</h1>
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
+            Page Not Found
+          </h2>
+          <p className="text-slate-600 dark:text-slate-400 mb-8">
+            The page you're looking for doesn't exist or has been moved.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          <Link
+            href="/"
+            className="inline-block w-full px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary/90 transition-colors"
+          >
+            Go Home
+          </Link>
+          <Link
+            href="/projects"
+            className="inline-block w-full px-6 py-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+          >
+            View Projects
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -97,7 +97,7 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
           const authData = JSON.parse(authStorage);
           accessToken = authData?.state?.token || null;
         } catch (e) {
-          console.error('Failed to parse auth data:', e);
+          // Silent fail
         }
       }
 
@@ -119,15 +119,13 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Upload response:', errorText);
         throw new Error(`Upload failed: ${response.status}`);
       }
 
       const data = await response.json();
       return data.secure_url || data.url;
     } catch (error) {
-      console.error('Upload error:', error);
+      // Don't log to console
       if (error instanceof Error && error.name === 'AbortError') {
         toast.error('Upload timeout - please try again');
       } else if (error instanceof Error && error.message.includes('401')) {
@@ -170,7 +168,7 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
           const authData = JSON.parse(authStorage);
           accessToken = authData?.state?.token || null;
         } catch (e) {
-          console.error('Failed to parse auth data:', e);
+          // Silent fail
         }
       }
 
@@ -205,8 +203,6 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
       });
 
       if (!response.ok) {
-        const errorData = await response.text();
-        console.error('Save project error:', response.status, errorData);
         throw new Error(`Failed to save project: ${response.status}`);
       }
 
@@ -215,7 +211,6 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
       onClose();
     } catch (error) {
       toast.error('Failed to save project');
-      console.error(error);
     } finally {
       setIsSubmitting(false);
     }

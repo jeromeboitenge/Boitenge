@@ -73,11 +73,29 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
 
     setUploading(true);
     try {
+      const authStorage = localStorage.getItem('auth-storage');
+      if (authStorage) {
+        try {
+          const authData = JSON.parse(authStorage);
+          const accessToken = authData?.state?.token || null;
+          if (accessToken) {
+            apiClient.setToken(accessToken);
+          }
+        } catch (e) {
+          toast.error('Authentication failed. Please login again.');
+          return null;
+        }
+      }
+
       const result = await apiClient.uploadImage(file);
+      
+      if (!result?.data?.url) {
+        toast.error('Upload failed - no URL returned');
+        return null;
+      }
       return result.data.url;
     } catch (error) {
-      console.error('Upload error:', error);
-      toast.error('Failed to upload certificate document');
+      toast.error('Failed to upload certificate document. Please try again or add a URL instead.');
       return null;
     } finally {
       setUploading(false);
@@ -100,6 +118,24 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
         documentUrl = uploadedUrl;
       }
 
+      const authStorage = localStorage.getItem('auth-storage');
+      let accessToken = null;
+      
+      if (authStorage) {
+        try {
+          const authData = JSON.parse(authStorage);
+          accessToken = authData?.state?.token || null;
+        } catch (e) {
+          // Silent fail
+        }
+      }
+
+      if (!accessToken) {
+        toast.error('Please login first');
+        setIsSubmitting(false);
+        return;
+      }
+
       const url = certificate 
         ? `https://portifolio-backend-ptck.onrender.com/api/certificates/${certificate.id}`
         : 'https://portifolio-backend-ptck.onrender.com/api/certificates';
@@ -109,7 +145,7 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
       const payload = {
         title: formData.name,
         issuer: formData.issuer,
-        date: formData.issueDate,
+        date: new Date(formData.issueDate).toISOString(),
         description: formData.description || `Certificate in ${formData.name}`,
         url: documentUrl,
         order: formData.order
@@ -119,18 +155,24 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
         method,
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
         },
         body: JSON.stringify(payload)
       });
 
-      if (!response.ok) throw new Error('Failed to save certificate');
+      if (!response.ok) {
+        const errorText = await response.text();
+        toast.error(`Failed to save certificate: ${response.status}`);
+        throw new Error('Failed to save certificate');
+      }
+
+      const result = await response.json();
 
       toast.success(certificate ? 'Certificate updated!' : 'Certificate created!');
       onSuccess();
       onClose();
     } catch (error) {
       toast.error('Failed to save certificate');
-      console.error(error);
     } finally {
       setIsSubmitting(false);
     }

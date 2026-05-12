@@ -52,9 +52,9 @@ export const SkillFormSchema = z.object({
     .min(2, 'Name must be at least 2 characters')
     .max(50, 'Name must be at most 50 characters'),
   
-  category: z.enum(['frontend', 'backend', 'database', 'tools', 'other'], {
-    errorMap: () => ({ message: 'Category must be one of: frontend, backend, database, tools, or other' }),
-  }),
+  category: z.string()
+    .min(2, 'Category must be at least 2 characters')
+    .max(50, 'Category must be at most 50 characters'),
   
   proficiency: z.number()
     .min(1, 'Proficiency must be at least 1')
@@ -87,16 +87,12 @@ export const ExperienceFormSchema = z.object({
     .min(10, 'Description must be at least 10 characters')
     .max(1000, 'Description must be at most 1000 characters'),
   
-  startDate: z.date({
-    required_error: 'Start date is required',
-    invalid_type_error: 'Invalid date',
-  }).refine((date) => date <= new Date(), {
-    message: 'Start date cannot be in the future',
-  }),
+  startDate: z.date()
+    .refine((date) => date <= new Date(), {
+      message: 'Start date cannot be in the future',
+    }),
   
-  endDate: z.date({
-    invalid_type_error: 'Invalid date',
-  }).optional(),
+  endDate: z.date().optional(),
   
   technologies: z.array(z.string())
     .max(20, 'Maximum 20 technologies allowed')
@@ -133,14 +129,9 @@ export const CertificateFormSchema = z.object({
     .min(2, 'Issuer must be at least 2 characters')
     .max(100, 'Issuer must be at most 100 characters'),
   
-  issueDate: z.date({
-    required_error: 'Issue date is required',
-    invalid_type_error: 'Invalid date',
-  }),
+  issueDate: z.date(),
   
-  expiryDate: z.date({
-    invalid_type_error: 'Invalid date',
-  }).optional(),
+  expiryDate: z.date().optional(),
   
   credentialId: z.string()
     .min(5, 'Credential ID must be at least 5 characters')
