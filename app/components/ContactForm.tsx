@@ -25,7 +25,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
     setStatus("sending");
 
     try {
-      const response = await fetch("https://formspree.io/f/mkgyjkll", {
+      const response = await fetch("https://portifolio-backend-ptck.onrender.com/api/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

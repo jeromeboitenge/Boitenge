@@ -4,12 +4,20 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class', // for dark mode support
+  darkMode: 'class',
   theme: {
+    screens: {
+      'xs': '375px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#00628F', // Deep ocean blue from user's image
+          DEFAULT: '#00628F',
           50: '#f0f9ff',
           100: '#e0f2fe',
           200: '#bae6fd',
@@ -26,9 +34,9 @@ module.exports = {
           DEFAULT: '#00C9FF',
           hover: '#00A3CC'
         },
-        darkBg: '#0f172a', // slate-900
-        darkCard: '#1e293b', // slate-800
-        darkText: '#f8fafc', // slate-50
+        darkBg: '#0f172a',
+        darkCard: '#1e293b',
+        darkText: '#f8fafc',
         lightBg: '#f8fafc',
         lightCard: '#ffffff',
         lightText: '#0f172a',
@@ -36,6 +44,12 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-inter)', 'sans-serif'],
         display: ['var(--font-outfit)', 'sans-serif'],
+      },
+      spacing: {
+        'safe-top': 'env(safe-area-inset-top)',
+        'safe-bottom': 'env(safe-area-inset-bottom)',
+        'safe-left': 'env(safe-area-inset-left)',
+        'safe-right': 'env(safe-area-inset-right)',
       },
       keyframes: {
         'fade-up': {
