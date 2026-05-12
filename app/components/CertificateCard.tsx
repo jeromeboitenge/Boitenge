@@ -106,14 +106,6 @@ export default function CertificateCard({ certificate, index, onView }: Certific
               month: 'short' 
             })}
           </div>
-          
-          <button
-            onClick={() => onView(certificate)}
-            className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
-          >
-            View Certificate
-            <FaExternalLinkAlt className="text-xs" />
-          </button>
         </div>
 
         {/* Credential ID */}
