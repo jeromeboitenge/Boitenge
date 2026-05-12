@@ -5,6 +5,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
+// Type definition for global locations
+declare global {
+  var locations: any[] | undefined;
+}
+
 // Shared location storage
 const getLocations = () => {
   if (typeof global.locations === 'undefined') {

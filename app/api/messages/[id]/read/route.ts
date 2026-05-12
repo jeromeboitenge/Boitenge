@@ -5,6 +5,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
+// Type definition for global messages
+declare global {
+  var messages: any[] | undefined;
+}
+
 // Shared message storage (in production, use a database)
 const getMessages = () => {
   if (typeof global.messages === 'undefined') {

@@ -124,11 +124,12 @@ export default function AdminDashboard() {
         }
       }
 
-      const endpoints = {
+      const endpoints: Record<TabType, string> = {
         projects: `https://portifolio-backend-ptck.onrender.com/api/projects/${id}`,
         skills: `https://portifolio-backend-ptck.onrender.com/api/skills/${id}`,
         experience: `https://portifolio-backend-ptck.onrender.com/api/experience/${id}`,
-        certificates: `https://portifolio-backend-ptck.onrender.com/api/certificates/${id}`
+        certificates: `https://portifolio-backend-ptck.onrender.com/api/certificates/${id}`,
+        messages: `https://portifolio-backend-ptck.onrender.com/api/messages/${id}`
       };
 
       const response = await fetch(endpoints[type], {
