@@ -45,10 +45,13 @@ class ApiClientImpl implements ApiClient {
       headers['Authorization'] = `Bearer ${this.token}`;
     }
 
-    console.log(`API Request: ${options.method || 'GET'} ${url}`, {
-      hasToken: !!this.token,
-      useLocalFallback: this.useLocalFallback
-    });
+    // Only log in development mode
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`API Request: ${options.method || 'GET'} ${url}`, {
+        hasToken: !!this.token,
+        useLocalFallback: this.useLocalFallback
+      });
+    }
 
     try {
       // Add timeout for backend requests
@@ -69,16 +72,22 @@ class ApiClientImpl implements ApiClient {
       }
 
       const data = await response.json();
-      console.log(`API Response: ${options.method || 'GET'} ${url}`, {
-        dataLength: Array.isArray(data) ? data.length : 'N/A'
-      });
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`API Response: ${options.method || 'GET'} ${url}`, {
+          dataLength: Array.isArray(data) ? data.length : 'N/A'
+        });
+      }
       return data;
     } catch (error) {
-      console.error(`API Request Failed: ${url}`, error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error(`API Request Failed: ${url}`, error);
+      }
       
       // If backend fails or times out, try local API as fallback
       if (!this.useLocalFallback && this.baseUrl !== '/api') {
-        console.warn('Backend unavailable or timeout, falling back to local API');
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Backend unavailable or timeout, falling back to local API');
+        }
         this.useLocalFallback = true;
         const localUrl = `/api${endpoint}`;
         

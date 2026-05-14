@@ -46,8 +46,20 @@ export default function PublicLocationDisplay() {
     ? [location.city, location.country].filter(Boolean).join(', ') || 'Live Location'
     : 'Kigali, Rwanda';
 
+  const handleLocationClick = () => {
+    if (location) {
+      const mapsUrl = `https://www.google.com/maps?q=${location.latitude},${location.longitude}`;
+      window.open(mapsUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
-    <div className="flex items-center justify-between w-full">
+    <button
+      onClick={handleLocationClick}
+      disabled={!location}
+      className="flex items-center justify-between w-full hover:bg-white/10 dark:hover:bg-black/10 rounded-lg px-2 py-1 transition-colors cursor-pointer disabled:cursor-default"
+      title={location ? 'Click to view on Google Maps' : 'Location unavailable'}
+    >
       <div className="flex items-center gap-2">
         <div className="relative">
           <FaMapMarkerAlt className="text-emerald-500 text-xs sm:text-sm" />
@@ -72,6 +84,6 @@ export default function PublicLocationDisplay() {
         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
         <span className={`relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 ${location ? 'bg-emerald-500' : 'bg-slate-400'}`} />
       </span>
-    </div>
+    </button>
   );
 }

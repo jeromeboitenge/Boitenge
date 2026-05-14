@@ -30,7 +30,7 @@ export default function LocationTracker() {
         startTracking();
       }
     }
-  }, [permissionStatus, isTracking, startTracking, user]);
+  }, [permissionStatus, user]);
 
   // Request permission on mount for admin users
   useEffect(() => {
@@ -45,18 +45,14 @@ export default function LocationTracker() {
             () => {
               startTracking();
             },
-            (error) => {
-              console.error('Location permission denied:', error);
-            }
+            () => {}
           );
         }
-      } catch (error) {
-        console.error('Error requesting location permission:', error);
-      }
+      } catch {}
     };
 
     requestPermission();
-  }, [startTracking, user]);
+  }, [user]);
 
   // Don't render UI for non-admin users
   if (!user || (user.role !== 'admin' && user.role !== 'owner')) {

@@ -40,12 +40,17 @@ export function useLocationTracking(options?: {
   const getAddress = async (lat: number, lon: number): Promise<string | undefined> => {
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`,
+        {
+          headers: {
+            'User-Agent': 'Portfolio-Location-Tracker'
+          }
+        }
       );
+      if (!response.ok) return undefined;
       const data = await response.json();
       return data.display_name;
     } catch (error) {
-      console.error('Failed to get address:', error);
       return undefined;
     }
   };
@@ -88,11 +93,13 @@ export function useLocationTracking(options?: {
           timestamp: position.timestamp,
         };
 
-        // Get address
-        const address = await getAddress(locationData.latitude, locationData.longitude);
-        if (address) {
-          locationData.address = address;
-        }
+        // Try to get address silently
+        try {
+          const address = await getAddress(locationData.latitude, locationData.longitude);
+          if (address) {
+            locationData.address = address;
+          }
+        } catch {}
 
         setLocation(locationData);
         setError(null);
