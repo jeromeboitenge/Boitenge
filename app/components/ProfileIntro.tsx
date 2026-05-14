@@ -99,7 +99,7 @@ export default function ProfileIntro({ showButtons = false }) {
           <div className="absolute inset-0 bg-gradient-to-tr from-primary to-accent rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3rem] rotate-6 opacity-30 blur-lg animate-pulse" />
           <div className="absolute inset-0 bg-gradient-to-tr from-primary to-accent rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3rem] -rotate-3 transition-transform duration-500 hover:rotate-0" />
           
-          <div className="absolute inset-1 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-slate-900 border-2 sm:border-4 border-white dark:border-slate-800">
+          <div className="absolute inset-1 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-slate-900 border-2 sm:border-4 border-white dark:border-slate-800 pointer-events-none">
             <Image
               src="/Nzaramyimana-Jerome.jpeg"
               alt="Jerome Nzaramyimana"
@@ -109,7 +109,7 @@ export default function ProfileIntro({ showButtons = false }) {
               priority
             />
             
-            <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 glass px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl">
+            <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 glass px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl pointer-events-auto z-10">
               <PublicLocationDisplay />
             </div>
           </div>

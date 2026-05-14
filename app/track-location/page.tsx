@@ -50,6 +50,8 @@ export default function TrackLocationPage() {
     } catch (error) {
       setStatus('error');
       setMessage('Failed to send location');
+    } finally {
+      setIsTracking(false);
     }
   };
 

@@ -22,9 +22,12 @@ export default function PublicLocationDisplay() {
         const res = await fetch(`${apiUrl}/api/location`);
         if (res.ok) {
           const data = await res.json();
+          console.log('Location data fetched:', data);
           if (data && data.latitude) setLocation(data);
         }
-      } catch {}
+      } catch (err) {
+        console.error('Failed to fetch location:', err);
+      }
     };
 
     fetchLocation();
@@ -46,23 +49,44 @@ export default function PublicLocationDisplay() {
     ? [location.city, location.country].filter(Boolean).join(', ') || 'Live Location'
     : 'Kigali, Rwanda';
 
-  const handleLocationClick = () => {
-    if (location) {
-      const mapsUrl = `https://www.google.com/maps?q=${location.latitude},${location.longitude}`;
-      window.open(mapsUrl, '_blank', 'noopener,noreferrer');
-    }
-  };
+  const mapsUrl = location 
+    ? `https://www.google.com/maps?q=${location.latitude},${location.longitude}`
+    : '#';
+
+  if (!location) {
+    return (
+      <div className="flex items-center justify-between w-full">
+        <div className="flex items-center gap-2">
+          <div className="relative">
+            <FaMapMarkerAlt className="text-emerald-500 text-xs sm:text-sm" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[9px] xs:text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-800 dark:text-white">
+              {displayLocation}
+            </span>
+          </div>
+        </div>
+        <span className="relative flex h-2.5 w-2.5 sm:h-3 sm:w-3">
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-slate-400" />
+        </span>
+      </div>
+    );
+  }
 
   return (
-    <button
-      onClick={handleLocationClick}
-      disabled={!location}
-      className="flex items-center justify-between w-full hover:bg-white/10 dark:hover:bg-black/10 rounded-lg px-2 py-1 transition-colors cursor-pointer disabled:cursor-default"
-      title={location ? 'Click to view on Google Maps' : 'Location unavailable'}
+    <a
+      href={mapsUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center justify-between w-full hover:bg-white/20 dark:hover:bg-black/20 rounded-lg px-2 py-1 transition-all active:scale-95 group relative z-20 no-underline"
+      title="Click to view on Google Maps"
+      onClick={(e) => {
+        console.log('Link clicked, opening:', mapsUrl);
+      }}
     >
       <div className="flex items-center gap-2">
         <div className="relative">
-          <FaMapMarkerAlt className="text-emerald-500 text-xs sm:text-sm" />
+          <FaMapMarkerAlt className="text-emerald-500 text-xs sm:text-sm group-hover:scale-110 transition-transform" />
           {location && (
             <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping" />
           )}
@@ -84,6 +108,6 @@ export default function PublicLocationDisplay() {
         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
         <span className={`relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 ${location ? 'bg-emerald-500' : 'bg-slate-400'}`} />
       </span>
-    </button>
+    </a>
   );
 }
