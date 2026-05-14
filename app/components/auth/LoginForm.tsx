@@ -8,7 +8,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from './AuthProvider';
-import { LoginCredentials } from '@/types';
+import type { LoginCredentials } from '../../types';
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -76,9 +76,9 @@ export function LoginForm({ onSuccess, className = '' }: LoginFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`space-y-5 ${className}`}>
+    <form onSubmit={handleSubmit} className={`space-y-4 ${className}`}>
       <div>
-        <label htmlFor="email" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           Email
         </label>
         <input
@@ -86,17 +86,17 @@ export function LoginForm({ onSuccess, className = '' }: LoginFormProps) {
           id="email"
           value={credentials.email}
           onChange={handleInputChange('email')}
-          className="w-full px-5 py-3 rounded-2xl text-sm bg-white/50 dark:bg-slate-900/50 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-slate-400"
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           placeholder="Enter your email"
           disabled={isLoading}
         />
         {formErrors.email && (
-          <p className="mt-2 text-sm text-red-600 dark:text-red-400">{formErrors.email}</p>
+          <p className="mt-1 text-sm text-red-600">{formErrors.email}</p>
         )}
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+        <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           Password
         </label>
         <input
@@ -104,17 +104,17 @@ export function LoginForm({ onSuccess, className = '' }: LoginFormProps) {
           id="password"
           value={credentials.password}
           onChange={handleInputChange('password')}
-          className="w-full px-5 py-3 rounded-2xl text-sm bg-white/50 dark:bg-slate-900/50 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-slate-400"
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           placeholder="Enter your password"
           disabled={isLoading}
         />
         {formErrors.password && (
-          <p className="mt-2 text-sm text-red-600 dark:text-red-400">{formErrors.password}</p>
+          <p className="mt-1 text-sm text-red-600">{formErrors.password}</p>
         )}
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded-2xl text-sm">
+        <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
           {error}
         </div>
       )}
@@ -122,13 +122,13 @@ export function LoginForm({ onSuccess, className = '' }: LoginFormProps) {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full py-4 text-sm font-bold bg-primary text-white rounded-2xl shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed hover:bg-primary/90"
+        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isLoading ? (
-          <>
-            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white/30 border-t-white"></div>
+          <div className="flex items-center">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
             Signing in...
-          </>
+          </div>
         ) : (
           'Sign In'
         )}

@@ -7,8 +7,8 @@
 'use client';
 
 import React, { createContext, useContext, useEffect } from 'react';
-import { AuthContextType } from '@/types';
-import { useAuthStore } from '@/stores/authStore';
+import { AuthContextType } from '../../types';
+import { useAuthStore } from '../../stores/authStore';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -30,26 +30,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Initialize authentication on mount
   useEffect(() => {
-    let mounted = true;
-    
-    const initAuth = async () => {
-      if (mounted && isAuthenticated) {
-        try {
-          await refreshAuth();
-        } catch (error) {
-          // Silently fail - user can re-login if needed
-          console.warn('Auth initialization failed:', error);
-        }
-      }
-    };
-    
-    // Don't auto-refresh on mount to avoid errors
-    // initAuth();
-    
-    return () => {
-      mounted = false;
-    };
-  }, []); // Empty dependency array - only run once on mount
+    refreshAuth();
+  }, [refreshAuth]);
 
   const contextValue: AuthContextType = {
     user,

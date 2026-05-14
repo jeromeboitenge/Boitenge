@@ -1,15 +1,45 @@
-// components/GoogleMap.tsx
+'use client';
+
+import { useEffect, useState } from 'react';
+
+interface LocationData {
+  latitude: number;
+  longitude: number;
+}
 
 export default function GoogleMap() {
+  const [location, setLocation] = useState<LocationData>({ latitude: -1.9570, longitude: 30.1127 });
+
+  useEffect(() => {
+    const fetchLocation = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://portifolio-backend-ptck.onrender.com';
+        const res = await fetch(`${apiUrl}/api/location`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.latitude && data?.longitude) {
+            setLocation({ latitude: data.latitude, longitude: data.longitude });
+          }
+        }
+      } catch {}
+    };
+
+    fetchLocation();
+    const interval = setInterval(fetchLocation, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const mapUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${location.latitude},${location.longitude}&zoom=14`;
+
   return (
     <div className="w-full h-64 md:h-80 rounded-xl overflow-hidden shadow-lg mt-4">
       <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15949.965054765184!2d30.053803270024986!3d-1.956976718404552!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca42936c4fc0b%3A0x8c6a59bcc69b83fb!2sNyarugenge%2C%20Kigali!5e0!3m2!1sen!2srw!4v1763562439988!5m2!1sen!2srw"
+        src={mapUrl}
         className="w-full h-full border-0"
         loading="lazy"
         allowFullScreen
         referrerPolicy="no-referrer-when-downgrade"
-      ></iframe>
+      />
     </div>
   );
 }

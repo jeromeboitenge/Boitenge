@@ -65,7 +65,7 @@ export default function ProfileIntro({ showButtons = false }) {
         </div>
 
         <p className="text-sm xs:text-base sm:text-lg md:text-xl leading-relaxed text-slate-600 dark:text-slate-300 max-w-2xl mx-auto md:mx-0">
-          I design and engineer premium digital experiences across React, Next.js, and Node.js—blending product
+          I design and engineer premium digital experiences across React, Next.js, and Node.js blending product
           thinking with scalable infrastructure so launches feel effortless and polished.
         </p>
 
