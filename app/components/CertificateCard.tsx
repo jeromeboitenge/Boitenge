@@ -11,6 +11,22 @@ interface CertificateCardProps {
 }
 
 export default function CertificateCard({ certificate, index, onView }: CertificateCardProps) {
+  // Check if the URL is a PDF
+  const isPDF = certificate.imageUrl?.toLowerCase().endsWith('.pdf');
+  const isImage = certificate.imageUrl && !isPDF;
+  
+  // Convert Cloudinary PDF to image thumbnail (first page)
+  const getThumbnailUrl = (url: string | undefined) => {
+    if (!url) return null;
+    if (!url.includes('cloudinary.com') || !isPDF) return url;
+    
+    // Transform Cloudinary PDF URL to show first page as image
+    // Example: /upload/v123/file.pdf -> /upload/f_jpg,pg_1/v123/file.pdf
+    return url.replace('/upload/', '/upload/f_jpg,pg_1,w_800,q_auto/');
+  };
+  
+  const thumbnailUrl = getThumbnailUrl(certificate.imageUrl);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -22,14 +38,42 @@ export default function CertificateCard({ certificate, index, onView }: Certific
     >
       {/* Certificate Image */}
       <div className="relative h-56 bg-gradient-to-br from-primary/10 via-purple-50 to-pink-50 dark:from-primary/20 dark:via-purple-900/20 dark:to-pink-900/20 overflow-hidden">
-        {certificate.imageUrl ? (
+        {thumbnailUrl ? (
           <>
             <img
-              src={certificate.imageUrl}
+              src={thumbnailUrl}
               alt={certificate.name}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              onError={(e) => {
+                console.error('Failed to load certificate thumbnail:', thumbnailUrl);
+                e.currentTarget.style.display = 'none';
+                const parent = e.currentTarget.parentElement;
+                if (parent) {
+                  const fallback = parent.querySelector('.fallback-icon');
+                  if (fallback) {
+                    (fallback as HTMLElement).style.display = 'flex';
+                  }
+                }
+              }}
             />
+            <div className="fallback-icon absolute inset-0 hidden flex-col items-center justify-center gap-4">
+              <div className="relative">
+                <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full"></div>
+                <svg className="w-20 h-20 text-primary relative z-10" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <span className="text-sm font-semibold text-primary uppercase tracking-wider">PDF Certificate</span>
+            </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            {isPDF && (
+              <div className="absolute top-4 left-4 bg-primary/90 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
+                </svg>
+                PDF
+              </div>
+            )}
           </>
         ) : (
           <div className="w-full h-full flex items-center justify-center">

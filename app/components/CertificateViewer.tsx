@@ -23,6 +23,21 @@ export default function CertificateViewer({
 }: CertificateViewerProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [viewMode, setViewMode] = useState<'image' | 'pdf'>('image');
+  
+  // Check if URL is a PDF
+  const isPDF = certificateUrl?.toLowerCase().endsWith('.pdf');
+  
+  // Convert Cloudinary PDF to high-res image
+  const getImageUrl = (url: string | undefined) => {
+    if (!url) return null;
+    if (!url.includes('cloudinary.com') || !isPDF) return url;
+    
+    // Transform Cloudinary PDF URL to show first page as high-res image
+    return url.replace('/upload/', '/upload/f_jpg,pg_1,w_1200,q_90/');
+  };
+  
+  const imageUrl = getImageUrl(certificateUrl);
 
   if (!isOpen) return null;
 
@@ -74,6 +89,15 @@ export default function CertificateViewer({
               </div>
 
               <div className="flex items-center gap-2">
+                {isPDF && (
+                  <button
+                    onClick={() => setViewMode(viewMode === 'image' ? 'pdf' : 'image')}
+                    className="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors text-sm font-semibold"
+                    title={viewMode === 'image' ? 'View PDF' : 'View Image'}
+                  >
+                    {viewMode === 'image' ? '📄 PDF' : '🖼️ Image'}
+                  </button>
+                )}
                 {certificateUrl && (
                   <button
                     onClick={handleDownload}
@@ -104,22 +128,32 @@ export default function CertificateViewer({
             <div className="flex-1 overflow-hidden bg-slate-100 dark:bg-slate-950">
               <div className="w-full h-full flex items-center justify-center p-8">
                 {certificateUrl ? (
-                  <>
-                    {!imageLoaded && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-                      </div>
-                    )}
-                    <img
+                  viewMode === 'pdf' && isPDF ? (
+                    // PDF Viewer
+                    <iframe
                       src={certificateUrl}
-                      alt={certificateName}
-                      onLoad={() => setImageLoaded(true)}
-                      onError={() => setImageLoaded(true)}
-                      className={`max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-opacity duration-300 ${
-                        imageLoaded ? 'opacity-100' : 'opacity-0'
-                      }`}
+                      className="w-full h-full rounded-lg shadow-2xl bg-white"
+                      title={certificateName}
                     />
-                  </>
+                  ) : (
+                    // Image Viewer (works for both images and converted PDFs)
+                    <>
+                      {!imageLoaded && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                        </div>
+                      )}
+                      <img
+                        src={imageUrl || certificateUrl}
+                        alt={certificateName}
+                        onLoad={() => setImageLoaded(true)}
+                        onError={() => setImageLoaded(true)}
+                        className={`max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-opacity duration-300 ${
+                          imageLoaded ? 'opacity-100' : 'opacity-0'
+                        }`}
+                      />
+                    </>
+                  )
                 ) : (
                   <div className="flex flex-col items-center justify-center text-center">
                     <div className="w-20 h-20 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center mb-4">
