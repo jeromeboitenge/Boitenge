@@ -4,6 +4,7 @@ import About from './about/page';
 import Skills from './skills/page';
 import Projects from './projects/page';
 import Experience from './experience/page';
+import Certificates from './components/Certificates';
 import Contact from './contact/page';
 
 export default function HomePage() {
@@ -24,6 +25,9 @@ export default function HomePage() {
       </section>
       <section id="experience">
         <Experience />
+      </section>
+      <section id="certificates">
+        <Certificates />
       </section>
       <section id="contact">
         <Contact />
