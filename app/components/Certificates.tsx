@@ -99,19 +99,19 @@ export default function Certificates() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
             <FaGraduationCap className="text-primary" />
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">
-              Professional Certifications
+              Professional Credentials
             </span>
           </div>
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
-            Certificates & 
+            Certifications & 
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-600 to-pink-600">
               {" "}Credentials
             </span>
           </h1>
           
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
-            Verified professional certifications demonstrating expertise and commitment to continuous learning in technology and development.
+            Verified professional certifications and technical credentials demonstrating expertise across various technologies and platforms.
           </p>
         </motion.div>
 
