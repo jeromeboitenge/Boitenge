@@ -111,8 +111,7 @@ export default function Certificates() {
           </h1>
           
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
-            Verified professional certifications and credentials that demonstrate expertise 
-            and commitment to continuous learning in technology and development.
+            Verified professional certifications demonstrating expertise and commitment to continuous learning in technology and development.
           </p>
         </motion.div>
 

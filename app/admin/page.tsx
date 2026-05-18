@@ -20,9 +20,10 @@ import ExperienceFormModal from '@/components/ExperienceFormModal';
 import AdminDiagnostics from '@/components/AdminDiagnostics';
 import RoleChecker from '@/components/RoleChecker';
 import CertificateViewer from '@/components/CertificateViewer';
-import toast, { Toaster } from 'react-hot-toast';
+import AnalyticsDashboard from '@/components/AnalyticsDashboard';
+import { Toaster } from 'react-hot-toast';
 
-type TabType = 'projects' | 'skills' | 'experience' | 'certificates' | 'messages';
+type TabType = 'analytics' | 'projects' | 'skills' | 'experience' | 'certificates' | 'messages';
 
 export default function AdminDashboard() {
   const { user, logout } = useAuth();
@@ -167,6 +168,7 @@ export default function AdminDashboard() {
   };
 
   const tabs = [
+    { id: 'analytics' as TabType, label: 'Analytics', icon: <FaChartLine />, count: 0 },
     { id: 'messages' as TabType, label: 'Messages', icon: <FaEnvelope />, count: stats.messages },
     { id: 'projects' as TabType, label: 'Projects', icon: <FaProjectDiagram />, count: stats.projects },
     { id: 'skills' as TabType, label: 'Skills', icon: <FaCode />, count: stats.skills },
@@ -330,6 +332,7 @@ export default function AdminDashboard() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
               >
+                {activeTab === 'analytics' && <AnalyticsDashboard />}
                 {activeTab === 'messages' && <MessagesManager messages={messages} onRefresh={fetchAllData} />}
                 {activeTab === 'projects' && <ProjectsManager projects={projects} onDelete={handleDelete} onRefresh={fetchAllData} />}
                 {activeTab === 'skills' && <SkillsManager skills={skills} onRefresh={fetchAllData} />}

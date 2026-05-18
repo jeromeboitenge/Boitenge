@@ -8,6 +8,7 @@ import { AuthProvider } from "./components/auth";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { BackendStatusToast } from "./components/BackendStatusToast";
 import LocationTracker from "./components/LocationTracker";
+import AnalyticsProvider from "./components/AnalyticsProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -56,11 +57,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ErrorBoundary>
             <AuthProvider>
-              <BackendStatusToast />
-              <LocationTracker />
-              <Navbar />
-              <main className="min-h-screen pt-20">{children}</main>
-              <Footer />
+              <AnalyticsProvider>
+                <BackendStatusToast />
+                <LocationTracker />
+                <Navbar />
+                <main className="min-h-screen pt-20">{children}</main>
+                <Footer />
+              </AnalyticsProvider>
             </AuthProvider>
           </ErrorBoundary>
         </ThemeProvider>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaRegEnvelope, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { analytics } from '@/lib/analytics';
 
 interface ContactFormProps {
   onSuccess?: () => void;
@@ -52,6 +53,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
       if (backendSuccess || localSuccess || emailSuccess) {
         setForm({ name: "", email: "", message: "" });
         setStatus("success");
+        analytics.trackContactForm(); // Track contact form submission
         if (onSuccess) onSuccess();
       } else {
         setStatus("error");
