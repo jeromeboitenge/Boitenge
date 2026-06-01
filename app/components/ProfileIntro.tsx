@@ -4,15 +4,22 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import PublicLocationDisplay from "./PublicLocationDisplay";
+import Modal from "./Modal";
+import { profileData } from "../data/profileData";
 
 const badges = ["Full-stack Engineer", "Design Systems", "Hardware & Software Maintenance"];
 
 export default function ProfileIntro({ showButtons = false }) {
   const [mounted, setMounted] = useState(false);
+  const [showCvModal, setShowCvModal] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const cvEmbedUrl = profileData.cvUrl?.includes("/view")
+    ? profileData.cvUrl.replace(/\/file\/d\/([^/]+)\/view.*$/, "/file/d/$1/preview")
+    : profileData.cvUrl;
 
   // Show content immediately, animate when mounted
   const MotionDiv = mounted ? motion.div : 'div';
@@ -74,17 +81,30 @@ export default function ProfileIntro({ showButtons = false }) {
             <a href="#contact" className="inline-flex items-center justify-center rounded-full bg-primary px-6 sm:px-8 py-3 sm:py-3.5 text-xs xs:text-sm font-semibold text-white shadow-lg shadow-primary/30 transition-all hover:-translate-y-1 hover:shadow-primary/50 active:scale-95">
               Let's build together
             </a>
-            <a
-              href="https://drive.google.com/file/d/1jhl1MrnuTMItHuivMO-jI6WLrKJlv6Bt/view?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={() => setShowCvModal(true)}
               className="inline-flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 px-6 sm:px-8 py-3 sm:py-3.5 text-xs xs:text-sm font-semibold text-slate-900 dark:text-white transition-all hover:-translate-y-1 hover:bg-slate-200 dark:hover:bg-slate-700 shadow-sm active:scale-95"
             >
               View CV
-            </a>
+            </button>
           </div>
         )}
       </MotionDiv>
+
+      <Modal isOpen={showCvModal} onClose={() => setShowCvModal(false)} title="Curriculum Vitae" size="xl">
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+          Your CV is displayed here for viewing without leaving the site.
+        </p>
+        <div className="w-full min-h-[60vh] rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800">
+          <iframe
+            src={cvEmbedUrl}
+            title="CV Preview"
+            className="w-full h-full min-h-[60vh]"
+            loading="lazy"
+          />
+        </div>
+      </Modal>
 
       {/* IMAGE CONTENT */}
       <MotionDiv
