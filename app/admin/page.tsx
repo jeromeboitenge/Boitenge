@@ -21,7 +21,7 @@ import AdminDiagnostics from '@/components/AdminDiagnostics';
 import RoleChecker from '@/components/RoleChecker';
 import CertificateViewer from '@/components/CertificateViewer';
 import AnalyticsDashboard from '@/components/AnalyticsDashboard';
-import { Toaster } from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
 
 type TabType = 'analytics' | 'projects' | 'skills' | 'experience' | 'certificates' | 'messages';
 
@@ -125,7 +125,7 @@ export default function AdminDashboard() {
         }
       }
 
-      const endpoints: Record<TabType, string> = {
+      const endpoints: Partial<Record<TabType, string>> = {
         projects: `https://portifolio-backend-ptck.onrender.com/api/projects/${id}`,
         skills: `https://portifolio-backend-ptck.onrender.com/api/skills/${id}`,
         experience: `https://portifolio-backend-ptck.onrender.com/api/experience/${id}`,
@@ -133,7 +133,12 @@ export default function AdminDashboard() {
         messages: `https://portifolio-backend-ptck.onrender.com/api/messages/${id}`
       };
 
-      const response = await fetch(endpoints[type], {
+      const endpoint = endpoints[type];
+      if (!endpoint) {
+        throw new Error('Invalid delete action');
+      }
+
+      const response = await fetch(endpoint, {
         method: 'DELETE',
         headers: {
           ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
