@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import SkillCard from "../components/SkillCard";
 import SkillsChart from "../components/SkillsChart";
-import Certificates from "../components/Certificates";
 import { apiClient } from "@/lib/api-client";
 import { Skill } from "@/types";
 
@@ -114,10 +113,9 @@ export default function Skills() {
             ))}
           </div>
 
-          {/* Charts & Certificates */}
+          {/* Charts */}
           <div className="mt-16">
             <SkillsChart />
-            <Certificates />
           </div>
         </>
       )}
