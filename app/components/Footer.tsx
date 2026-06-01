@@ -56,7 +56,7 @@ export default function Footer() {
                 <FaTwitter size={18} />
               </a>
               <a
-                href="https://linkedin.com/in/jeromeboitenge"
+                href="https://www.linkedin.com/in/jerome-aldrin-463b4a411?utm_source=share_via&utm_content=profile&utm_medium=member_android"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white text-slate-700 dark:bg-slate-900 dark:text-slate-300 border border-slate-200 dark:border-slate-800 shadow-sm hover:bg-primary hover:text-white transition-all duration-300"

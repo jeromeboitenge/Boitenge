@@ -37,7 +37,7 @@ export default function ContactPage() {
     {
       icon: <FaLinkedin />,
       label: "LinkedIn",
-      href: "https://www.linkedin.com/in/nzaramyimana-jerome-961714391",
+      href: "https://www.linkedin.com/in/jerome-aldrin-463b4a411?utm_source=share_via&utm_content=profile&utm_medium=member_android",
       color: "text-blue-600",
     },
     {

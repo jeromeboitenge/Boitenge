@@ -11,7 +11,7 @@ export const profileData = {
   imageUrl: "/Nzaramyimana-Jerome.jpeg",
   social: {
     twitter: "https://twitter.com/jeromeboitenge",
-    linkedin: "https://linkedin.com/in/jeromeboitenge",
+    linkedin: "https://www.linkedin.com/in/jerome-aldrin-463b4a411?utm_source=share_via&utm_content=profile&utm_medium=member_android",
     github: "https://github.com/jeromeboitenge"
   },
   about: "Passionate software engineer crafting digital solutions that make a difference. Let's build something amazing together.",
