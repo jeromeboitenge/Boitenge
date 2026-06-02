@@ -1,6 +1,5 @@
 'use client';
 
-import ExperienceTimeline from "../components/ExperienceTimeline";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
@@ -37,11 +36,6 @@ export default function AboutPage() {
           the hero introduction, this section dives deeper into how I collaborate, mentor teams, and champion user-centric delivery.
         </p>
       </MotionDiv>
-
-      <h2 className="text-3xl font-bold mb-8 mt-16 text-darkText dark:text-lightBg">
-        My Journey
-      </h2>
-      <ExperienceTimeline />
     </section>
   );
 }
