@@ -148,9 +148,8 @@ export default function Footer() {
         </div>
 
         {/* COPYRIGHT */}
-        <div className="mt-10 flex flex-col gap-4 border-t border-slate-200 dark:border-slate-800 pt-8 text-sm text-slate-500 dark:text-slate-400 md:flex-row md:items-center md:justify-between">
+        <div className="mt-10 flex flex-col gap-4 border-t border-slate-200 dark:border-slate-800 pt-8 text-sm text-slate-500 dark:text-slate-400 md:flex-row md:items-center md:justify-center">
           <p>© {currentYear} Jerome Boitenge. All rights reserved.</p>
-          <p>Designed with intent and built for impact.</p>
         </div>
       </div>
 
