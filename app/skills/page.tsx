@@ -84,7 +84,7 @@ export default function Skills() {
                   ${
                     activeFilter === filter
                       ? "bg-primary text-white shadow-lg"
-                      : "bg-lightBg dark:bg-darkCard text-lightText dark:text-darkText border border-primary"
+                      : "bg-lightCard dark:bg-darkCard text-lightText dark:text-darkText border border-primary"
                   }
                 `}
               >
