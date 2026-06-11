@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import ProjectCard from '../components/ProjectCard';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
-import { apiClient } from '@/lib/api-client';
+import { unifiedApiClient } from '@/lib/unified-api-client';
 import { Project } from '@/types';
 
 // Define the number of projects to show by default
@@ -19,12 +19,12 @@ export default function ProjectsPage() {
     const fetchProjects = async () => {
       try {
         setIsLoading(true);
-        const data = await apiClient.getProjects();
+        const data = await unifiedApiClient.getProjects();
         setProjects(data);
         setError(null);
       } catch (err) {
         console.error('Failed to fetch projects:', err);
-        setError('Failed to load projects. Please try again later.');
+        setError('Failed to load projects. Showing cached data.');
       } finally {
         setIsLoading(false);
       }

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import SkillCard from "../components/SkillCard";
 import SkillsChart from "../components/SkillsChart";
-import { apiClient } from "@/lib/api-client";
+import { unifiedApiClient } from "@/lib/unified-api-client";
 import { Skill } from "@/types";
 
 export default function Skills() {
@@ -17,7 +17,7 @@ export default function Skills() {
     const fetchSkills = async () => {
       try {
         setIsLoading(true);
-        const data = await apiClient.getSkills();
+        const data = await unifiedApiClient.getSkills();
         
         // Group skills by category
         const grouped = data.reduce((acc, skill) => {
@@ -33,7 +33,7 @@ export default function Skills() {
         setError(null);
       } catch (err) {
         console.error('Failed to fetch skills:', err);
-        setError('Failed to load skills. Please try again later.');
+        setError('Failed to load skills. Showing cached data.');
       } finally {
         setIsLoading(false);
       }

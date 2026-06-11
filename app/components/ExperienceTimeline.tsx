@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { FaBriefcase, FaLaptopCode, FaGraduationCap, FaStar } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { apiClient } from "@/lib/api-client";
+import { unifiedApiClient } from "@/lib/unified-api-client";
 import type { Experience } from "@/types/content";
 
 const iconMap: Record<number, JSX.Element> = {
@@ -22,7 +22,7 @@ export default function ExperienceTimeline() {
     const fetchExperience = async () => {
       try {
         setIsLoading(true);
-        const data = await apiClient.getExperience();
+        const data = await unifiedApiClient.getExperience();
         setExperiences(data.sort((a, b) => b.order - a.order));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load experience');
