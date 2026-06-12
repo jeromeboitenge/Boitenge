@@ -239,29 +239,6 @@ class LocalApiClient {
     LocalStorageHelper.saveToStorage(STORAGE_KEYS.CERTIFICATES, filtered);
   }
 
-  async createCertificate(certificate: Partial<Certificate>): Promise<Certificate> {
-    const certificates = await this.getCertificates();
-    const newCertificate: Certificate = {
-      id: `local-${Date.now()}`,
-      name: certificate.name || '',
-      issuer: certificate.issuer || '',
-      issueDate: certificate.issueDate || new Date(),
-      expiryDate: certificate.expiryDate,
-      credentialId: certificate.credentialId,
-      credentialUrl: certificate.credentialUrl,
-      imageUrl: certificate.imageUrl,
-      description: certificate.description,
-      skills: certificate.skills || [],
-      order: certificate.order || certificates.length + 1,
-      isVisible: certificate.isVisible ?? true
-    };
-    
-    const updated = [...certificates, newCertificate];
-    LocalStorageHelper.saveToStorage(STORAGE_KEYS.CERTIFICATES, updated);
-    
-    return newCertificate;
-  }
-
   // Utility methods
   clearAllData(): void {
     LocalStorageHelper.clearStorage();

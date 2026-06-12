@@ -649,6 +649,84 @@ class ApiClientImpl implements ApiClient {
     }));
   }
 
+  async createCertificate(certificate: Partial<Certificate>): Promise<Certificate> {
+    const response = await this.request<{
+      id: string;
+      title: string;
+      issuer: string;
+      date: string;
+      description?: string;
+      url?: string;
+      order: number;
+    }>('/api/certificates', {
+      method: 'POST',
+      body: JSON.stringify({
+        title: certificate.name,
+        issuer: certificate.issuer,
+        date: certificate.issueDate?.toISOString(),
+        description: certificate.description,
+        url: certificate.credentialUrl || certificate.imageUrl,
+        order: certificate.order
+      }),
+    });
+
+    return {
+      id: response.id,
+      name: response.title,
+      issuer: response.issuer,
+      issueDate: new Date(response.date),
+      expiryDate: undefined,
+      credentialId: undefined,
+      credentialUrl: response.url,
+      imageUrl: response.url,
+      description: response.description,
+      skills: certificate.skills || [],
+      order: response.order,
+      isVisible: true
+    };
+  }
+
+  async updateCertificate(id: string, certificate: Partial<Certificate>): Promise<Certificate> {
+    const response = await this.request<{
+      id: string;
+      title: string;
+      issuer: string;
+      date: string;
+      description?: string;
+      url?: string;
+      order: number;
+    }>(`/api/certificates/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        ...(certificate.name && { title: certificate.name }),
+        ...(certificate.issuer && { issuer: certificate.issuer }),
+        ...(certificate.issueDate && { date: certificate.issueDate.toISOString() }),
+        ...(certificate.description && { description: certificate.description }),
+        ...(certificate.credentialUrl && { url: certificate.credentialUrl }),
+        ...(certificate.order !== undefined && { order: certificate.order })
+      }),
+    });
+
+    return {
+      id: response.id,
+      name: response.title,
+      issuer: response.issuer,
+      issueDate: new Date(response.date),
+      expiryDate: undefined,
+      credentialId: undefined,
+      credentialUrl: response.url,
+      imageUrl: response.url,
+      description: response.description,
+      skills: certificate.skills || [],
+      order: response.order,
+      isVisible: true
+    };
+  }
+
+  async deleteCertificate(id: string): Promise<void> {
+    await this.request(`/api/certificates/${id}`, { method: 'DELETE' });
+  }
+
   async getMessages(): Promise<Message[]> {
     try {
       console.log('Fetching messages from backend...');

@@ -15,7 +15,7 @@ export const seedProjects: Project[] = [
       "React Native",
       "tailwind css"
     ],
-    "liveUrl": null,
+    "liveUrl": undefined,
     "imageUrl": "https://res.cloudinary.com/dsi3ggvz4/image/upload/v1779098595/project-images/image/project-1779098594423.jpg",
     "highlights": [
       "Dynamic Data Aggregation & Telemetry",
@@ -24,8 +24,8 @@ export const seedProjects: Project[] = [
       "Clean UI/UX & Responsive Layouts"
     ],
     "order": 0,
-    "createdAt": "2026-05-18T10:03:17.696Z",
-    "updatedAt": "2026-05-18T10:03:17.696Z",
+    "createdAt": new Date("2026-05-18T10:03:17.696Z"),
+    "updatedAt": new Date("2026-05-18T10:03:17.696Z"),
     "isPublished": true
   },
   {
@@ -46,8 +46,8 @@ export const seedProjects: Project[] = [
       "Implemented QR code verification and fraud-resistant checks for ticket security."
     ],
     "order": 1,
-    "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdAt": new Date("2024-01-01T00:00:00.000Z"),
+    "updatedAt": new Date("2024-01-01T00:00:00.000Z"),
     "isPublished": true
   },
   {
@@ -67,8 +67,8 @@ export const seedProjects: Project[] = [
       "Automated Financial Operations"
     ],
     "order": 1,
-    "createdAt": "2026-05-18T09:32:51.260Z",
-    "updatedAt": "2026-05-18T09:43:17.364Z",
+    "createdAt": new Date("2026-05-18T09:32:51.260Z"),
+    "updatedAt": new Date("2026-05-18T09:43:17.364Z"),
     "isPublished": true
   },
   {
@@ -87,8 +87,8 @@ export const seedProjects: Project[] = [
       "Designed a secure, multi-tenant API using Next.js Server Actions for data integrity."
     ],
     "order": 2,
-    "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "createdAt": new Date("2024-01-01T00:00:00.000Z"),
+    "updatedAt": new Date("2024-01-01T00:00:00.000Z"),
     "isPublished": true
   },
   {
@@ -112,8 +112,8 @@ export const seedProjects: Project[] = [
       "Data-Driven Smart Farming and Decision Making"
     ],
     "order": 6,
-    "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2026-05-18T09:55:16.314Z",
+    "createdAt": new Date("2024-01-01T00:00:00.000Z"),
+    "updatedAt": new Date("2026-05-18T09:55:16.314Z"),
     "isPublished": true
   }
 ];
@@ -262,7 +262,7 @@ export const seedExperience: Experience[] = [
     "company": "UR Binary Hub",
     "position": "Full stack developer",
     "description": "Long term interneurship where we Contributed to a full-stack event management platform, building responsive React.js interfaces, RESTful Node.js APIs, and a secure JWT-based authentication system with RBAC. Designed and integrated a ticketing system for event registration and attendance, collaborating with the team using Agile workflows and Git. we had also worked on different projects like ImoTrack, umutungobox , etc",
-    "startDate": "2022-03-01T00:00:00.000Z",
+    "startDate": new Date("2022-03-01T00:00:00.000Z"),
     "technologies": [],
     "achievements": [],
     "order": 0,
@@ -275,7 +275,7 @@ export const seedCertificates: Certificate[] = [
     "id": "cmp2zjq0f000023j12431hk2h",
     "name": "AI career essentials",
     "issuer": "ALX",
-    "issueDate": "2024-05-12T00:00:00.000Z",
+    "issueDate": new Date("2024-05-12T00:00:00.000Z"),
     "credentialUrl": "https://res.cloudinary.com/dsi3ggvz4/image/upload/v1778612706/portfolio-images/image/jukp29vy8ychkj8ikuwf.png",
     "imageUrl": "https://res.cloudinary.com/dsi3ggvz4/image/upload/v1778612706/portfolio-images/image/jukp29vy8ychkj8ikuwf.png",
     "description": "An intermediate knowledge for AI and Prompting Engeneering.",
@@ -287,7 +287,7 @@ export const seedCertificates: Certificate[] = [
     "id": "cmpawwl86000825hl9eumqoq5",
     "name": "Cyber Security",
     "issuer": "Cisco Networking Academy",
-    "issueDate": "2026-04-11T00:00:00.000Z",
+    "issueDate": new Date("2026-04-11T00:00:00.000Z"),
     "credentialUrl": "https://res.cloudinary.com/dsi3ggvz4/image/upload/v1779091097/portfolio-images/image/aofv9d872p1zwdbdacie.pdf",
     "imageUrl": "https://res.cloudinary.com/dsi3ggvz4/image/upload/v1779091097/portfolio-images/image/aofv9d872p1zwdbdacie.pdf",
     "description": "A rigorous technical certification validating a strong foundation in digital asset protection, secure application design, and modern threat mitigation strategies. This training bridges the gap between software development and information security, ensuring a proactive approach to risk management.",
@@ -299,7 +299,7 @@ export const seedCertificates: Certificate[] = [
     "id": "cmpawiugs000725hledq2wbav",
     "name": "Nodejs and Nestjs development",
     "issuer": "Solvit Africa",
-    "issueDate": "2026-01-18T00:00:00.000Z",
+    "issueDate": new Date("2026-01-18T00:00:00.000Z"),
     "credentialUrl": "https://res.cloudinary.com/dsi3ggvz4/image/upload/v1779090455/portfolio-images/image/wmcaqntldbazmb8wwwx9.pdf",
     "imageUrl": "https://res.cloudinary.com/dsi3ggvz4/image/upload/v1779090455/portfolio-images/image/wmcaqntldbazmb8wwwx9.pdf",
     "description": "A backend engineering credential covering Node.js and Nest.js architecture, practical application development, and professional software delivery. Sponsored under the Mastercard Foundation's Young African Works strategy to foster high-impact digital skills.",
@@ -311,7 +311,7 @@ export const seedCertificates: Certificate[] = [
     "id": "cmpazwdwp000b25hl8bdzusm6",
     "name": "Geospatial Data & Open Mapping Specialist",
     "issuer": "GIZ Digital Transformation Center Rwanda, YouthMappers, OpenStreetMap Rwanda, and CyLab Africa (Carnegie Mellon University Africa)",
-    "issueDate": "2026-02-14T00:00:00.000Z",
+    "issueDate": new Date("2026-02-14T00:00:00.000Z"),
     "credentialUrl": "https://res.cloudinary.com/dsi3ggvz4/image/upload/v1779096126/portfolio-images/image/afigzlfwbuc8ukjovija.pdf",
     "imageUrl": "https://res.cloudinary.com/dsi3ggvz4/image/upload/v1779096126/portfolio-images/image/afigzlfwbuc8ukjovija.pdf",
     "description": "An intensive, hands-on technical training credential focused on modern geospatial data engineering, open-source mapping platforms, and data creation methodologies. This workshop, backed by international development and premier academic institutions like GIZ and Carnegie Mellon University Africa, certifies core practical competencies in leveraging humanitarian data to drive digital transformation and community innovation.",
@@ -323,7 +323,7 @@ export const seedCertificates: Certificate[] = [
     "id": "cmpazhjiq000a25hl9g7xvky4",
     "name": "Intelligent Transportation System",
     "issuer": "Harbin Institute of Technology,University of Rwanda (UR - CST), and China Road and Bridge Corporation (CRBC)",
-    "issueDate": "2026-04-27T00:00:00.000Z",
+    "issueDate": new Date("2026-04-27T00:00:00.000Z"),
     "credentialUrl": "https://res.cloudinary.com/dsi3ggvz4/image/upload/v1779095433/portfolio-images/image/gsfcguzvn814bgzzaoob.jpg",
     "imageUrl": "https://res.cloudinary.com/dsi3ggvz4/image/upload/v1779095433/portfolio-images/image/gsfcguzvn814bgzzaoob.jpg",
     "description": "A high-level capacity-building and technical credential focusing on the intersection of advanced computing, IoT, and modern infrastructure. This international program provided deep insights into Intelligent Transportation Systems (ITS), smart infrastructure development, and the digital transformation of modern transit networks.",
