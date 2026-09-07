@@ -7,6 +7,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { AuthGuard } from '@/components/auth';
 import { useAuth } from '@/components/auth';
 import { apiClient } from '@/lib/api-client';
@@ -22,11 +23,13 @@ import RoleChecker from '@/components/RoleChecker';
 import CertificateViewer from '@/components/CertificateViewer';
 import AnalyticsDashboard from '@/components/AnalyticsDashboard';
 import { toast, Toaster } from 'react-hot-toast';
+import { buildBackendUrl } from '@/lib/backend-config';
 
 type TabType = 'analytics' | 'projects' | 'skills' | 'experience' | 'certificates' | 'messages';
 
 export default function AdminDashboard() {
   const { user, logout } = useAuth();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>('projects');
   const [projects, setProjects] = useState<Project[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
@@ -107,6 +110,7 @@ export default function AdminDashboard() {
 
   const handleLogout = async () => {
     await logout();
+    router.push('/');
   };
 
   const handleDelete = async (type: TabType, id: string) => {
@@ -126,11 +130,11 @@ export default function AdminDashboard() {
       }
 
       const endpoints: Partial<Record<TabType, string>> = {
-        projects: `https://portifolio-backend-ptck.onrender.com/api/projects/${id}`,
-        skills: `https://portifolio-backend-ptck.onrender.com/api/skills/${id}`,
-        experience: `https://portifolio-backend-ptck.onrender.com/api/experience/${id}`,
-        certificates: `https://portifolio-backend-ptck.onrender.com/api/certificates/${id}`,
-        messages: `https://portifolio-backend-ptck.onrender.com/api/messages/${id}`
+        projects: buildBackendUrl(`/api/projects/${id}`),
+        skills: buildBackendUrl(`/api/skills/${id}`),
+        experience: buildBackendUrl(`/api/experience/${id}`),
+        certificates: buildBackendUrl(`/api/certificates/${id}`),
+        messages: buildBackendUrl(`/api/messages/${id}`)
       };
 
       const endpoint = endpoints[type];

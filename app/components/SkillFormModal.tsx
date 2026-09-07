@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Skill } from '@/types';
 import Modal from './Modal';
 import toast from 'react-hot-toast';
+import { buildBackendUrl } from '@/lib/backend-config';
 
 interface SkillFormModalProps {
   isOpen: boolean;
@@ -116,9 +117,9 @@ export default function SkillFormModal({ isOpen, onClose, onSuccess, skill }: Sk
         }
       }
 
-      const url = skill 
-        ? `https://portifolio-backend-ptck.onrender.com/api/skills/${skill.id}`
-        : 'https://portifolio-backend-ptck.onrender.com/api/skills';
+      const url = skill
+        ? buildBackendUrl(`/api/skills/${skill.id}`)
+        : buildBackendUrl('/api/skills');
       
       const method = skill ? 'PATCH' : 'POST';
       

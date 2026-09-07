@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getBackendHealthUrl, fetchWithRetry } from '@/lib/backend-config';
 
 export function BackendStatusToast() {
   const [status, setStatus] = useState<'checking' | 'online' | 'offline' | 'hidden'>('checking');
@@ -10,14 +11,12 @@ export function BackendStatusToast() {
   useEffect(() => {
     const checkBackend = async () => {
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-        const response = await fetch('https://portifolio-backend-ptck.onrender.com/health', {
-          signal: controller.signal,
-        });
-
-        clearTimeout(timeoutId);
+        const response = await fetchWithRetry(
+          getBackendHealthUrl(),
+          { method: 'GET' },
+          2,
+          15000,
+        );
 
         if (response.ok) {
           setStatus('online');

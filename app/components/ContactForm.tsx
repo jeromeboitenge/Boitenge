@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaRegEnvelope, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { analytics } from '@/lib/analytics';
+import { buildBackendUrl } from '@/lib/backend-config';
 
 interface ContactFormProps {
   onSuccess?: () => void;
@@ -28,7 +29,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
     try {
       // Send to both backend (for admin dashboard) and Formspree (for email)
       const [backendResponse, localResponse, emailResponse] = await Promise.allSettled([
-        fetch("https://portifolio-backend-ptck.onrender.com/api/messages", {
+        fetch(buildBackendUrl('/api/messages'), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(form),

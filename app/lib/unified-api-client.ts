@@ -7,6 +7,7 @@ import { apiClient } from './api-client';
 import { localApiClient } from './local-api-client';
 import { Project, ProjectInput, Skill, Experience, Certificate } from '@/types';
 import { LocalStorageHelper, STORAGE_KEYS } from '@/data/seedData';
+import { buildBackendUrl, fetchWithTimeout } from './backend-config';
 
 class UnifiedApiClient {
   private isBackendAvailable: boolean | null = null;
@@ -24,20 +25,14 @@ class UnifiedApiClient {
     // Start new check
     this.checkingBackend = (async () => {
       try {
-        // Try a simple request with short timeout
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
-
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://portifolio-backend-ptck.onrender.com'}/api/projects`, {
-          signal: controller.signal,
+        const response = await fetchWithTimeout(buildBackendUrl('/api/projects'), {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
-        });
+        }, 20000);
 
-        clearTimeout(timeoutId);
         this.isBackendAvailable = response.ok;
         console.log(`Backend availability: ${this.isBackendAvailable ? 'ONLINE' : 'OFFLINE'}`);
-        
+
         return this.isBackendAvailable;
       } catch (error) {
         console.warn('Backend unavailable, using local storage fallback');
@@ -61,19 +56,12 @@ class UnifiedApiClient {
     fallbackName: string = 'data'
   ): Promise<T> {
     try {
-      // Try backend first with timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
-      
-      const dataPromise = backendFn();
       const data = await Promise.race([
-        dataPromise,
-        new Promise<never>((_, reject) => 
-          setTimeout(() => reject(new Error('Backend timeout')), 8000)
+        backendFn(),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('Backend timeout')), 15000)
         )
       ]);
-      
-      clearTimeout(timeoutId);
       
       // Save to local storage for offline access
       if (saveToLocal && data) {
@@ -264,7 +252,6 @@ class UnifiedApiClient {
 
   // Utility methods
   async forceLocalMode(): Promise<void> {
-    this.isBackendAvailable = false;
     LocalStorageHelper.setLocalMode(true);
   }
 

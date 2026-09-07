@@ -5,6 +5,7 @@ import { Project, ProjectInput } from '@/types';
 import Modal from './Modal';
 import toast from 'react-hot-toast';
 import { FaUpload, FaImage, FaTimes } from 'react-icons/fa';
+import { buildBackendUrl } from '@/lib/backend-config';
 
 interface ProjectFormModalProps {
   isOpen: boolean;
@@ -109,7 +110,7 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
         headers['Authorization'] = `Bearer ${accessToken}`;
       }
 
-      const response = await fetch('https://portifolio-backend-ptck.onrender.com/api/uploads', {
+      const response = await fetch(buildBackendUrl('/api/uploads'), {
         method: 'POST',
         headers,
         body: uploadFormData,
@@ -154,9 +155,9 @@ export default function ProjectFormModal({ isOpen, onClose, onSuccess, project }
         }
         projectImageUrl = uploadedUrl;
       }
-      const url = project 
-        ? `https://portifolio-backend-ptck.onrender.com/api/projects/${project.id}`
-        : 'https://portifolio-backend-ptck.onrender.com/api/projects';
+      const url = project
+        ? buildBackendUrl(`/api/projects/${project.id}`)
+        : buildBackendUrl('/api/projects');
       
       const method = project ? 'PATCH' : 'POST';
       

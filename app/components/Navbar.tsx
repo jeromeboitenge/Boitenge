@@ -6,7 +6,7 @@ import { FaMoon, FaSun, FaBars, FaTimes, FaUser, FaSignOutAlt, FaCog } from 'rea
 import { useTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from './auth/AuthProvider';
 
 const links = [
@@ -22,6 +22,7 @@ const links = [
 export default function Navbar() {
   const { theme, setTheme } = useTheme();
   const { user, isAuthenticated, logout } = useAuth();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [activeSection, setActiveSection] = useState('Home');
@@ -75,6 +76,7 @@ export default function Navbar() {
     try {
       await logout();
       setShowUserMenu(false);
+      router.push('/');
     } catch (error) {
       console.error('Logout failed:', error);
     }

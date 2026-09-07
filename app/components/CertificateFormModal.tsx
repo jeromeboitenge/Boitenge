@@ -6,6 +6,7 @@ import Modal from './Modal';
 import toast from 'react-hot-toast';
 import { FaUpload, FaFile, FaTimes } from 'react-icons/fa';
 import { apiClient } from '@/lib/api-client';
+import { buildBackendUrl } from '@/lib/backend-config';
 
 interface CertificateFormModalProps {
   isOpen: boolean;
@@ -141,9 +142,9 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
         return;
       }
 
-      const url = certificate 
-        ? `https://portifolio-backend-ptck.onrender.com/api/certificates/${certificate.id}`
-        : 'https://portifolio-backend-ptck.onrender.com/api/certificates';
+      const url = certificate
+        ? buildBackendUrl(`/api/certificates/${certificate.id}`)
+        : buildBackendUrl('/api/certificates');
       
       const method = certificate ? 'PATCH' : 'POST';
       

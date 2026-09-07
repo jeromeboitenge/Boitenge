@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Experience } from '@/types';
 import Modal from './Modal';
 import toast from 'react-hot-toast';
+import { buildBackendUrl } from '@/lib/backend-config';
 
 interface ExperienceFormModalProps {
   isOpen: boolean;
@@ -66,9 +67,9 @@ export default function ExperienceFormModal({ isOpen, onClose, onSuccess, experi
         }
       }
 
-      const url = experience 
-        ? `https://portifolio-backend-ptck.onrender.com/api/experience/${experience.id}`
-        : 'https://portifolio-backend-ptck.onrender.com/api/experience';
+      const url = experience
+        ? buildBackendUrl(`/api/experience/${experience.id}`)
+        : buildBackendUrl('/api/experience');
       
       const method = experience ? 'PATCH' : 'POST';
       
