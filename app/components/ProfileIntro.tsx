@@ -6,12 +6,14 @@ import { useState, useEffect } from "react";
 import PublicLocationDisplay from "./PublicLocationDisplay";
 import Modal from "./Modal";
 import { profileData } from "../data/profileData";
+import { useProfileStore } from "../stores/profileStore";
 
 const badges = ["Full-stack Engineer", "Design Systems", "Hardware & Software Maintenance"];
 
 export default function ProfileIntro({ showButtons = false }) {
   const [mounted, setMounted] = useState(false);
   const [showCvModal, setShowCvModal] = useState(false);
+  const { imageUrl } = useProfileStore();
 
   useEffect(() => {
     setMounted(true);
@@ -121,7 +123,7 @@ export default function ProfileIntro({ showButtons = false }) {
           
           <div className="absolute inset-1 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-slate-900 border-2 sm:border-4 border-white dark:border-slate-800 pointer-events-none">
             <Image
-              src="/Nzaramyimana-Jerome.jpeg"
+              src={imageUrl}
               alt="Jerome Nzaramyimana"
               fill
               sizes="(max-width: 375px) 240px, (max-width: 640px) 280px, (max-width: 768px) 320px, 448px"

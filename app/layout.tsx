@@ -9,6 +9,8 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { BackendStatusToast } from "./components/BackendStatusToast";
 import LocationTracker from "./components/LocationTracker";
 import AnalyticsProvider from "./components/AnalyticsProvider";
+import ScrollToTop from "./components/ScrollToTop";
+import PageTransition from "./components/PageTransition";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -61,8 +63,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 <BackendStatusToast />
                 <LocationTracker />
                 <Navbar />
-                <main className="min-h-screen pt-20">{children}</main>
+                <main className="min-h-screen pt-20">
+                  <PageTransition>{children}</PageTransition>
+                </main>
                 <Footer />
+                <ScrollToTop />
               </AnalyticsProvider>
             </AuthProvider>
           </ErrorBoundary>

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { FaMoon, FaSun, FaBars, FaTimes, FaUser, FaSignOutAlt, FaCog } from 'react-icons/fa';
+import { FaMoon, FaSun, FaBars, FaTimes, FaUser, FaSignOutAlt, FaCog, FaCamera } from 'react-icons/fa';
 import { useTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
@@ -158,6 +158,14 @@ export default function Navbar() {
                       <FaCog className="text-xs" />
                       <span>Admin Dashboard</span>
                     </Link>
+                    <Link
+                      href="/admin/profile"
+                      className="flex items-center space-x-2 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
+                      onClick={() => setShowUserMenu(false)}
+                    >
+                      <FaCamera className="text-xs" />
+                      <span>Edit Profile Photo</span>
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="flex items-center space-x-2 w-full px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 text-left"
@@ -254,6 +262,14 @@ export default function Navbar() {
                   <FaCog className="text-xs" />
                   <span>Admin Dashboard</span>
                 </Link>
+                <Link
+                  href="/admin/profile"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center space-x-2 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                >
+                  <FaCamera className="text-xs" />
+                  <span>Edit Profile Photo</span>
+                </Link>
                 <button
                   onClick={() => {
                     handleLogout();
@@ -305,6 +321,14 @@ export default function Navbar() {
             >
               <FaCog className="text-xs" />
               <span>Admin Dashboard</span>
+            </Link>
+            <Link
+              href="/admin/profile"
+              className="flex items-center space-x-2 px-4 py-3 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
+              onClick={() => setShowUserMenu(false)}
+            >
+              <FaCamera className="text-xs" />
+              <span>Edit Profile Photo</span>
             </Link>
             <button
               onClick={handleLogout}
