@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import PublicLocationDisplay from "./PublicLocationDisplay";
 import Modal from "./Modal";
-import { profileData } from "../data/profileData";
 import { useProfileStore } from "../stores/profileStore";
 
 const badges = ["Full-stack Engineer", "Design Systems", "Hardware & Software Maintenance"];
@@ -13,15 +12,15 @@ const badges = ["Full-stack Engineer", "Design Systems", "Hardware & Software Ma
 export default function ProfileIntro({ showButtons = false }) {
   const [mounted, setMounted] = useState(false);
   const [showCvModal, setShowCvModal] = useState(false);
-  const { imageUrl } = useProfileStore();
+  const { imageUrl, cvUrl } = useProfileStore();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const cvEmbedUrl = profileData.cvUrl?.includes("/view")
-    ? profileData.cvUrl.replace(/\/file\/d\/([^/]+)\/view.*$/, "/file/d/$1/preview")
-    : profileData.cvUrl;
+  const cvEmbedUrl = cvUrl?.includes("/view")
+    ? cvUrl.replace(/\/file\/d\/([^/]+)\/view.*$/, "/file/d/$1/preview")
+    : cvUrl;
 
   // Show content immediately, animate when mounted
   const MotionDiv = mounted ? motion.div : 'div';

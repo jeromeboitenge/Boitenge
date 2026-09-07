@@ -772,9 +772,14 @@ class ApiClientImpl implements ApiClient {
 
   // File upload method
   async uploadImage(file: File): Promise<UploadResponse> {
+    return this.uploadFile(file, 'portfolio-images');
+  }
+
+  // Generic file upload method
+  async uploadFile(file: File, resource: string = 'portfolio-images'): Promise<UploadResponse> {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('resource', 'portfolio-images');
+    formData.append('resource', resource);
 
     const headers: Record<string, string> = {};
     if (this.token) {

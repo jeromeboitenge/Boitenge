@@ -24,6 +24,7 @@ import RoleChecker from '@/components/RoleChecker';
 import CertificateViewer from '@/components/CertificateViewer';
 import AnalyticsDashboard from '@/components/AnalyticsDashboard';
 import ProfileImageCard from '@/components/ProfileImageCard';
+import CvCard from '@/components/CvCard';
 import { toast, Toaster } from 'react-hot-toast';
 import { buildBackendUrl } from '@/lib/backend-config';
 
@@ -375,7 +376,7 @@ function ProfileManagement() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Manage Profile</h2>
-        <p className="text-slate-600 dark:text-slate-400 mt-1">Update your profile photo to be displayed on your portfolio</p>
+        <p className="text-slate-600 dark:text-slate-400 mt-1">Update your profile photo and CV to be displayed on your portfolio</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -406,16 +407,13 @@ function ProfileManagement() {
           <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl border border-primary/20 p-6">
             <h3 className="font-bold text-slate-900 dark:text-white mb-2">Preview</h3>
             <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-              Your photo will appear on the hero section of your portfolio with a rotating gradient effect.
+              Your photo appears on the hero section and your CV in the "View CV" modal. Changes are saved instantly and persist across sessions.
             </p>
-            <div className="flex items-center gap-3">
-              <div className="text-sm text-slate-600 dark:text-slate-300">
-                <span className="font-semibold text-primary">Tip:</span> Changes are saved instantly and persist across sessions.
-              </div>
-            </div>
           </div>
         </div>
       </div>
+
+      <CvCard />
     </div>
   );
 }

@@ -48,6 +48,7 @@ export interface ApiClient {
   
   // File operations
   uploadImage(file: File): Promise<UploadResponse>;
+  uploadFile(file: File, resource?: string): Promise<UploadResponse>;
 }
 
 export interface ApiRequest {
