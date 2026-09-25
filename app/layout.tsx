@@ -34,8 +34,40 @@ export const metadata = {
     "Software Engineer Rwanda",
     "MERN Developer",
     "React Developer Rwanda",
+    "Next.js Developer",
+    "Full Stack Developer",
+    "Freelance Developer Rwanda",
   ],
-  authors: [{ name: "Jerome Boitenge" }],
+  authors: [{ name: "Jerome Boitenge", url: "https://boitenge.vercel.app" }],
+  creator: "Jerome Boitenge",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://boitenge.vercel.app",
+    siteName: "Jerome Boitenge",
+    title: "Jerome Nzaramyimana | Software Engineer",
+    description:
+      "Full-stack engineer crafting premium digital experiences with React, Next.js, and Node.js. Available for hire and remote work.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Jerome Nzaramyimana | Software Engineer",
+    description:
+      "Full-stack engineer crafting premium digital experiences with React, Next.js, and Node.js.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "https://boitenge.vercel.app",
+  },
 };
 
 export const viewport = {

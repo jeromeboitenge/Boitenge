@@ -3,11 +3,20 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope } from "react-icons/fa";
 import PublicLocationDisplay from "./PublicLocationDisplay";
 import Modal from "./Modal";
+import Typewriter from "./Typewriter";
 import { useProfileStore } from "../stores/profileStore";
 
 const badges = ["Full-stack Engineer", "Design Systems", "Hardware & Software Maintenance"];
+const roles = ["Full-Stack Engineer", "System Analyst", "API & Database Architect", "Design Systems Builder"];
+const socialLinks = [
+  { icon: <FaGithub className="text-lg" />, href: "https://github.com/jeromeboitenge", label: "GitHub" },
+  { icon: <FaLinkedin className="text-lg" />, href: "https://www.linkedin.com/in/jerome-aldrin-463b4a411", label: "LinkedIn" },
+  { icon: <FaTwitter className="text-lg" />, href: "https://twitter.com/jeromeboitenge", label: "Twitter" },
+  { icon: <FaEnvelope className="text-lg" />, href: "mailto:jeromeboitenge@gmail.com", label: "Email" },
+];
 
 export default function ProfileIntro({ showButtons = false }) {
   const [mounted, setMounted] = useState(false);
@@ -61,6 +70,14 @@ export default function ProfileIntro({ showButtons = false }) {
             );
           })}
         </div>
+
+        <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-300 dark:border-emerald-500/30 px-3 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs font-semibold text-emerald-600 dark:text-emerald-400 shadow-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+            Available for hire & remote work
+          </div>
         
         <div className="space-y-2 sm:space-y-3 md:space-y-4">
           <h2 className="text-sm xs:text-base sm:text-lg md:text-xl font-medium text-slate-500 dark:text-slate-400">
@@ -70,6 +87,10 @@ export default function ProfileIntro({ showButtons = false }) {
             Jerome <br className="hidden sm:block md:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Nzaramyimana</span>
           </h1>
+          <div className="flex items-center justify-center md:justify-start gap-2 text-base xs:text-lg sm:text-xl md:text-2xl font-semibold text-slate-700 dark:text-slate-200 h-8">
+            <span className="hidden sm:inline text-slate-400 dark:text-slate-500">I build&nbsp;</span>
+            <Typewriter words={roles} className="text-primary" />
+          </div>
         </div>
 
         <p className="text-sm xs:text-base sm:text-lg md:text-xl leading-relaxed text-slate-600 dark:text-slate-300 max-w-2xl mx-auto md:mx-0">
@@ -91,6 +112,23 @@ export default function ProfileIntro({ showButtons = false }) {
             </button>
           </div>
         )}
+
+        {/* Social links */}
+        <div className="flex items-center justify-center md:justify-start gap-2 sm:gap-3 pt-1">
+          <span className="text-xs uppercase tracking-widest text-slate-400 dark:text-slate-500 mr-1 hidden sm:block">Find me</span>
+          {socialLinks.map(({ icon, href, label }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              className="flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 shadow-sm hover:text-primary dark:hover:text-primary hover:-translate-y-0.5 hover:shadow-md transition-all"
+            >
+              {icon}
+            </a>
+          ))}
+        </div>
       </MotionDiv>
 
       <Modal isOpen={showCvModal} onClose={() => setShowCvModal(false)} title="Curriculum Vitae" size="xl">

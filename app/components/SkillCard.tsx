@@ -11,11 +11,14 @@ import {
   SiNestjs,
   SiMongodb,
   SiMysql,
+  SiPostgresql,
   SiPrisma,
   SiGit,
   SiPostman,
   SiUbuntu,
-  SiNeovim,
+  SiTypescript,
+  SiJavascript,
+  SiDocker,
 } from "react-icons/si";
 
 import { VscVscode } from "react-icons/vsc";
@@ -34,8 +37,12 @@ const iconMap: Record<string, JSX.Element> = {
 
   MongoDB: <SiMongodb />,
   MySQL: <SiMysql />,
+  PostgreSQL: <SiPostgresql />,
   Prisma: <SiPrisma />,
-  Neon: <SiNeovim />,
+
+  TypeScript: <SiTypescript />,
+  JavaScript: <SiJavascript />,
+  Docker: <SiDocker />,
 
   Git: <SiGit />,
   Postman: <SiPostman />,

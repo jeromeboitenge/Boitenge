@@ -3,6 +3,37 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import {
+  SiReact,
+  SiNextdotjs,
+  SiTypescript,
+  SiJavascript,
+  SiTailwindcss,
+  SiHtml5,
+  SiCss3,
+  SiNodedotjs,
+  SiExpress,
+  SiNestjs,
+  SiMongodb,
+  SiMysql,
+  SiPostgresql,
+  SiPrisma,
+  SiFauna,
+  SiSupabase,
+  SiFirebase,
+  SiGit,
+  SiDocker,
+  SiRedis,
+  SiGraphql,
+  SiPython,
+  SiDjango,
+  SiFlask,
+  SiKotlin,
+  SiAndroid,
+  SiPostman,
+  SiVite,
+  SiRedux,
+} from 'react-icons/si';
 
 // --- ICON DEFINITIONS (Kept for necessary icons: Spark, External, Check) ---
 
@@ -55,7 +86,7 @@ const IconCheck = () => (
   </svg>
 );
 
-// --- TECH ICON DEFINITIONS (All remaining icons kept as before) ---
+// --- TECH ICON DEFINITIONS ---
 
 const iconBase = 'h-3.5 w-3.5 text-primary';
 
@@ -65,7 +96,6 @@ const IconNext = () => (
     <path d="M8 8l8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
   </svg>
 );
-// ... (Include all other Icon components here, or ensure they are present in your file)
 
 const DefaultTechIcon = () => (
   <svg aria-hidden="true" className={iconBase} viewBox="0 0 24 24" fill="none">
@@ -74,9 +104,44 @@ const DefaultTechIcon = () => (
 );
 
 const techIconMap: Record<string, JSX.Element> = {
-  // ... (Include all key-value pairs for techIconMap here)
+  React: <SiReact className={iconBase} />,
+  ReactJS: <SiReact className={iconBase} />,
   'Next.js': <IconNext />,
-  // ...
+  Next: <IconNext />,
+  TypeScript: <SiTypescript className={iconBase} />,
+  JavaScript: <SiJavascript className={iconBase} />,
+  JS: <SiJavascript className={iconBase} />,
+  TS: <SiTypescript className={iconBase} />,
+  'Tailwind CSS': <SiTailwindcss className={iconBase} />,
+  Tailwind: <SiTailwindcss className={iconBase} />,
+  HTML: <SiHtml5 className={iconBase} />,
+  CSS: <SiCss3 className={iconBase} />,
+  'Node.js': <SiNodedotjs className={iconBase} />,
+  Node: <SiNodedotjs className={iconBase} />,
+  Express: <SiExpress className={iconBase} />,
+  'Express.js': <SiExpress className={iconBase} />,
+  NestJS: <SiNestjs className={iconBase} />,
+  MongoDB: <SiMongodb className={iconBase} />,
+  Mongo: <SiMongodb className={iconBase} />,
+  MySQL: <SiMysql className={iconBase} />,
+  PostgreSQL: <SiPostgresql className={iconBase} />,
+  Postgres: <SiPostgresql className={iconBase} />,
+  Prisma: <SiPrisma className={iconBase} />,
+  Redux: <SiRedux className={iconBase} />,
+  Supabase: <SiSupabase className={iconBase} />,
+  Firebase: <SiFirebase className={iconBase} />,
+  Redis: <SiRedis className={iconBase} />,
+  GraphQL: <SiGraphql className={iconBase} />,
+  Docker: <SiDocker className={iconBase} />,
+  Git: <SiGit className={iconBase} />,
+  Python: <SiPython className={iconBase} />,
+  Django: <SiDjango className={iconBase} />,
+  Flask: <SiFlask className={iconBase} />,
+  Kotlin: <SiKotlin className={iconBase} />,
+  Android: <SiAndroid className={iconBase} />,
+  Postman: <SiPostman className={iconBase} />,
+  Vite: <SiVite className={iconBase} />,
+  ViteJS: <SiVite className={iconBase} />,
 };
 
 // --- INTERFACE AND COMPONENT ---
@@ -155,7 +220,7 @@ export default function ProjectCard({
           {/* Tech Stack Tags */}
           <div className="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
             <span className="text-xs font-semibold uppercase text-slate-500 mr-2">Core Stack:</span>
-            {tags.slice(0, 3).map((tag, index) => (
+            {tags.slice(0, 4).map((tag, index) => (
               <span
                 key={index}
                 className="inline-flex items-center gap-1.5 rounded-full bg-slate-100/80 px-2.5 py-0.5 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -164,6 +229,11 @@ export default function ProjectCard({
                 {tag}
               </span>
             ))}
+            {tags.length > 4 && (
+              <span className="inline-flex items-center rounded-full bg-primary/5 px-2.5 py-0.5 text-xs font-medium text-primary dark:bg-primary/10">
+                +{tags.length - 4} more
+              </span>
+            )}
           </div>
 
 
