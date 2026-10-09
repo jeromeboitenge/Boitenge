@@ -30,6 +30,8 @@ export interface ApiClient {
   // Profile
   getProfile(): Promise<Profile>;
   updateProfile(profile: ProfileInput): Promise<Profile>;
+  getProfileAvatar(): Promise<string | null>;
+  updateProfileAvatar(avatarUrl: string): Promise<void>;
   
   // Projects
   getProjects(): Promise<Project[]>;

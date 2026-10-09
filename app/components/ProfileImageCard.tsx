@@ -61,6 +61,7 @@ export default function ProfileImageCard() {
       setProgress(100);
 
       if (response.success && response.data.url) {
+        await apiClient.updateProfileAvatar(response.data.url);
         cleanupPreview();
         setPreview(null);
         setImageUrl(response.data.url);

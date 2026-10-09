@@ -8,6 +8,7 @@ import PublicLocationDisplay from "./PublicLocationDisplay";
 import Modal from "./Modal";
 import Typewriter from "./Typewriter";
 import { useProfileStore } from "../stores/profileStore";
+import { apiClient } from "@/lib/api-client";
 
 const badges = ["Full-stack Engineer", "Design Systems", "Hardware & Software Maintenance"];
 const roles = ["Full-Stack Engineer", "System Analyst", "API & Database Architect", "Design Systems Builder"];
@@ -21,10 +22,19 @@ const socialLinks = [
 export default function ProfileIntro({ showButtons = false }) {
   const [mounted, setMounted] = useState(false);
   const [showCvModal, setShowCvModal] = useState(false);
-  const { imageUrl, cvUrl } = useProfileStore();
+  const [imageUrl, setImageUrl] = useState("/Nzaramyimana-Jerome.jpeg");
+  const { cvUrl } = useProfileStore();
 
   useEffect(() => {
     setMounted(true);
+    let isCurrent = true;
+    apiClient.getProfileAvatar().then((avatarUrl) => {
+      if (isCurrent && avatarUrl) setImageUrl(avatarUrl);
+    }).catch(() => {});
+
+    return () => {
+      isCurrent = false;
+    };
   }, []);
 
   const cvEmbedUrl = cvUrl?.includes("/view")
