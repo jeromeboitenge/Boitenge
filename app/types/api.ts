@@ -31,7 +31,9 @@ export interface ApiClient {
   getProfile(): Promise<Profile>;
   updateProfile(profile: ProfileInput): Promise<Profile>;
   getProfileAvatar(): Promise<string | null>;
-  updateProfileAvatar(avatarUrl: string): Promise<void>;
+  updateProfileAvatar(avatarUrl: string | null): Promise<void>;
+  getProfileAssets(): Promise<{ avatarUrl: string | null; cvUrl: string | null }>;
+  updateProfileCv(cvUrl: string | null): Promise<void>;
   
   // Projects
   getProjects(): Promise<Project[]>;

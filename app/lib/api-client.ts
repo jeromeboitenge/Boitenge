@@ -825,18 +825,34 @@ class ApiClientImpl implements ApiClient {
   }
 
   // Profile methods
-  async getProfileAvatar(): Promise<string | null> {
-    const profile = await this.request<{ avatarUrl?: string | null } | null>(
-      '/api/profile',
-      { cache: 'no-store' },
-    );
-    return profile?.avatarUrl ?? null;
+  async getProfileAssets(): Promise<{ avatarUrl: string | null; cvUrl: string | null }> {
+    const profile = await this.request<{
+      avatarUrl?: string | null;
+      cvUrl?: string | null;
+    } | null>('/api/profile', { cache: 'no-store' });
+
+    return {
+      avatarUrl: profile?.avatarUrl ?? null,
+      cvUrl: profile?.cvUrl ?? null,
+    };
   }
 
-  async updateProfileAvatar(avatarUrl: string): Promise<void> {
+  async getProfileAvatar(): Promise<string | null> {
+    const { avatarUrl } = await this.getProfileAssets();
+    return avatarUrl;
+  }
+
+  async updateProfileAvatar(avatarUrl: string | null): Promise<void> {
     await this.request('/api/profile/avatar', {
       method: 'PATCH',
       body: JSON.stringify({ avatarUrl }),
+    });
+  }
+
+  async updateProfileCv(cvUrl: string | null): Promise<void> {
+    await this.request('/api/profile/cv', {
+      method: 'PATCH',
+      body: JSON.stringify({ cvUrl }),
     });
   }
 

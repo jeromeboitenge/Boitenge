@@ -61,6 +61,7 @@ export default function CvCard() {
       setProgress(100);
 
       if (response.success && response.data.url) {
+        await apiClient.updateProfileCv(response.data.url);
         setCvUrl(response.data.url);
         toast.success('CV uploaded! It is now linked on your portfolio.');
       } else {
@@ -87,11 +88,16 @@ export default function CvCard() {
     if (file) handleFile(file);
   };
 
-  const handleReset = () => {
-    setFileName(null);
-    resetCv();
-    if (fileInputRef.current) fileInputRef.current.value = '';
-    toast.success('CV reset to the default');
+  const handleReset = async () => {
+    try {
+      await apiClient.updateProfileCv(null);
+      setFileName(null);
+      resetCv();
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      toast.success('CV reset to the default');
+    } catch {
+      toast.error('Could not reset the CV. Please try again.');
+    }
   };
 
   const isCustom = cvUrl && cvUrl !== '' && !cvUrl.startsWith('https://drive.google.com');

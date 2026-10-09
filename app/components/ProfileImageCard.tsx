@@ -100,13 +100,18 @@ export default function ProfileImageCard() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
     cleanupPreview();
     setPreview(null);
     setHasChanges(false);
-    resetImage();
-    if (fileInputRef.current) fileInputRef.current.value = '';
-    toast.success('Profile image reset to default');
+    try {
+      await apiClient.updateProfileAvatar(null);
+      resetImage();
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      toast.success('Profile image reset to default');
+    } catch {
+      toast.error('Could not reset the profile image. Please try again.');
+    }
   };
 
   const displayImage = preview || imageUrl;

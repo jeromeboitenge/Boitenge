@@ -11,6 +11,7 @@ import LocationTracker from "./components/LocationTracker";
 import AnalyticsProvider from "./components/AnalyticsProvider";
 import ScrollToTop from "./components/ScrollToTop";
 import PageTransition from "./components/PageTransition";
+import ProfileAssetsSync from "./components/ProfileAssetsSync";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -92,6 +93,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <ErrorBoundary>
             <AuthProvider>
               <AnalyticsProvider>
+                <ProfileAssetsSync />
                 <BackendStatusToast />
                 <LocationTracker />
                 <Navbar />

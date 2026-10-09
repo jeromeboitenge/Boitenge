@@ -215,7 +215,7 @@ export default function AdminDashboard() {
                   className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-primary text-slate-700 dark:text-slate-300 px-6 py-2.5 rounded-full text-sm font-semibold transition-colors"
                 >
                   <FaUser className="text-xs" />
-                  Profile Photo
+                  Profile
                 </Link>
                 <button
                   onClick={handleLogout}
@@ -374,46 +374,20 @@ export default function AdminDashboard() {
 function ProfileManagement() {
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Manage Profile</h2>
-        <p className="text-slate-600 dark:text-slate-400 mt-1">Update your profile photo and CV to be displayed on your portfolio</p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ProfileImageCard />
-        <div className="space-y-4">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
-            <h3 className="font-bold text-slate-900 dark:text-white mb-2">Profile Tips</h3>
-            <ul className="space-y-3">
-              {[
-                { title: 'Use a recent photo', desc: 'A clear, professional headshot helps visitors connect with you.' },
-                { title: 'Square or portrait works best', desc: 'The card is designed to crop any photo beautifully with object-cover.' },
-                { title: 'Keep it under 5MB', desc: 'Larger files slow down your portfolio page load time.' },
-                { title: 'High resolution', desc: 'Images 500x500px or larger stay crisp on all screen sizes.' },
-              ].map((tip, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">
-                    {idx + 1}
-                  </span>
-                  <div>
-                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">{tip.title}</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{tip.desc}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl border border-primary/20 p-6">
-            <h3 className="font-bold text-slate-900 dark:text-white mb-2">Preview</h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-              Your photo appears on the hero section and your CV in the "View CV" modal. Changes are saved instantly and persist across sessions.
-            </p>
-          </div>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Profile assets</h2>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">Manage the photo and CV shown to portfolio visitors.</p>
         </div>
+        <Link href="/admin/profile" className="text-sm font-semibold text-primary hover:text-primary/80">
+          Open full settings
+        </Link>
       </div>
 
-      <CvCard />
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
+        <ProfileImageCard />
+        <CvCard />
+      </div>
     </div>
   );
 }
