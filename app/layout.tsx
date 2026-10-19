@@ -6,7 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { Inter, Outfit } from "next/font/google";
 import { AuthProvider } from "./components/auth";
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import { BackendStatusToast } from "./components/BackendStatusToast";
+// removed
 import LocationTracker from "./components/LocationTracker";
 import AnalyticsProvider from "./components/AnalyticsProvider";
 import ScrollToTop from "./components/ScrollToTop";
@@ -94,7 +94,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <AuthProvider>
               <AnalyticsProvider>
                 <ProfileAssetsSync />
-                <BackendStatusToast />
+
                 <LocationTracker />
                 <Navbar />
                 <main className="min-h-screen pt-20">
