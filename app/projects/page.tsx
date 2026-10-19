@@ -44,7 +44,7 @@ export default function ProjectsPage() {
 
   return (
     <div className="bg-gradient-to-b from-white via-primary/5 to-transparent dark:from-dark dark:via-dark/95 dark:to-dark" id="projects">
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         
         {/* Header Section */}
         <div className="mx-auto max-w-7xl space-y-6 text-center animate-fade-up">
