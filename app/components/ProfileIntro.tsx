@@ -1,179 +1,120 @@
 'use client';
 
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
-import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope } from "react-icons/fa";
-import PublicLocationDisplay from "./PublicLocationDisplay";
-import Modal from "./Modal";
-import Typewriter from "./Typewriter";
-import { useProfileStore } from "../stores/profileStore";
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { ArrowDown, ArrowUpRight, Download, Github, Linkedin, Mail } from 'lucide-react';
+import Modal from './Modal';
+import { useProfileStore } from '../stores/profileStore';
 
-const badges = ["Full-stack Engineer", "Design Systems", "Hardware & Software Maintenance"];
-const roles = ["Full-Stack Engineer", "System Analyst", "API & Database Architect", "Design Systems Builder"];
+interface ProfileIntroProps {
+  showButtons?: boolean;
+}
+
 const socialLinks = [
-  { icon: <FaGithub className="text-lg" />, href: "https://github.com/jeromeboitenge", label: "GitHub" },
-  { icon: <FaLinkedin className="text-lg" />, href: "https://www.linkedin.com/in/jerome-aldrin-463b4a411", label: "LinkedIn" },
-  { icon: <FaTwitter className="text-lg" />, href: "https://twitter.com/jeromeboitenge", label: "Twitter" },
-  { icon: <FaEnvelope className="text-lg" />, href: "mailto:jeromeboitenge@gmail.com", label: "Email" },
+  { icon: Github, href: 'https://github.com/jeromeboitenge', label: 'GitHub' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/jerome-aldrin-463b4a411', label: 'LinkedIn' },
+  { icon: Mail, href: 'mailto:jeromeboitenge@gmail.com', label: 'Email' },
 ];
 
-export default function ProfileIntro({ showButtons = false }) {
-  const [mounted, setMounted] = useState(false);
+export default function ProfileIntro({ showButtons = false }: ProfileIntroProps) {
   const [showCvModal, setShowCvModal] = useState(false);
   const { imageUrl, cvUrl } = useProfileStore();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const cvEmbedUrl = cvUrl?.includes("/view")
-    ? cvUrl.replace(/\/file\/d\/([^/]+)\/view.*$/, "/file/d/$1/preview")
+  const cvEmbedUrl = cvUrl?.includes('/view')
+    ? cvUrl.replace(/\/file\/d\/([^/]+)\/view.*$/, '/file/d/$1/preview')
     : cvUrl;
 
-  // Show content immediately, animate when mounted
-  const MotionDiv = mounted ? motion.div : 'div';
-  
   return (
-    <div className="relative pt-20 pb-10 sm:pt-24 md:py-32 flex flex-col md:flex-row items-center gap-8 sm:gap-12 md:gap-20 px-4 sm:px-6 md:px-8 lg:px-0">
-      
-      {/* BACKGROUND ELEMENTS */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-72 h-72 sm:w-96 sm:h-96 bg-primary/20 rounded-full blur-[100px] animate-blob" />
-        <div className="absolute top-40 -left-20 w-60 h-60 sm:w-72 sm:h-72 bg-accent/20 rounded-full blur-[80px] animate-blob" style={{ animationDelay: '2s' }} />
-      </div>
-
-      {/* TEXT CONTENT */}
-      <MotionDiv
-        {...(mounted ? {
-          initial: { opacity: 0, x: -50 },
-          whileInView: { opacity: 1, x: 0 },
-          transition: { duration: 0.8, ease: "easeOut" }
-        } : {})}
-        className="flex-1 space-y-4 sm:space-y-6 md:space-y-8 text-center md:text-left z-10 w-full max-w-3xl"
+    <div className="mx-auto grid w-full max-w-7xl items-center gap-12 px-5 py-10 sm:px-8 sm:py-14 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:px-12 lg:py-16">
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, ease: 'easeOut' }}
+        className="relative z-10 order-2 text-center lg:order-1 lg:text-left"
       >
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:justify-start">
-          {badges.map((badge, idx) => {
-            const BadgeMotion = mounted ? motion.span : 'span';
-            return (
-              <BadgeMotion
-                {...(mounted ? {
-                  initial: { opacity: 0, y: 10 },
-                  animate: { opacity: 1, y: 0 },
-                  transition: { delay: 0.3 + idx * 0.1 }
-                } : {})}
-                key={badge}
-                className="rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 sm:px-3 sm:py-1.5 text-[9px] xs:text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 shadow-sm border border-slate-200 dark:border-slate-700"
-              >
-                {badge}
-              </BadgeMotion>
-            );
-          })}
-        </div>
-
-        <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-300 dark:border-emerald-500/30 px-3 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs font-semibold text-emerald-600 dark:text-emerald-400 shadow-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-            </span>
-            Available for hire & remote work
-          </div>
-        
-        <div className="space-y-2 sm:space-y-3 md:space-y-4">
-          <h2 className="text-sm xs:text-base sm:text-lg md:text-xl font-medium text-slate-500 dark:text-slate-400">
-            Hello, I am
-          </h2>
-          <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-extrabold text-slate-900 dark:text-white leading-[1.1]">
-            Jerome <br className="hidden sm:block md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Nzaramyimana</span>
-          </h1>
-          <div className="flex items-center justify-center md:justify-start gap-2 text-base xs:text-lg sm:text-xl md:text-2xl font-semibold text-slate-700 dark:text-slate-200 h-8">
-            <span className="hidden sm:inline text-slate-400 dark:text-slate-500">I build&nbsp;</span>
-            <Typewriter words={roles} className="text-primary" />
-          </div>
-        </div>
-
-        <p className="text-sm xs:text-base sm:text-lg md:text-xl leading-relaxed text-slate-600 dark:text-slate-300 max-w-2xl mx-auto md:mx-0">
-          I design and engineer premium digital experiences across React, Next.js, and Node.js blending product
-          thinking with scalable infrastructure so launches feel effortless and polished.
+        <h1 className="font-display text-4xl font-bold leading-[1.08] text-slate-950 dark:text-white sm:text-5xl md:text-6xl">
+          Jerome <span className="text-primary">Nzaramyimana</span>
+        </h1>
+        <p className="mt-6 max-w-2xl text-xl font-medium leading-relaxed text-slate-800 dark:text-slate-100 sm:text-2xl">
+          I build thoughtful web products, from the first interface to the systems behind it.
+        </p>
+        <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-300 lg:mx-0">
+          I work across React, Next.js, and Node.js to turn complex needs into clear, dependable software.
         </p>
 
         {showButtons && (
-          <div className="flex flex-col xs:flex-row justify-center md:justify-start gap-3 sm:gap-4 pt-2 sm:pt-4">
-            <a href="#contact" className="inline-flex items-center justify-center rounded-full bg-primary px-6 sm:px-8 py-3 sm:py-3.5 text-xs xs:text-sm font-semibold text-white shadow-lg shadow-primary/30 transition-all hover:-translate-y-1 hover:shadow-primary/50 active:scale-95">
-              Let's build together
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
+            <a
+              href="#projects"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              Explore selected work <ArrowDown size={16} aria-hidden="true" />
             </a>
             <button
               type="button"
               onClick={() => setShowCvModal(true)}
-              className="inline-flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 px-6 sm:px-8 py-3 sm:py-3.5 text-xs xs:text-sm font-semibold text-slate-900 dark:text-white transition-all hover:-translate-y-1 hover:bg-slate-200 dark:hover:bg-slate-700 shadow-sm active:scale-95"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded border border-slate-300 bg-white/70 px-6 text-sm font-semibold text-slate-800 transition-colors hover:border-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100"
             >
-              View CV
+              View résumé <Download size={16} aria-hidden="true" />
             </button>
           </div>
         )}
 
-        {/* Social links */}
-        <div className="flex items-center justify-center md:justify-start gap-2 sm:gap-3 pt-1">
-          <span className="text-xs uppercase tracking-widest text-slate-400 dark:text-slate-500 mr-1 hidden sm:block">Find me</span>
-          {socialLinks.map(({ icon, href, label }) => (
+        <div className="mt-8 flex items-center justify-center gap-3 lg:justify-start">
+          {socialLinks.map(({ icon: Icon, href, label }) => (
             <a
               key={label}
               href={href}
-              target="_blank"
-              rel="noopener noreferrer"
+              target={href.startsWith('mailto:') ? undefined : '_blank'}
+              rel={href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
               aria-label={label}
-              className="flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 shadow-sm hover:text-primary dark:hover:text-primary hover:-translate-y-0.5 hover:shadow-md transition-all"
+              title={label}
+              className="flex h-11 w-11 items-center justify-center rounded border border-slate-200 bg-white/70 text-slate-600 transition-colors hover:border-primary hover:text-primary dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300"
             >
-              {icon}
+              <Icon size={18} aria-hidden="true" />
             </a>
           ))}
+          <a
+            href="/contact"
+            className="ml-2 inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary transition hover:text-primary-700"
+          >
+            Get in touch <ArrowUpRight size={16} aria-hidden="true" />
+          </a>
         </div>
-      </MotionDiv>
+
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.65, delay: 0.1, ease: 'easeOut' }}
+        className="relative order-1 mx-auto w-full max-w-[22rem] sm:max-w-[25rem] lg:order-2 lg:max-w-[28rem]"
+      >
+        <div className="relative aspect-[4/5] overflow-hidden rounded border border-slate-200 bg-slate-200 dark:border-slate-700 dark:bg-slate-800">
+          <Image
+            src={imageUrl}
+            alt="Portrait of Jerome Nzaramyimana"
+            fill
+            sizes="(max-width: 640px) 80vw, (max-width: 1024px) 400px, 448px"
+            className="object-cover"
+            priority
+          />
+        </div>
+        <span className="absolute -bottom-7 -left-7 hidden font-display text-7xl font-bold leading-none text-primary/10 lg:block" aria-hidden="true">
+          JB
+        </span>
+      </motion.div>
 
       <Modal isOpen={showCvModal} onClose={() => setShowCvModal(false)} title="Curriculum Vitae" size="xl">
-        <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-          Your CV is displayed here for viewing without leaving the site.
-        </p>
-        <div className="w-full min-h-[60vh] rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800">
+        <div className="min-h-[60vh] overflow-hidden rounded border border-slate-200 dark:border-slate-800">
           <iframe
             src={cvEmbedUrl}
-            title="CV Preview"
-            className="w-full h-full min-h-[60vh]"
+            title="Curriculum Vitae"
+            className="min-h-[60vh] w-full"
             loading="lazy"
           />
         </div>
       </Modal>
-
-      {/* IMAGE CONTENT */}
-      <MotionDiv
-        {...(mounted ? {
-          initial: { opacity: 0, scale: 0.9, rotate: -5 },
-          whileInView: { opacity: 1, scale: 1, rotate: 0 },
-          transition: { duration: 0.8, ease: "easeOut", delay: 0.2 }
-        } : {})}
-        className="relative flex-shrink-0 z-10 w-full max-w-[240px] xs:max-w-[280px] sm:max-w-[320px] md:max-w-md"
-      >
-        <div className="relative w-full aspect-square">
-          <div className="absolute inset-0 bg-gradient-to-tr from-primary to-accent rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3rem] rotate-6 opacity-30 blur-lg animate-pulse" />
-          <div className="absolute inset-0 bg-gradient-to-tr from-primary to-accent rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3rem] -rotate-3 transition-transform duration-500 hover:rotate-0" />
-          
-          <div className="absolute inset-1 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-slate-900 border-2 sm:border-4 border-white dark:border-slate-800 pointer-events-none">
-            <Image
-              src={imageUrl}
-              alt="Jerome Nzaramyimana"
-              fill
-              sizes="(max-width: 375px) 240px, (max-width: 640px) 280px, (max-width: 768px) 320px, 448px"
-              className="object-cover transition-transform duration-700 hover:scale-105"
-              priority
-            />
-            
-            <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 glass px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl pointer-events-auto z-10">
-              <PublicLocationDisplay />
-            </div>
-          </div>
-        </div>
-      </MotionDiv>
     </div>
   );
 }

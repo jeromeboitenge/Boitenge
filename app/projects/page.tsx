@@ -43,37 +43,34 @@ export default function ProjectsPage() {
   const isViewLessAvailable = showAll;
 
   return (
-    <div className="bg-gradient-to-b from-white via-primary/5 to-transparent dark:from-dark dark:via-dark/95 dark:to-dark" id="projects">
+    <div className="border-y border-slate-200/80 bg-white/40 dark:border-slate-800 dark:bg-slate-900/20" id="projects">
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        
-        {/* Header Section */}
-        <div className="mx-auto max-w-7xl space-y-6 text-center animate-fade-up">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.4em] text-primary/70">
-            Featured Work
-          </p>
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl">
-            My Projects
-          </h1>
-          <p className="text-lg text-slate-600 dark:text-gray-400 sm:text-xl">
-            A collection of the software I've designed, developed, and deployed.
-          </p>
-          <div className="mt-4 flex flex-col gap-2 text-sm text-slate-500 dark:text-slate-400 sm:flex-row sm:items-center sm:justify-center sm:gap-6">
-            <span>Showing {currentVisibleCount} of {projects.length} projects</span>
-            {isMoreAvailable && <span className="font-semibold text-primary">Browse more projects below</span>}
+        <div className="flex flex-col gap-5 border-b border-slate-200 pb-7 dark:border-slate-800 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-2xl">
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-primary">Selected work</p>
+            <h2 className="font-display text-3xl font-bold text-slate-950 dark:text-white sm:text-4xl">
+              Products built to solve real problems.
+            </h2>
+            <p className="mt-3 text-base leading-7 text-slate-600 dark:text-slate-400">
+              A closer look at the interfaces, systems, and decisions behind my work.
+            </p>
           </div>
+          <p className="shrink-0 text-sm font-medium text-slate-500 dark:text-slate-400">
+            Showing {currentVisibleCount} of {projects.length} projects
+          </p>
         </div>
 
         {/* Loading State */}
         {isLoading && (
-          <div className="mt-16 text-center">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent"></div>
-            <p className="mt-4 text-slate-600 dark:text-slate-400">Loading projects...</p>
+          <div className="py-16 text-center" role="status" aria-live="polite">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-primary border-r-transparent"></div>
+            <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">Loading projects...</p>
           </div>
         )}
 
         {/* Error State */}
         {error && (
-          <div className="mt-16 text-center">
+          <div className="py-16 text-center">
             <p className="text-red-500">{error}</p>
           </div>
         )}
@@ -81,7 +78,7 @@ export default function ProjectsPage() {
         {/* Projects Grid */}
         {!isLoading && !error && (
           <>
-            <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {projectsToShow.map((project) => (
                 <ProjectCard
                   key={project.id}
@@ -98,13 +95,13 @@ export default function ProjectsPage() {
             </div>
 
             {/* View More/Less Buttons */}
-            <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
               {isMoreAvailable && (
                 <button
                   onClick={() => setShowAll(true)}
-                  className="px-8 py-3 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition-all shadow-lg hover:shadow-primary/25 flex items-center gap-2"
+                  className="inline-flex min-h-11 items-center gap-2 rounded bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
                 >
-                  View More Projects <ArrowRight size={18} />
+                  Show all projects <ArrowRight size={17} />
                 </button>
               )}
 
@@ -114,9 +111,9 @@ export default function ProjectsPage() {
                     setShowAll(false);
                     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="px-8 py-3 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold hover:border-primary hover:text-primary transition-colors flex items-center gap-2 shadow-md"
+                  className="inline-flex min-h-11 items-center gap-2 rounded border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-primary hover:text-primary dark:border-slate-700 dark:text-slate-200"
                 >
-                  <ArrowLeft size={18} /> View Less
+                  <ArrowLeft size={17} /> Show fewer
                 </button>
               )}
             </div>

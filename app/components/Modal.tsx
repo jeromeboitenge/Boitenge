@@ -39,7 +39,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className={`relative w-full ${sizeClasses[size]} bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-h-[90vh] overflow-hidden`}
+              className={`relative w-full ${sizeClasses[size]} max-h-[90vh] overflow-hidden rounded border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900`}
             >
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-800">

@@ -38,7 +38,7 @@ export default function Footer() {
           {/* ABOUT */}
           <div className="space-y-6 lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-3 text-2xl font-display font-bold tracking-wide text-slate-900 dark:text-white">
-              <span className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center text-sm shadow-lg shadow-primary/10">JB</span>
+              <span className="flex h-10 w-10 items-center justify-center rounded bg-primary text-sm text-white">JB</span>
               Jerome
             </Link>
 
@@ -75,7 +75,7 @@ export default function Footer() {
 
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/20 hover:bg-primary/90 transition"
+              className="inline-flex min-h-11 items-center justify-center rounded bg-primary px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
             >
               Hire me
             </Link>
@@ -108,9 +108,9 @@ export default function Footer() {
           <div className="space-y-6">
             <h4 className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-900 dark:text-white">Get In Touch</h4>
             <div className="space-y-4">
-              <div className="rounded-3xl border border-slate-200 bg-white/90 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+              <div className="rounded border border-slate-200 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900/80">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <div className="flex h-10 w-10 items-center justify-center rounded bg-primary/10 text-primary">
                     <Mail size={16} />
                   </div>
                   <div>
@@ -120,9 +120,9 @@ export default function Footer() {
                 </div>
               </div>
 
-              <div className="rounded-3xl border border-slate-200 bg-white/90 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+              <div className="rounded border border-slate-200 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900/80">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <div className="flex h-10 w-10 items-center justify-center rounded bg-primary/10 text-primary">
                     <Phone size={16} />
                   </div>
                   <div>
@@ -132,9 +132,9 @@ export default function Footer() {
                 </div>
               </div>
 
-              <div className="rounded-3xl border border-slate-200 bg-white/90 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+              <div className="rounded border border-slate-200 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900/80">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <div className="flex h-10 w-10 items-center justify-center rounded bg-primary/10 text-primary">
                     <MapPin size={16} />
                   </div>
                   <div>
@@ -158,7 +158,7 @@ export default function Footer() {
         onClick={scrollToTop}
         aria-label="Scroll to top"
         className={clsx(
-          "fixed bottom-8 right-8 p-3 rounded-full bg-primary text-white shadow-lg hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300 z-40",
+          "fixed bottom-8 right-8 z-40 flex h-11 w-11 items-center justify-center rounded bg-primary text-white transition-colors hover:bg-primary-700",
           showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
         )}
       >

@@ -1,36 +1,18 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { FaChevronDown } from 'react-icons/fa';
 import ProfileIntro from './ProfileIntro';
 
 export default function Hero() {
   return (
-    <section className="min-h-screen flex items-center px-4 md:px-8 relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10" />
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-secondary/20 rounded-full blur-3xl animate-pulse" />
+    <section className="relative isolate flex min-h-[calc(100svh-5rem)] items-center overflow-hidden px-4 md:px-8">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 opacity-40 [background-image:linear-gradient(to_right,rgba(20,90,74,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(20,90,74,0.07)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent)]"
+      />
+      <div className="absolute inset-x-0 top-0 -z-10 h-48 bg-gradient-to-b from-white/80 to-transparent dark:from-darkBg/70" />
       <div className="mx-auto w-full max-w-7xl">
         <ProfileIntro showButtons={true} />
       </div>
-
-      {/* Scroll-down indicator */}
-      <motion.a
-        href="#about"
-        aria-label="Scroll to about section"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.6 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary dark:hover:text-primary transition-colors"
-      >
-        <span className="text-[10px] uppercase tracking-[0.3em] font-semibold">Scroll</span>
-        <motion.span
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <FaChevronDown className="text-lg" />
-        </motion.span>
-      </motion.a>
     </section>
   );
 }

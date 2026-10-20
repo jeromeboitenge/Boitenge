@@ -5,7 +5,7 @@ import {
   SiNextdotjs,
   SiTailwindcss,
   SiHtml5,
-  SiCss3,
+  SiCss,
   SiNodedotjs,
   SiExpress,
   SiNestjs,
@@ -29,7 +29,7 @@ const iconMap: Record<string, JSX.Element> = {
   "Next.js": <SiNextdotjs />,
   "Tailwind CSS": <SiTailwindcss />,
   HTML: <SiHtml5 />,
-  CSS: <SiCss3 />,
+  CSS: <SiCss />,
 
   "Node.js": <SiNodedotjs />,
   "Express.js": <SiExpress />,
@@ -54,11 +54,8 @@ const iconMap: Record<string, JSX.Element> = {
 export default function SkillCard({ name }: { name: string }) {
   return (
     <motion.div
-      whileHover={{ scale: 1.08 }}
-      className="flex items-center gap-2 px-4 py-2
-      bg-lightCard dark:bg-darkCard text-lightText dark:text-darkText
-      border border-primary rounded-full shadow 
-      hover:shadow-lg transition cursor-pointer"
+      whileHover={{ y: -2 }}
+      className="flex items-center gap-2 rounded-md border border-slate-200 bg-lightCard px-3 py-2 text-lightText transition-colors hover:border-primary/50 dark:border-slate-800 dark:bg-darkCard dark:text-darkText"
     >
       <span className="text-xl text-primary">{iconMap[name]}</span>
       <span className="font-medium">{name}</span>

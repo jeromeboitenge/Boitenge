@@ -70,7 +70,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="flex flex-col items-center justify-center glass-card p-10 rounded-3xl text-center min-h-[350px]"
+        className="flex min-h-[350px] min-w-0 flex-col items-center justify-center rounded border border-slate-200 bg-white p-6 text-center dark:border-slate-800 dark:bg-slate-900 sm:p-10"
       >
         {status === "success" ? (
           <>
@@ -99,7 +99,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
         )}
         <button
           onClick={() => setStatus("idle")}
-          className="mt-8 px-8 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-full font-medium hover:-translate-y-1 transition-all shadow-lg"
+          className="mt-8 rounded border border-slate-300 px-6 py-3 font-medium text-slate-800 transition-colors hover:border-primary hover:text-primary dark:border-slate-700 dark:text-slate-100"
         >
           Send Another Message
         </button>
@@ -114,16 +114,16 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
-      className="glass-card p-8 md:p-10 rounded-3xl"
+      className="w-full min-w-0 rounded border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900 sm:p-7 md:p-9"
     >
       {/* Top section */}
       <div className="flex flex-col items-start gap-2 mb-8">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+          <div className="flex h-12 w-12 items-center justify-center rounded bg-primary/10">
             <FaRegEnvelope className="text-primary text-2xl" />
           </div>
           <div>
-            <h3 className="text-2xl font-display font-bold text-slate-900 dark:text-white">Let's Connect</h3>
+            <h3 className="text-xl font-display font-bold text-slate-900 dark:text-white sm:text-2xl">Let's Connect</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400">
               Fill out the form and I'll get back to you within 24 hours.
             </p>
@@ -141,7 +141,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             placeholder="John Doe"
-            className="w-full px-5 py-3 rounded-2xl text-sm bg-white/50 dark:bg-slate-900/50 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-slate-400"
+            className="w-full rounded border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 transition-colors placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-950 dark:text-white"
           />
         </div>
 
@@ -154,7 +154,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             placeholder="john@example.com"
-            className="w-full px-5 py-3 rounded-2xl text-sm bg-white/50 dark:bg-slate-900/50 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-slate-400"
+            className="w-full rounded border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 transition-colors placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-950 dark:text-white"
           />
         </div>
 
@@ -167,7 +167,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
             value={form.message}
             onChange={(e) => setForm({ ...form, message: e.target.value })}
             placeholder="How can I help you?"
-            className="w-full px-5 py-4 rounded-2xl text-sm bg-white/50 dark:bg-slate-900/50 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-slate-400 resize-none"
+            className="w-full resize-none rounded border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 transition-colors placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-950 dark:text-white"
           ></textarea>
         </div>
 
@@ -176,7 +176,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
           type="submit"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="w-full py-4 text-sm font-bold bg-primary text-white rounded-2xl shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
+          className="flex min-h-11 w-full items-center justify-center gap-3 rounded bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-70"
           disabled={status === "sending"}
         >
           {status === "sending" ? (

@@ -115,7 +115,7 @@ export default function AboutPage() {
           whileInView: { opacity: 1, y: 0 },
           transition: { duration: 0.7 }
         } : {})}
-        className="rounded-3xl bg-white/90 p-10 shadow-xl ring-1 ring-slate-100 dark:bg-slate-900/70 dark:ring-slate-800"
+        className="rounded border border-slate-200 bg-white/90 p-6 dark:border-slate-800 dark:bg-slate-900/70 sm:p-8"
       >
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
           <div className="max-w-3xl">
@@ -131,20 +131,13 @@ export default function AboutPage() {
               closely with product teams, mentor developers, and champion user-centric delivery at every stage of the build.
             </p>
           </div>
-          <div className="flex md:flex-col gap-3 shrink-0">
-            <span className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-300 dark:border-emerald-500/30 px-4 py-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-              </span>
-              Open to work
-            </span>
+          <div className="flex shrink-0">
             <a
               href={cvUrl || '#'}
               onClick={downloadOrOpenCv}
               target={cvUrl && !cvUrl.includes('drive.google.com') ? '_blank' : undefined}
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary hover:bg-primary/90 text-white px-5 py-2.5 text-sm font-semibold transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/25"
+              className="inline-flex items-center justify-center gap-2 rounded bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
             >
               <FaDownload className="text-xs" /> Download CV
             </a>
@@ -164,11 +157,11 @@ export default function AboutPage() {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-2xl bg-white/90 dark:bg-slate-900/70 p-6 text-center shadow-lg ring-1 ring-slate-100 dark:ring-slate-800 hover:ring-primary/30 transition-all hover:-translate-y-1"
+            className="rounded border border-slate-200 bg-white/90 p-6 text-center transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900/70"
           >
             <p className="text-4xl font-extrabold font-display text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
               {stat.loading ? (
-                <span className="inline-block w-12 h-8 bg-slate-200 dark:bg-slate-700 animate-pulse rounded-lg align-middle" />
+                <span className="inline-block w-12 h-8 bg-slate-200 dark:bg-slate-700 animate-pulse rounded align-middle" />
               ) : (
                 <AnimatedCounter value={stat.value} suffix={stat.suffix} />
               )}
@@ -188,7 +181,7 @@ export default function AboutPage() {
         className="mt-8"
       >
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+          <div className="flex h-10 w-10 items-center justify-center rounded bg-primary/10">
             <FaHandshake className="text-primary text-lg" />
           </div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">How I Work</h2>
@@ -197,9 +190,9 @@ export default function AboutPage() {
           {values.map((value, idx) => (
             <div
               key={idx}
-              className="rounded-2xl bg-white/90 dark:bg-slate-900/70 p-6 shadow-lg ring-1 ring-slate-100 dark:ring-slate-800 hover:ring-primary/30 transition-all hover:-translate-y-1"
+              className="rounded border border-slate-200 bg-white/90 p-6 transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900/70"
             >
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded bg-primary/10">
                 {value.icon}
               </div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{value.title}</h3>
@@ -219,7 +212,7 @@ export default function AboutPage() {
         className="mt-8"
       >
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+          <div className="flex h-10 w-10 items-center justify-center rounded bg-primary/10">
             <FaCode className="text-primary text-lg" />
           </div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Core Stack</h2>

@@ -12,7 +12,6 @@ import {
   FaTwitter,
   FaCopy,
   FaCheck,
-  FaClock,
 } from "react-icons/fa";
 
 const EMAIL = "jeromeboitenge@gmail.com";
@@ -105,34 +104,14 @@ export default function ContactPage() {
         Contact <span className="text-primary">Me</span>
       </motion.h2>
 
-      {/* Availability + response-time banner */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="max-w-3xl mx-auto mb-12 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6"
-      >
-        <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-300 dark:border-emerald-500/30 px-5 py-2.5 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-          </span>
-          Currently available for new projects
-        </span>
-        <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-5 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300">
-          <FaClock className="text-primary" />
-          I usually reply within 24 hours
-        </span>
-      </motion.div>
-
-      <div className="grid md:grid-cols-2 gap-16">
+      <div className="grid min-w-0 grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
 
         {/* LEFT: Contact Info Card */}
         <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-700 shadow-lg rounded-2xl p-8 flex flex-col gap-6"
+          className="flex flex-col gap-6 rounded border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-[#1a1a1a] sm:p-7"
         >
           <h3 className="text-3xl font-semibold text-slate-900 dark:text-white">Let’s Talk Via</h3>
 
@@ -141,7 +120,7 @@ export default function ContactPage() {
             {contacts.map((item, i) => (
               <div
                 key={i}
-                className="group flex items-center gap-4 px-5 py-4 rounded-xl bg-gray-100 dark:bg-[#2a2a2a] border border-gray-200 dark:border-gray-600 shadow-sm hover:shadow-md transition"
+                className="group flex min-w-0 items-center gap-3 rounded border border-gray-200 bg-gray-100 px-4 py-4 transition-colors hover:border-primary/40 dark:border-gray-600 dark:bg-[#2a2a2a] sm:gap-4 sm:px-5"
               >
                 <a
                   href={item.href}
@@ -152,16 +131,16 @@ export default function ContactPage() {
                 >
                   {item.icon}
                 </a>
-                <span className="flex-1 text-lg text-slate-900 dark:text-white transition group-hover:text-primary">
+                <span className="min-w-0 flex-1 break-words text-sm text-slate-900 transition group-hover:text-primary dark:text-white sm:text-base">
                   {item.label}
                 </span>
                 {item.copyValue && (
                   <button
                     onClick={(e) => {
                       e.preventDefault();
-                      copyToClipboard(item.copyValue, item.key);
+                      copyToClipboard(item.copyValue as string, item.key);
                     }}
-                    className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded text-slate-400 transition-colors hover:bg-slate-200 hover:text-primary dark:hover:bg-slate-700"
                     aria-label={`Copy ${item.label}`}
                     title="Copy"
                   >
@@ -172,7 +151,7 @@ export default function ContactPage() {
             ))}
           </div>
 
-          <div className="mt-2 rounded-xl bg-primary/5 dark:bg-primary/10 border border-primary/20 p-4 text-sm text-slate-600 dark:text-slate-300">
+          <div className="mt-2 rounded border border-primary/15 bg-primary/5 p-4 text-sm text-slate-600 dark:bg-primary/10 dark:text-slate-300">
             Prefer email or WhatsApp for the fastest response. I look forward to hearing about
             your project!
           </div>
@@ -180,9 +159,10 @@ export default function ContactPage() {
 
         {/* RIGHT: Contact Form */}
         <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
+          className="min-w-0"
         >
           <ContactForm onSuccess={showToast} />
         </motion.div>

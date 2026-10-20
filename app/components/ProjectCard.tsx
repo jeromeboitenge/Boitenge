@@ -10,7 +10,7 @@ import {
   SiJavascript,
   SiTailwindcss,
   SiHtml5,
-  SiCss3,
+  SiCss,
   SiNodedotjs,
   SiExpress,
   SiNestjs,
@@ -115,7 +115,7 @@ const techIconMap: Record<string, JSX.Element> = {
   'Tailwind CSS': <SiTailwindcss className={iconBase} />,
   Tailwind: <SiTailwindcss className={iconBase} />,
   HTML: <SiHtml5 className={iconBase} />,
-  CSS: <SiCss3 className={iconBase} />,
+  CSS: <SiCss className={iconBase} />,
   'Node.js': <SiNodedotjs className={iconBase} />,
   Node: <SiNodedotjs className={iconBase} />,
   Express: <SiExpress className={iconBase} />,
@@ -166,7 +166,7 @@ export default function ProjectCard({
   demoLink,
   codeLink,
 }: ProjectCardProps) {
-  const isProd = demoLink.startsWith('https://') && !demoLink.includes('example');
+  const hasLiveDemo = /^https:\/\/(?!demo\.|example\.)/i.test(demoLink) && demoLink !== '#';
   
   return (
     <motion.div
@@ -174,110 +174,102 @@ export default function ProjectCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.5 }}
-      className="relative h-full rounded-3xl bg-white p-[1px] shadow-xl dark:shadow-slate-900/40 transition-shadow duration-300 hover:shadow-primary/30 dark:bg-slate-900/50 dark:hover:shadow-primary/20"
+      className="h-full"
     >
-      <article className="group relative flex h-full flex-col overflow-hidden rounded-[23px] bg-white dark:bg-slate-900/80 ring-1 ring-slate-100 dark:ring-slate-800">
-        
-        {/* --- IMAGE / HEADER SECTION --- */}
-        <div className="relative overflow-hidden">
+      <article className="group flex h-full flex-col overflow-hidden rounded border border-slate-200/80 bg-white transition-colors duration-200 hover:border-primary/50 dark:border-slate-800 dark:bg-slate-900">
+        <div className="relative h-48 overflow-hidden bg-slate-100 dark:bg-slate-800 sm:h-52">
           <Image
             src={image}
-            alt={`${title} mockup`}
+            alt={`${title} project preview`}
             width={640}
-            height={200}
-            className="h-40 w-full object-cover transition duration-700 ease-out group-hover:scale-105"
+            height={360}
+            className="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.03]"
             loading="lazy"
             quality={85}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/65 via-slate-900/25 to-transparent opacity-80" />
-          
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-transparent" />
           <span
-            className={`absolute right-4 top-4 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider ${
-              isProd ? 'bg-emerald-500 text-white' : 'bg-primary text-white'
+            className={`absolute left-4 top-4 rounded px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] ${
+              hasLiveDemo ? 'bg-emerald-500 text-white' : 'bg-white/95 text-slate-700'
             }`}
           >
-            {isProd ? 'LIVE' : 'CONCEPT'}
+            {hasLiveDemo ? 'Live' : 'Selected work'}
           </span>
         </div>
 
-        {/* --- MAIN CONTENT --- */}
-        <div className="flex flex-1 flex-col p-5 gap-4">
-          
-          {/* Title and Description */}
+        <div className="flex flex-1 flex-col gap-4 p-5">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-0.5 text-xs font-medium text-primary mb-1">
-              <IconSpark />
-              Case Study
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+            <h3 className="text-lg font-bold leading-snug text-slate-950 dark:text-white">
               {title}
             </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-3">
+            <p className="line-clamp-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
               {description}
             </p>
           </div>
 
-          {/* Tech Stack Tags */}
-          <div className="flex flex-wrap gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-            <span className="text-xs font-semibold uppercase text-slate-500 mr-2">Core Stack:</span>
-            {tags.slice(0, 4).map((tag, index) => (
+          <div className="border-t border-slate-100 pt-4 dark:border-slate-800">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">Technology</p>
+            <div className="flex flex-wrap gap-2">
+            {tags.slice(0, 4).map((tag) => (
               <span
-                key={index}
-                className="inline-flex items-center gap-1.5 rounded-full bg-slate-100/80 px-2.5 py-0.5 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                key={tag}
+                className="inline-flex items-center gap-1.5 rounded bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200"
               >
                 {techIconMap[tag] ?? <DefaultTechIcon />}
                 {tag}
               </span>
             ))}
             {tags.length > 4 && (
-              <span className="inline-flex items-center rounded-full bg-primary/5 px-2.5 py-0.5 text-xs font-medium text-primary dark:bg-primary/10">
+              <span className="inline-flex items-center rounded px-2 py-1 text-xs font-medium text-primary">
                 +{tags.length - 4} more
               </span>
             )}
+            </div>
           </div>
 
-
-          {/* Impact Highlights */}
-          <div className="flex-1 rounded-xl bg-slate-50/70 p-4 ring-1 ring-slate-100 dark:bg-slate-800/50 dark:ring-slate-700">
-            <p className="mb-2 text-xs font-bold uppercase tracking-widest text-slate-500">
-              Impact Highlights
+          <div className="flex-1 pt-1">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
+              Highlights
             </p>
-            <ul className="space-y-2">
-              {highlights.slice(0, 2).map((point, index) => (
-                <li key={index} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-200">
-                  <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-primary flex-shrink-0">
+            <ul className="space-y-2.5">
+              {highlights.slice(0, 2).map((point) => (
+                <li key={point} className="flex items-start gap-2 text-sm leading-5 text-slate-600 dark:text-slate-200">
+                  <span className="mt-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-sm bg-primary/10 text-primary">
                     <IconCheck />
                   </span>
-                  <span className="text-xs font-medium leading-relaxed">{point}</span>
+                  <span>{point}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Action Buttons */}
-          <div className="mt-auto flex gap-2 pt-2">
-            <Link
-              href={demoLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-accent px-6 py-2.5 text-sm font-semibold text-white transition hover:scale-[1.01] hover:opacity-90 shadow-lg shadow-primary/25"
-              aria-label={`${title} live demo`}
-            >
-              Live Demo
-              <IconExternal />
-            </Link>
-            {codeLink && (
+          {(hasLiveDemo || codeLink) && (
+            <div className="mt-auto flex flex-wrap gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
+              {hasLiveDemo && (
+                <Link
+                  href={demoLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-10 flex-1 items-center justify-center gap-2 rounded bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+                  aria-label={`${title} live site`}
+                >
+                  View live site <IconExternal />
+                </Link>
+              )}
+              {codeLink && (
               <Link
                 href={codeLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-100 dark:bg-slate-800 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 transition hover:bg-slate-200 dark:hover:bg-slate-700"
+                title={`${title} source code`}
+                className="inline-flex h-10 w-10 items-center justify-center rounded border border-slate-200 text-slate-700 transition-colors hover:border-primary hover:text-primary dark:border-slate-700 dark:text-slate-200"
                 aria-label={`${title} source code`}
               >
                 <IconGithub />
               </Link>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
       </article>
     </motion.div>

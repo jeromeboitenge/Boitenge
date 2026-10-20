@@ -15,7 +15,6 @@ const links = [
   { name: 'Skills', href: '/skills' },
   { name: 'Projects', href: '/projects' },
   { name: 'Experience', href: '/experience' },
-  { name: 'Docs', href: '/docs' },
   { name: 'Contact', href: '/contact' },
 ];
 
@@ -90,30 +89,34 @@ export default function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className={clsx(
-        'fixed top-0 inset-x-0 z-50 transition-all duration-300',
-        scrolled ? 'py-4' : 'py-6'
+        'fixed inset-x-0 top-0 z-50 border-b transition-all duration-300',
+        scrolled
+          ? 'border-slate-200 bg-lightBg/95 py-2 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-darkBg/95'
+          : 'border-transparent bg-lightBg/80 py-3 backdrop-blur-sm dark:bg-darkBg/75'
       )}
     >
       <div className={clsx(
-        'mx-auto max-w-5xl px-6 py-3 flex justify-between items-center transition-all duration-300',
-        scrolled ? 'glass rounded-full' : 'bg-transparent'
+        'mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8'
       )}>
-        <Link href="/" className="text-xl font-display font-bold text-lightText dark:text-darkText tracking-wide flex items-center gap-2">
-          <span className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm">JB</span>
-          Jerome
+        <Link href="/" className="flex shrink-0 items-center gap-3 text-slate-950 dark:text-white">
+          <span className="flex h-9 w-9 items-center justify-center rounded bg-primary font-display text-sm font-bold text-white">JB</span>
+          <span className="leading-tight">
+            <span className="block font-display text-base font-bold">Jerome</span>
+            <span className="hidden text-[11px] font-medium text-slate-500 dark:text-slate-400 sm:block">Full-stack engineer</span>
+          </span>
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-1 items-center bg-lightBg/50 dark:bg-darkBg/50 backdrop-blur-md px-2 py-1 rounded-full border border-slate-200 dark:border-slate-800">
+        <div className="hidden items-center gap-1 md:flex">
           {links.map((link) => (
             <Link
               key={link.name}
               href={link.href}
               className={clsx(
-                'px-4 py-2 rounded-full text-sm font-medium transition-all duration-300',
+                'rounded px-3 py-2 text-[13px] font-medium transition-colors',
                 activeSection.toLowerCase() === link.name.toLowerCase()
-                  ? 'bg-primary text-white shadow-md shadow-primary/25'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary hover:bg-primary/10'
+                  ? 'text-primary'
+                  : 'text-slate-600 hover:bg-white/70 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800/70 dark:hover:text-white'
               )}
             >
               {link.name}
@@ -125,8 +128,9 @@ export default function Navbar() {
           {/* Dark Mode Button */}
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-            aria-label="Toggle Dark Mode"
+            className="flex h-10 w-10 items-center justify-center rounded border border-slate-200 text-slate-600 transition-colors hover:border-primary hover:text-primary dark:border-slate-700 dark:text-slate-300"
+            aria-label="Toggle color theme"
+            title="Toggle color theme"
           >
             {theme === 'dark' ? <FaSun className="text-amber-400" /> : <FaMoon />}
           </button>
@@ -136,7 +140,7 @@ export default function Navbar() {
             <div className="relative user-menu-container">
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                className="flex items-center space-x-2 px-3 py-2 rounded-full bg-primary text-white hover:bg-primary-600 transition-colors shadow-lg shadow-primary/20"
+                className="flex items-center gap-2 rounded bg-primary px-3 py-2 text-white transition-colors hover:bg-primary-700"
               >
                 <FaUser className="text-sm" />
                 <span className="text-sm font-medium">{user?.name || 'Admin'}</span>
@@ -148,7 +152,7 @@ export default function Navbar() {
                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                    className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 py-1 z-50"
+                    className="absolute right-0 z-50 mt-2 w-48 rounded border border-slate-200 bg-white py-1 shadow-sm dark:border-slate-700 dark:bg-slate-800"
                   >
                     <Link
                       href="/admin"
@@ -180,22 +184,24 @@ export default function Navbar() {
           ) : (
             <Link 
               href="/admin/login" 
-              className="px-5 py-2 rounded-full bg-primary text-white text-sm font-medium hover:bg-primary-600 transition-colors shadow-lg shadow-primary/20"
+              className="rounded bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
             >
               Sign In
             </Link>
           )}
           
-          <Link href="/contact" className="px-5 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-            Let's Talk
+          <Link href="/contact" className="rounded border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white">
+            Contact
           </Link>
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center space-x-4">
+        <div className="flex items-center gap-2 md:hidden">
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+            className="flex h-10 w-10 items-center justify-center rounded border border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300"
+            aria-label="Toggle color theme"
+            title="Toggle color theme"
           >
             {theme === 'dark' ? <FaSun className="text-amber-400" /> : <FaMoon />}
           </button>
@@ -204,20 +210,27 @@ export default function Navbar() {
           {isAuthenticated ? (
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="p-2 rounded-full bg-primary text-white"
+              className="flex h-10 w-10 items-center justify-center rounded bg-primary text-white"
+              aria-label="Open account menu"
             >
               <FaUser />
             </button>
           ) : (
             <Link 
               href="/admin/login" 
-              className="p-2 rounded-full bg-primary text-white"
+              className="flex h-10 w-10 items-center justify-center rounded bg-primary text-white"
+              aria-label="Sign in"
             >
               <FaUser />
             </Link>
           )}
           
-          <button onClick={() => setIsOpen(!isOpen)} className="text-2xl text-lightText dark:text-darkText">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex h-10 w-10 items-center justify-center rounded border border-slate-200 text-slate-800 dark:border-slate-700 dark:text-slate-100"
+            aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isOpen}
+          >
             {isOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
@@ -230,7 +243,7 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-20 left-4 right-4 glass-card p-4 rounded-3xl flex flex-col space-y-2 md:hidden"
+            className="absolute left-4 right-4 top-16 flex flex-col gap-1 rounded border border-slate-200 bg-lightBg p-3 shadow-sm dark:border-slate-700 dark:bg-darkBg md:hidden"
           >
             {links.map((link) => (
               <Link
@@ -238,7 +251,7 @@ export default function Navbar() {
                 href={link.href}
                 onClick={() => setIsOpen(false)}
                 className={clsx(
-                  'px-4 py-3 rounded-2xl text-sm font-medium transition-all',
+                  'min-h-11 rounded px-4 py-3 text-sm font-medium transition-colors',
                   activeSection.toLowerCase() === link.name.toLowerCase()
                     ? 'bg-primary/10 text-primary'
                     : 'text-slate-600 dark:text-slate-300'
@@ -257,7 +270,7 @@ export default function Navbar() {
                 <Link
                   href="/admin"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center space-x-2 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                  className="flex items-center space-x-2 rounded px-4 py-3 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
                 >
                   <FaCog className="text-xs" />
                   <span>Admin Dashboard</span>
@@ -265,7 +278,7 @@ export default function Navbar() {
                 <Link
                   href="/admin/profile"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center space-x-2 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                  className="flex items-center space-x-2 rounded px-4 py-3 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
                 >
                   <FaCamera className="text-xs" />
                   <span>Edit Profile Photo</span>
@@ -275,7 +288,7 @@ export default function Navbar() {
                     handleLogout();
                     setIsOpen(false);
                   }}
-                  className="flex items-center space-x-2 w-full px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-left"
+                  className="flex w-full items-center space-x-2 rounded px-4 py-3 text-left text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
                 >
                   <FaSignOutAlt className="text-xs" />
                   <span>Sign Out</span>
@@ -285,7 +298,7 @@ export default function Navbar() {
               <Link
                 href="/admin/login"
                 onClick={() => setIsOpen(false)}
-                className="mt-2 px-4 py-3 rounded-2xl bg-primary text-white text-sm font-medium text-center shadow-lg shadow-primary/20"
+                className="mt-2 rounded bg-primary px-4 py-3 text-center text-sm font-semibold text-white"
               >
                 Sign In
               </Link>
@@ -294,9 +307,9 @@ export default function Navbar() {
             <Link
               href="/contact"
               onClick={() => setIsOpen(false)}
-              className="px-4 py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm font-medium text-center hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+              className="min-h-11 rounded border border-primary px-4 py-3 text-center text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white"
             >
-              Let's Talk
+              Contact
             </Link>
           </motion.div>
         )}
@@ -309,7 +322,7 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            className="absolute top-20 right-4 w-48 bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50 md:hidden"
+            className="absolute right-4 top-20 z-50 w-48 rounded border border-slate-200 bg-white py-2 shadow-sm dark:border-slate-700 dark:bg-slate-800 md:hidden"
           >
             <div className="px-4 py-2 text-sm font-medium text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-700">
               {user?.name || 'Admin'}

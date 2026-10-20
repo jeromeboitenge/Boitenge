@@ -33,17 +33,17 @@ export default function CertificateCard({ certificate, index, onView }: Certific
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      whileHover={{ y: -8 }}
-      className="group bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-lg hover:shadow-2xl hover:border-primary/50 transition-all duration-300"
+      whileHover={{ y: -2 }}
+      className="group overflow-hidden rounded border border-slate-200 bg-white transition-colors duration-200 hover:border-primary/50 dark:border-slate-800 dark:bg-slate-900"
     >
       {/* Certificate Image */}
-      <div className="relative h-56 bg-gradient-to-br from-primary/10 via-purple-50 to-pink-50 dark:from-primary/20 dark:via-purple-900/20 dark:to-pink-900/20 overflow-hidden">
+      <div className="relative h-56 overflow-hidden bg-slate-100 dark:bg-slate-800">
         {thumbnailUrl ? (
           <>
             <img
               src={thumbnailUrl}
               alt={certificate.name}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               onError={(e) => {
                 console.error('Failed to load certificate thumbnail:', thumbnailUrl);
                 e.currentTarget.style.display = 'none';
@@ -67,7 +67,7 @@ export default function CertificateCard({ certificate, index, onView }: Certific
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             {isPDF && (
-              <div className="absolute top-4 left-4 bg-primary/90 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
+              <div className="absolute left-4 top-4 flex items-center gap-1 rounded bg-primary px-3 py-1 text-xs font-bold text-white">
                 <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
                 </svg>
@@ -86,13 +86,13 @@ export default function CertificateCard({ certificate, index, onView }: Certific
           onClick={() => onView(certificate)}
           className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         >
-          <div className="bg-white dark:bg-slate-900 rounded-full p-4 shadow-2xl transform scale-90 group-hover:scale-100 transition-transform duration-300">
+          <div className="rounded border border-slate-200 bg-white p-3 transition-transform duration-300 group-hover:scale-100 dark:border-slate-700 dark:bg-slate-900">
             <FaEye className="text-2xl text-primary" />
           </div>
         </button>
 
         {/* Verified Badge */}
-        <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
+        <div className="absolute right-4 top-4 flex items-center gap-1 rounded bg-emerald-700 px-3 py-1 text-xs font-bold text-white">
           <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
           </svg>
@@ -126,13 +126,13 @@ export default function CertificateCard({ certificate, index, onView }: Certific
             {certificate.skills.slice(0, 3).map((skill, idx) => (
               <span
                 key={idx}
-                className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-semibold"
+                className="rounded bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
               >
                 {skill}
               </span>
             ))}
             {certificate.skills.length > 3 && (
-              <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-full text-xs font-semibold">
+              <span className="rounded bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-400">
                 +{certificate.skills.length - 3}
               </span>
             )}

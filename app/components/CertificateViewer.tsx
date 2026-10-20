@@ -71,7 +71,7 @@ export default function CertificateViewer({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ type: 'spring', duration: 0.5, bounce: 0.3 }}
-            className={`relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col ${
+            className={`relative flex flex-col overflow-hidden rounded border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 ${
               isFullscreen
                 ? 'w-full h-full max-w-none max-h-none'
                 : 'w-full max-w-6xl h-[90vh]'
@@ -92,7 +92,7 @@ export default function CertificateViewer({
                 {isPDF && (
                   <button
                     onClick={() => setViewMode(viewMode === 'image' ? 'pdf' : 'image')}
-                    className="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors text-sm font-semibold"
+                    className="rounded px-3 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600"
                     title={viewMode === 'image' ? 'View PDF' : 'View Image'}
                   >
                     {viewMode === 'image' ? '📄 PDF' : '🖼️ Image'}
@@ -101,7 +101,7 @@ export default function CertificateViewer({
                 {certificateUrl && (
                   <button
                     onClick={handleDownload}
-                    className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+                    className="rounded p-2 text-primary transition-colors hover:bg-primary/20"
                     title="Download certificate"
                   >
                     <FaDownload />
@@ -109,14 +109,14 @@ export default function CertificateViewer({
                 )}
                 <button
                   onClick={() => setIsFullscreen(!isFullscreen)}
-                  className="p-2 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+                  className="rounded p-2 text-slate-700 transition-colors hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600"
                   title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
                 >
                   {isFullscreen ? <FaCompress /> : <FaExpand />}
                 </button>
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+                  className="rounded p-2 text-slate-700 transition-colors hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600"
                   title="Close"
                 >
                   <FaTimes />
@@ -132,7 +132,7 @@ export default function CertificateViewer({
                     // PDF Viewer
                     <iframe
                       src={certificateUrl}
-                      className="w-full h-full rounded-lg shadow-2xl bg-white"
+                      className="h-full w-full rounded bg-white"
                       title={certificateName}
                     />
                   ) : (
@@ -148,7 +148,7 @@ export default function CertificateViewer({
                         alt={certificateName}
                         onLoad={() => setImageLoaded(true)}
                         onError={() => setImageLoaded(true)}
-                        className={`max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-opacity duration-300 ${
+                        className={`max-h-full max-w-full rounded object-contain transition-opacity duration-300 ${
                           imageLoaded ? 'opacity-100' : 'opacity-0'
                         }`}
                       />

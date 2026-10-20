@@ -78,13 +78,13 @@ export default function Skills() {
             {filters.map((filter, idx) => (
               <motion.button
                 key={idx}
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ y: -2 }}
                 onClick={() => setActiveFilter(filter)}
-                className={`px-4 py-2 rounded-full font-medium transition 
+                className={`rounded border px-4 py-2 text-sm font-medium transition-colors
                   ${
                     activeFilter === filter
-                      ? "bg-primary text-white shadow-lg"
-                      : "bg-lightCard dark:bg-darkCard text-lightText dark:text-darkText border border-primary"
+                      ? "border-primary bg-primary text-white"
+                      : "border-slate-200 bg-lightCard text-lightText hover:border-primary/50 dark:border-slate-800 dark:bg-darkCard dark:text-darkText"
                   }
                 `}
               >
@@ -94,14 +94,14 @@ export default function Skills() {
           </div>
 
           {/* Skill Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             {filteredSkills.map(([category, list], idx) => (
               <motion.div
                 key={category}
                 initial={{ opacity: 0, y: 60 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: idx * 0.2 }}
-                className="bg-lightBg dark:bg-[#111] shadow-md p-6 rounded-xl"
+                className="rounded border border-slate-200 bg-lightBg p-5 dark:border-slate-800 dark:bg-[#111] sm:p-6"
               >
                 <h3 className="text-xl font-semibold text-primary mb-4">{category}</h3>
                 <div className="flex flex-wrap gap-3">

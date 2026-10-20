@@ -105,7 +105,7 @@ export default function Certificates() {
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
             Certifications & 
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-600 to-pink-600">
+            <span className="text-primary">
               {" "}Credentials
             </span>
           </h1>
@@ -122,9 +122,9 @@ export default function Certificates() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
         >
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-lg">
+          <div className="rounded border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded bg-primary/10">
                 <FaCertificate className="text-2xl text-primary" />
               </div>
               <div>
@@ -134,9 +134,9 @@ export default function Certificates() {
             </div>
           </div>
           
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-lg">
+          <div className="rounded border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded bg-green-100 dark:bg-green-900/20">
                 <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
@@ -148,10 +148,10 @@ export default function Certificates() {
             </div>
           </div>
           
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-lg">
+          <div className="rounded border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
-                <FaAward className="text-2xl text-purple-600 dark:text-purple-400" />
+              <div className="flex h-12 w-12 items-center justify-center rounded bg-primary/10">
+                <FaAward className="text-2xl text-primary" />
               </div>
               <div>
                 <p className="text-3xl font-bold text-slate-900 dark:text-white">
@@ -168,14 +168,14 @@ export default function Certificates() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-20 bg-white dark:bg-slate-900 rounded-3xl border-2 border-dashed border-slate-300 dark:border-slate-700"
+            className="rounded border border-dashed border-slate-300 bg-white py-16 text-center dark:border-slate-700 dark:bg-slate-900"
           >
             <FaCertificate className="text-6xl text-slate-300 dark:text-slate-700 mx-auto mb-4" />
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">No Certificates Yet</h3>
             <p className="text-slate-600 dark:text-slate-400">Certificates will appear here once added</p>
           </motion.div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             {certificates.map((cert, idx) => (
               <CertificateCard
                 key={cert.id}
