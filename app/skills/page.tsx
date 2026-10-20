@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import SkillCard from "../components/SkillCard";
 import SkillsChart from "../components/SkillsChart";
-import { unifiedApiClient } from "@/lib/unified-api-client";
+import { PORTFOLIO_DATA_UPDATED_EVENT, unifiedApiClient } from "@/lib/unified-api-client";
 import { Skill } from "@/types";
 
 export default function Skills() {
@@ -14,10 +14,12 @@ export default function Skills() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchSkills = async () => {
+    let isMounted = true;
+    const fetchSkills = async (showLoading: boolean) => {
       try {
-        setIsLoading(true);
+        if (showLoading) setIsLoading(true);
         const data = await unifiedApiClient.getSkills();
+        if (!isMounted) return;
         
         // Group skills by category
         const grouped = data.reduce((acc, skill) => {
@@ -32,14 +34,22 @@ export default function Skills() {
         setSkills(grouped);
         setError(null);
       } catch (err) {
+        if (!isMounted) return;
         console.error('Failed to fetch skills:', err);
         setError('Failed to load skills. Showing cached data.');
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     };
 
-    fetchSkills();
+    const refreshSkills = () => void fetchSkills(false);
+    void fetchSkills(true);
+    window.addEventListener(PORTFOLIO_DATA_UPDATED_EVENT, refreshSkills);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener(PORTFOLIO_DATA_UPDATED_EVENT, refreshSkills);
+    };
   }, []);
 
   const filters = ["All", ...Object.keys(skills)];

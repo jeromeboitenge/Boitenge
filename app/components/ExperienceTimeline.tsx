@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { unifiedApiClient } from "@/lib/unified-api-client";
+import { PORTFOLIO_DATA_UPDATED_EVENT, unifiedApiClient } from "@/lib/unified-api-client";
 import type { Experience } from "@/types/content";
 
 const formatDate = (date: Date) => date.toLocaleDateString('en-US', {
@@ -16,20 +16,30 @@ export default function ExperienceTimeline() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchExperience = async () => {
+    let isMounted = true;
+    const fetchExperience = async (showLoading: boolean) => {
       try {
-        setIsLoading(true);
+        if (showLoading) setIsLoading(true);
         const data = await unifiedApiClient.getExperience();
+        if (!isMounted) return;
         setExperiences(data.sort((a, b) => b.order - a.order));
       } catch (err) {
+        if (!isMounted) return;
         setError(err instanceof Error ? err.message : 'Failed to load experience');
         console.error('Error fetching experience:', err);
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     };
 
-    fetchExperience();
+    const refreshExperience = () => void fetchExperience(false);
+    void fetchExperience(true);
+    window.addEventListener(PORTFOLIO_DATA_UPDATED_EVENT, refreshExperience);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener(PORTFOLIO_DATA_UPDATED_EVENT, refreshExperience);
+    };
   }, []);
   if (isLoading) {
     return (

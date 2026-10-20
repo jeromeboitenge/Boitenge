@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { AuthGuard } from '@/components/auth';
 import { useAuth } from '@/components/auth';
 import { apiClient } from '@/lib/api-client';
+import { PORTFOLIO_DATA_UPDATED_EVENT, unifiedApiClient } from '@/lib/unified-api-client';
 import { Project, Skill, Experience, Certificate, Message } from '@/types';
 import { FaProjectDiagram, FaCode, FaBriefcase, FaCertificate, FaPlus, FaEdit, FaTrash, FaEye, FaEnvelope, FaEnvelopeOpen, FaChartLine, FaClock, FaCheckCircle, FaUser } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -48,8 +49,58 @@ export default function AdminDashboard() {
     responseRate: 100
   });
 
+  const fetchContentData = async () => {
+    const [projectsData, skillsData, experienceData, certificatesData] = await Promise.all([
+      unifiedApiClient.getProjects(),
+      unifiedApiClient.getSkills(),
+      unifiedApiClient.getExperience(),
+      unifiedApiClient.getCertificates(),
+    ]);
+
+    setProjects(projectsData);
+    setSkills(skillsData);
+    setExperiences(experienceData);
+    setCertificates(certificatesData);
+    setStats((current) => ({
+      ...current,
+      projects: projectsData.length,
+      skills: skillsData.length,
+      experience: experienceData.length,
+      certificates: certificatesData.length,
+    }));
+  };
+
+  const updateMessageStats = (messagesData: Message[]) => {
+    const unreadMessages = messagesData.filter((message) => !message.isRead).length;
+    const recentMessages = messagesData.filter(
+      (message) => new Date(message.createdAt).getTime() > Date.now() - 24 * 60 * 60 * 1000
+    ).length;
+
+    setMessages(messagesData);
+    setStats((current) => ({ ...current, messages: unreadMessages }));
+    setQuickStats({
+      totalMessages: messagesData.length,
+      unreadMessages,
+      recentMessages,
+      responseRate: messagesData.length
+        ? Math.round(((messagesData.length - unreadMessages) / messagesData.length) * 100)
+        : 100,
+    });
+  };
+
   useEffect(() => {
     fetchAllData();
+  }, []);
+
+  useEffect(() => {
+    const refreshContent = () => {
+      void fetchContentData().catch((error) => {
+        console.error('Failed to refresh portfolio content:', error);
+      });
+    };
+
+    window.addEventListener(PORTFOLIO_DATA_UPDATED_EVENT, refreshContent);
+    return () => window.removeEventListener(PORTFOLIO_DATA_UPDATED_EVENT, refreshContent);
   }, []);
 
   const fetchAllData = async () => {
@@ -70,39 +121,8 @@ export default function AdminDashboard() {
         }
       }
       
-      // Fetch all data including messages
-      const [projectsData, skillsData, experienceData, certificatesData, messagesData] = await Promise.all([
-        apiClient.getProjects(),
-        apiClient.getSkills(),
-        apiClient.getExperience(),
-        apiClient.getCertificates(),
-        apiClient.getMessages(),
-      ]);
-      
-      setProjects(projectsData);
-      setSkills(skillsData);
-      setExperiences(experienceData);
-      setCertificates(certificatesData);
-      setMessages(messagesData);
-      
-      setStats({
-        projects: projectsData.length,
-        skills: skillsData.length,
-        experience: experienceData.length,
-        certificates: certificatesData.length,
-        messages: messagesData.filter(m => !m.isRead).length,
-      });
-      
-      // Calculate quick stats
-      const last24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000);
-      const recentMsgs = messagesData.filter(m => new Date(m.createdAt) > last24Hours);
-      
-      setQuickStats({
-        totalMessages: messagesData.length,
-        unreadMessages: messagesData.filter(m => !m.isRead).length,
-        recentMessages: recentMsgs.length,
-        responseRate: messagesData.length > 0 ? Math.round((messagesData.filter(m => m.isRead).length / messagesData.length) * 100) : 100
-      });
+      await fetchContentData();
+      void apiClient.getMessages().then(updateMessageStats);
     } catch (error) {
       console.error('Error fetching data:', error);
       toast.error('Failed to load data. Please refresh the page.');

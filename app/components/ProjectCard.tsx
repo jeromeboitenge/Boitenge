@@ -262,7 +262,7 @@ export default function ProjectCard({
           {(projectLink || codeLink) && (
             <div className="mt-auto flex flex-wrap gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
               {projectLink && (
-                <Link
+                <a
                   href={projectLink.href}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -270,7 +270,7 @@ export default function ProjectCard({
                   aria-label={`${title}: ${projectLink.action}`}
                 >
                   {projectLink.action} <IconExternal />
-                </Link>
+                </a>
               )}
               {codeLink && (
               <Link

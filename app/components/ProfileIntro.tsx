@@ -88,21 +88,30 @@ export default function ProfileIntro({ showButtons = false }: ProfileIntroProps)
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.65, delay: 0.1, ease: 'easeOut' }}
-        className="relative order-1 mx-auto w-full max-w-[22rem] sm:max-w-[25rem] lg:order-2 lg:max-w-[28rem]"
+        className="relative order-1 mx-auto aspect-square w-full max-w-[19rem] sm:max-w-[24rem] lg:order-2 lg:max-w-[28rem]"
       >
-        <div className="relative aspect-[4/5] overflow-hidden rounded border border-slate-200 bg-slate-200 dark:border-slate-700 dark:bg-slate-800">
-          <Image
-            src={imageUrl}
-            alt="Portrait of Jerome Nzaramyimana"
-            fill
-            sizes="(max-width: 640px) 80vw, (max-width: 1024px) 400px, 448px"
-            className="object-cover"
-            priority
-          />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 rounded-full opacity-70"
+          style={{
+            backgroundColor: 'rgba(0, 98, 139, 0.035)',
+            backgroundImage: 'linear-gradient(45deg, rgba(0,98,139,.07) 25%, transparent 25%, transparent 75%, rgba(0,98,139,.07) 75%), linear-gradient(45deg, rgba(0,98,139,.07) 25%, transparent 25%, transparent 75%, rgba(0,98,139,.07) 75%)',
+            backgroundPosition: '0 0, 12px 12px',
+            backgroundSize: '24px 24px',
+          }}
+        />
+        <div className="absolute inset-[2%] overflow-hidden rounded-full border-[3px] border-[#D86C49] bg-white p-1 dark:bg-slate-900">
+          <div className="relative h-full w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+            <Image
+              src={imageUrl}
+              alt="Portrait of Jerome Nzaramyimana"
+              fill
+              sizes="(max-width: 640px) 76vw, (max-width: 1024px) 380px, 448px"
+              className="object-cover object-center"
+              priority
+            />
+          </div>
         </div>
-        <span className="absolute -bottom-7 -left-7 hidden font-display text-7xl font-bold leading-none text-primary/10 lg:block" aria-hidden="true">
-          JB
-        </span>
       </motion.div>
 
       <Modal isOpen={showCvModal} onClose={() => setShowCvModal(false)} title="Curriculum Vitae" size="xl">

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { apiClient } from "@/lib/api-client";
+import { PORTFOLIO_DATA_UPDATED_EVENT, unifiedApiClient } from "@/lib/unified-api-client";
 import type { Certificate } from "@/types/content";
 import CertificateViewer from "./CertificateViewer";
 import CertificateCard from "./CertificateCard";
@@ -45,20 +45,30 @@ export default function Certificates() {
   const [selectedCertificate, setSelectedCertificate] = useState<Certificate | null>(null);
 
   useEffect(() => {
-    const fetchCertificates = async () => {
+    let isMounted = true;
+    const fetchCertificates = async (showLoading: boolean) => {
       try {
-        setIsLoading(true);
-        const data = await apiClient.getCertificates();
+        if (showLoading) setIsLoading(true);
+        const data = await unifiedApiClient.getCertificates();
+        if (!isMounted) return;
         setCertificates(data.sort((a, b) => a.order - b.order));
       } catch (err) {
+        if (!isMounted) return;
         setError(err instanceof Error ? err.message : 'Failed to load certificates');
         console.error('Error fetching certificates:', err);
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     };
 
-    fetchCertificates();
+    const refreshCertificates = () => void fetchCertificates(false);
+    void fetchCertificates(true);
+    window.addEventListener(PORTFOLIO_DATA_UPDATED_EVENT, refreshCertificates);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener(PORTFOLIO_DATA_UPDATED_EVENT, refreshCertificates);
+    };
   }, []);
   if (isLoading) {
     return (
