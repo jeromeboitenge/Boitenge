@@ -25,14 +25,14 @@ export default function ProfileIntro({ showButtons = false }: ProfileIntroProps)
     : cvUrl;
 
   return (
-    <div className="mx-auto grid w-full max-w-7xl items-center gap-12 px-5 py-10 sm:px-8 sm:py-14 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:px-12 lg:py-16">
+    <div className="mx-auto grid w-full max-w-7xl items-center gap-12 px-5 py-10 max-[320px]:gap-6 max-[320px]:px-3 max-[320px]:py-6 sm:px-8 sm:py-14 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:px-12 lg:py-16">
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.55, ease: 'easeOut' }}
         className="relative z-10 order-2 text-center lg:order-1 lg:text-left"
       >
-        <h1 className="font-display text-4xl font-bold leading-[1.08] text-slate-950 dark:text-white sm:text-5xl md:text-6xl">
+        <h1 className="break-words font-display text-4xl font-bold leading-[1.08] text-slate-950 dark:text-white max-[320px]:text-2xl sm:text-5xl md:text-6xl">
           Jerome <span className="text-primary">Nzaramyimana</span>
         </h1>
         <p className="mt-6 max-w-2xl text-xl font-medium leading-relaxed text-slate-800 dark:text-slate-100 sm:text-2xl">
@@ -60,7 +60,7 @@ export default function ProfileIntro({ showButtons = false }: ProfileIntroProps)
           </div>
         )}
 
-        <div className="mt-8 flex items-center justify-center gap-3 lg:justify-start">
+        <div className="mt-8 flex items-center justify-center gap-3 max-[320px]:gap-2 lg:justify-start">
           {socialLinks.map(({ icon: Icon, href, label }) => (
             <a
               key={label}
@@ -69,14 +69,14 @@ export default function ProfileIntro({ showButtons = false }: ProfileIntroProps)
               rel={href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
               aria-label={label}
               title={label}
-              className="flex h-11 w-11 items-center justify-center rounded border border-slate-200 bg-white/70 text-slate-600 transition-colors hover:border-primary hover:text-primary dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300"
+              className="flex h-11 w-11 items-center justify-center rounded border border-slate-200 bg-white/70 text-slate-600 transition-colors hover:border-primary hover:text-primary dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300 max-[320px]:h-9 max-[320px]:w-9"
             >
               <Icon size={18} aria-hidden="true" />
             </a>
           ))}
           <a
             href="/contact"
-            className="ml-2 inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary transition hover:text-primary-700"
+            className="ml-2 inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary transition hover:text-primary-700 max-[320px]:hidden"
           >
             Get in touch <ArrowUpRight size={16} aria-hidden="true" />
           </a>

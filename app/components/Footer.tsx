@@ -107,20 +107,20 @@ export default function Footer() {
           {/* CONTACT INFO */}
           <div className="space-y-6">
             <h4 className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-900 dark:text-white">Get In Touch</h4>
-            <div className="space-y-4">
-              <div className="rounded border border-slate-200 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900/80">
+            <div className="space-y-6">
+              <div className="rounded-xl border border-slate-200 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900/80">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded bg-primary/10 text-primary">
                     <Mail size={16} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-sm font-semibold text-slate-900 dark:text-white">Email</p>
-                    <a href="mailto:jeromeboitenge@gmail.com" className="text-sm text-slate-600 dark:text-slate-400 hover:text-primary transition">jeromeboitenge@gmail.com</a>
+                    <a href="mailto:jeromeboitenge@gmail.com" className="break-all text-sm text-slate-600 transition hover:text-primary dark:text-slate-400">jeromeboitenge@gmail.com</a>
                   </div>
                 </div>
               </div>
 
-              <div className="rounded border border-slate-200 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900/80">
+              <div className="rounded-xl border border-slate-200 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900/80">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded bg-primary/10 text-primary">
                     <Phone size={16} />
@@ -132,7 +132,7 @@ export default function Footer() {
                 </div>
               </div>
 
-              <div className="rounded border border-slate-200 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900/80">
+              <div className="rounded-xl border border-slate-200 bg-white/90 p-4 dark:border-slate-800 dark:bg-slate-900/80">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded bg-primary/10 text-primary">
                     <MapPin size={16} />

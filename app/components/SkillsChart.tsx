@@ -47,7 +47,7 @@ export default function SkillsChart() {
         </h2>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {skillCategories.map((category, idx) => (
           <motion.div
             key={category.title}
@@ -55,7 +55,7 @@ export default function SkillsChart() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: idx * 0.1 }}
             viewport={{ once: true }}
-            className={`flex flex-col rounded border border-slate-200 bg-white p-5 transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900 sm:p-6 ${category.colSpan}`}
+            className={`flex flex-col rounded-xl border border-slate-200 bg-white p-6 transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900 max-[320px]:p-4 ${category.colSpan}`}
           >
             {category.icon}
             <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">

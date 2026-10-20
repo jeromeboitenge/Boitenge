@@ -96,18 +96,18 @@ export default function Navbar() {
       )}
     >
       <div className={clsx(
-        'mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8'
+        'mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 max-[320px]:gap-2 max-[320px]:px-2 sm:px-6 lg:px-8'
       )}>
-        <Link href="/" className="flex shrink-0 items-center gap-3 text-slate-950 dark:text-white">
-          <span className="flex h-9 w-9 items-center justify-center rounded bg-primary font-display text-sm font-bold text-white">JB</span>
-          <span className="leading-tight">
+        <Link href="/" className="flex shrink-0 items-center gap-3 text-slate-950 dark:text-white max-[320px]:gap-0">
+          <span className="flex h-9 w-9 items-center justify-center rounded bg-primary font-display text-sm font-bold text-white max-[320px]:h-8 max-[320px]:w-8">JB</span>
+          <span className="leading-tight max-[320px]:hidden">
             <span className="block font-display text-base font-bold">Jerome</span>
             <span className="hidden text-[11px] font-medium text-slate-500 dark:text-slate-400 sm:block">Full-stack engineer</span>
           </span>
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-1 min-[900px]:flex">
           {links.map((link) => (
             <Link
               key={link.name}
@@ -124,7 +124,7 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="hidden md:flex items-center space-x-4">
+        <div className="hidden items-center space-x-4 min-[900px]:flex">
           {/* Dark Mode Button */}
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
@@ -189,17 +189,13 @@ export default function Navbar() {
               Sign In
             </Link>
           )}
-          
-          <Link href="/contact" className="rounded border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white">
-            Contact
-          </Link>
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-2 max-[320px]:gap-1 min-[900px]:hidden">
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="flex h-10 w-10 items-center justify-center rounded border border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300"
+            className="flex h-10 w-10 items-center justify-center rounded border border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300 max-[320px]:h-8 max-[320px]:w-8"
             aria-label="Toggle color theme"
             title="Toggle color theme"
           >
@@ -210,7 +206,7 @@ export default function Navbar() {
           {isAuthenticated ? (
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="flex h-10 w-10 items-center justify-center rounded bg-primary text-white"
+              className="flex h-10 w-10 items-center justify-center rounded bg-primary text-white max-[320px]:hidden"
               aria-label="Open account menu"
             >
               <FaUser />
@@ -218,7 +214,7 @@ export default function Navbar() {
           ) : (
             <Link 
               href="/admin/login" 
-              className="flex h-10 w-10 items-center justify-center rounded bg-primary text-white"
+              className="flex h-10 w-10 items-center justify-center rounded bg-primary text-white max-[320px]:hidden"
               aria-label="Sign in"
             >
               <FaUser />
@@ -227,7 +223,7 @@ export default function Navbar() {
           
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="flex h-10 w-10 items-center justify-center rounded border border-slate-200 text-slate-800 dark:border-slate-700 dark:text-slate-100"
+            className="flex h-10 w-10 items-center justify-center rounded border border-slate-200 text-slate-800 dark:border-slate-700 dark:text-slate-100 max-[320px]:h-9 max-[320px]:w-9"
             aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={isOpen}
           >
@@ -243,7 +239,7 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute left-4 right-4 top-16 flex flex-col gap-1 rounded border border-slate-200 bg-lightBg p-3 shadow-sm dark:border-slate-700 dark:bg-darkBg md:hidden"
+            className="absolute left-4 right-4 top-16 flex max-h-[calc(100dvh-5rem)] flex-col gap-1 overflow-y-auto rounded border border-slate-200 bg-lightBg p-3 shadow-sm dark:border-slate-700 dark:bg-darkBg max-[320px]:left-2 max-[320px]:right-2 max-[320px]:p-2 min-[900px]:hidden"
           >
             {links.map((link) => (
               <Link
@@ -322,7 +318,7 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            className="absolute right-4 top-20 z-50 w-48 rounded border border-slate-200 bg-white py-2 shadow-sm dark:border-slate-700 dark:bg-slate-800 md:hidden"
+            className="absolute right-4 top-20 z-50 w-48 rounded border border-slate-200 bg-white py-2 shadow-sm dark:border-slate-700 dark:bg-slate-800 min-[900px]:hidden"
           >
             <div className="px-4 py-2 text-sm font-medium text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-700">
               {user?.name || 'Admin'}

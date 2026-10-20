@@ -106,7 +106,7 @@ export default function TrackLocationPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white dark:bg-slate-800 rounded-3xl shadow-2xl p-8 space-y-6">
+      <div className="max-w-md w-full bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-8 space-y-6">
         
         <div className="text-center space-y-2">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
@@ -121,7 +121,7 @@ export default function TrackLocationPage() {
         </div>
 
         {location && (
-          <div className="bg-slate-50 dark:bg-slate-700 rounded-2xl p-4 space-y-2">
+          <div className="bg-slate-50 dark:bg-slate-700 rounded-xl p-4 space-y-2">
             <div className="text-sm text-slate-600 dark:text-slate-300">
               <strong>Latitude:</strong> {location.coords.latitude.toFixed(6)}
             </div>

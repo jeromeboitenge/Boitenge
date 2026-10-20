@@ -176,44 +176,42 @@ export default function ProjectCard({
       transition={{ duration: 0.5 }}
       className="h-full"
     >
-      <article className="group flex h-full flex-col overflow-hidden rounded border border-slate-200/80 bg-white transition-colors duration-200 hover:border-primary/50 dark:border-slate-800 dark:bg-slate-900">
-        <div className="relative h-48 overflow-hidden bg-slate-100 dark:bg-slate-800 sm:h-52">
+      <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/80 bg-white transition-colors duration-200 hover:border-primary/50 dark:border-slate-800 dark:bg-slate-900">
+        <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
           <Image
             src={image}
             alt={`${title} project preview`}
-            width={640}
-            height={360}
-            className="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.03]"
+            fill
+            sizes="(max-width: 320px) 100vw, (max-width: 768px) 92vw, (max-width: 1280px) 45vw, 400px"
+            className="object-cover transition duration-500 ease-out group-hover:scale-[1.03]"
             loading="lazy"
             quality={85}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-transparent" />
-          <span
-            className={`absolute left-4 top-4 rounded px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] ${
-              hasLiveDemo ? 'bg-emerald-500 text-white' : 'bg-white/95 text-slate-700'
-            }`}
-          >
-            {hasLiveDemo ? 'Live' : 'Selected work'}
-          </span>
+          {hasLiveDemo && (
+            <span className="absolute left-4 top-4 rounded bg-emerald-700 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
+              Live
+            </span>
+          )}
         </div>
 
-        <div className="flex flex-1 flex-col gap-4 p-5">
+        <div className="flex flex-1 flex-col gap-4 p-6 max-[320px]:gap-3 max-[320px]:p-4">
           <div className="space-y-2">
-            <h3 className="text-lg font-bold leading-snug text-slate-950 dark:text-white">
+            <h3 className="text-lg font-bold leading-snug text-slate-950 dark:text-white max-[320px]:text-base">
               {title}
             </h3>
-            <p className="line-clamp-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+            <p className="line-clamp-3 text-sm leading-6 text-slate-600 dark:text-slate-300 max-[320px]:text-[13px] max-[320px]:leading-5">
               {description}
             </p>
           </div>
 
           <div className="border-t border-slate-100 pt-4 dark:border-slate-800">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">Technology</p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 max-[320px]:gap-1.5">
             {tags.slice(0, 4).map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1.5 rounded bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                className="inline-flex items-center gap-1.5 rounded bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200 max-[320px]:px-1.5 max-[320px]:text-[11px]"
               >
                 {techIconMap[tag] ?? <DefaultTechIcon />}
                 {tag}

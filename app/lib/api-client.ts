@@ -281,6 +281,7 @@ class ApiClientImpl implements ApiClient {
       order: number;
       createdAt: string;
       updatedAt: string;
+      isPublished?: boolean;
     }>>('/api/projects');
 
     // Transform to match our Project interface
@@ -296,7 +297,7 @@ class ApiClientImpl implements ApiClient {
       order: project.order,
       createdAt: new Date(project.createdAt),
       updatedAt: new Date(project.updatedAt),
-      isPublished: true // Assume all returned projects are published
+      isPublished: project.isPublished ?? true
     }));
   }
 

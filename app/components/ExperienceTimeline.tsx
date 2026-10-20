@@ -55,7 +55,7 @@ export default function ExperienceTimeline() {
       {experiences.length === 0 ? (
         <p className="py-8 text-sm text-slate-500 dark:text-slate-400">Experience details will appear here soon.</p>
       ) : (
-      <div className="relative ml-2 space-y-5 border-l border-slate-200 dark:border-slate-800 sm:ml-3">
+      <div className="relative ml-2 space-y-6 border-l border-slate-200 dark:border-slate-800 sm:ml-3">
         {experiences.map((exp, index) => {
           const period = `${formatDate(exp.startDate)} - ${exp.endDate ? formatDate(exp.endDate) : 'Present'}`;
 
@@ -70,7 +70,7 @@ export default function ExperienceTimeline() {
             >
               <span className="absolute -left-[5px] top-5 h-2.5 w-2.5 rounded-full bg-primary ring-4 ring-lightBg dark:ring-darkBg" aria-hidden="true" />
 
-              <article className="rounded border border-slate-200 bg-white p-4 transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900 sm:p-5">
+              <article className="rounded-xl border border-slate-200 bg-white p-5 transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900 max-[320px]:p-4 sm:p-6">
                 <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-start">
                   <div>
                     <h3 className="text-lg font-bold leading-snug text-slate-950 dark:text-white">

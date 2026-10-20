@@ -5,12 +5,10 @@ import { useState, useEffect } from "react";
 import { FaRocket, FaUsers, FaLightbulb, FaCode, FaDownload, FaHandshake } from "react-icons/fa";
 import AnimatedCounter from "../components/AnimatedCounter";
 import { unifiedApiClient } from "../lib/unified-api-client";
-import { apiClient } from "../lib/api-client";
 import { useProfileStore } from "../stores/profileStore";
 
 interface Stat {
-  value: number;
-  suffix: string;
+  value: number | null;
   label: string;
   loading?: boolean;
 }
@@ -30,10 +28,10 @@ const coreStack = [
 export default function AboutPage() {
   const [mounted, setMounted] = useState(false);
   const [stats, setStats] = useState<Stat[]>([
-    { value: 0, suffix: '+', label: "Years Experience", loading: true },
-    { value: 0, suffix: '+', label: "Projects Shipped", loading: true },
-    { value: 0, suffix: '+', label: "Technologies", loading: true },
-    { value: 0, suffix: '+', label: "Certifications", loading: true },
+    { value: null, label: "Years Experience", loading: true },
+    { value: null, label: "Projects", loading: true },
+    { value: null, label: "Technologies", loading: true },
+    { value: null, label: "Certifications", loading: true },
   ]);
   const { cvUrl } = useProfileStore();
 
@@ -42,54 +40,76 @@ export default function AboutPage() {
   }, []);
 
   useEffect(() => {
+    let isCurrent = true;
+
     const fetchStats = async () => {
       try {
         const [projectsData, skillsData, experienceData, certificatesData] = await Promise.all([
           unifiedApiClient.getProjects(),
           unifiedApiClient.getSkills(),
           unifiedApiClient.getExperience(),
-          apiClient.getCertificates(),
+          unifiedApiClient.getCertificates(),
         ]);
 
-        // Years experience: span between earliest start and most recent end date
+        const visibleProjects = projectsData.filter((project) => project.isPublished);
+        const visibleSkills = skillsData.filter((skill) => skill.isVisible);
+        const visibleExperience = experienceData.filter((experience) => experience.isVisible);
+        const visibleCertificates = certificatesData.filter((certificate) => certificate.isVisible);
+
         let yearsExperience = 0;
-        if (experienceData.length > 0) {
-          const valid = experienceData.filter((e) => e.startDate);
-          if (valid.length > 0) {
-            const earliestStart = new Date(
-              Math.min(...valid.map((e) => new Date(e.startDate).getTime()))
-            );
-            const latestEnd = new Date(
-              Math.max(
-                ...valid.map((e) =>
-                  e.endDate ? new Date(e.endDate).getTime() : Date.now()
-                )
-              )
-            );
-            const years = (latestEnd.getTime() - earliestStart.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
-            yearsExperience = Math.max(1, Math.round(years));
-          }
+        const startTimes = visibleExperience
+          .map((experience) => new Date(experience.startDate).getTime())
+          .filter(Number.isFinite);
+        const endTimes = visibleExperience
+          .map((experience) => experience.endDate ? new Date(experience.endDate).getTime() : Date.now())
+          .filter(Number.isFinite);
+
+        if (startTimes.length && endTimes.length) {
+          const years = (Math.max(...endTimes) - Math.min(...startTimes)) / (1000 * 60 * 60 * 24 * 365.25);
+          yearsExperience = Math.max(1, Math.round(years));
         }
 
-        // Unique technologies across projects and skills
         const techSet = new Set<string>();
-        projectsData.forEach((p) => p.technologies?.forEach((t) => techSet.add(t)));
-        skillsData.forEach((s) => techSet.add(s.name));
+        visibleProjects.forEach((project) => project.technologies?.forEach((technology) => {
+          const normalized = technology.trim().toLocaleLowerCase();
+          if (normalized) techSet.add(normalized);
+        }));
+        visibleSkills.forEach((skill) => {
+          const normalized = skill.name.trim().toLocaleLowerCase();
+          if (normalized) techSet.add(normalized);
+        });
 
         const nextStats: Stat[] = [
-          { value: yearsExperience, suffix: '+', label: "Years Experience" },
-          { value: projectsData.length, suffix: '+', label: "Projects Shipped" },
-          { value: techSet.size, suffix: '+', label: "Technologies" },
-          { value: certificatesData.length, suffix: '+', label: "Certifications" },
+          { value: yearsExperience, label: "Years Experience" },
+          { value: visibleProjects.length, label: "Projects" },
+          { value: techSet.size, label: "Technologies" },
+          { value: visibleCertificates.length, label: "Certifications" },
         ];
+        if (!isCurrent) return;
         setStats(nextStats);
       } catch (err) {
         console.error('Failed to load stats:', err);
-        setStats((prev) => prev.map((s) => ({ ...s, loading: false })));
+        if (isCurrent) {
+          setStats((prev) => prev.map((stat) => ({ ...stat, value: null, loading: false })));
+        }
       }
     };
 
-    fetchStats();
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') void fetchStats();
+    };
+
+    void fetchStats();
+    window.addEventListener('focus', fetchStats);
+    window.addEventListener('storage', fetchStats);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      isCurrent = false;
+      window.removeEventListener('focus', fetchStats);
+      window.removeEventListener('storage', fetchStats);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   const MotionDiv = mounted ? motion.div : 'div';
@@ -115,7 +135,7 @@ export default function AboutPage() {
           whileInView: { opacity: 1, y: 0 },
           transition: { duration: 0.7 }
         } : {})}
-        className="rounded border border-slate-200 bg-white/90 p-6 dark:border-slate-800 dark:bg-slate-900/70 sm:p-8"
+        className="rounded-xl border border-slate-200 bg-white/90 p-6 dark:border-slate-800 dark:bg-slate-900/70 sm:p-8"
       >
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
           <div className="max-w-3xl">
@@ -152,18 +172,18 @@ export default function AboutPage() {
           whileInView: { opacity: 1, y: 0 },
           transition: { duration: 0.7, delay: 0.1 }
         } : {})}
-        className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-4"
+        className="mt-8 grid grid-cols-2 gap-6 lg:grid-cols-4"
       >
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded border border-slate-200 bg-white/90 p-6 text-center transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900/70"
+            className="rounded-xl border border-slate-200 bg-white/90 p-6 text-center transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900/70"
           >
             <p className="text-4xl font-extrabold font-display text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
               {stat.loading ? (
                 <span className="inline-block w-12 h-8 bg-slate-200 dark:bg-slate-700 animate-pulse rounded align-middle" />
               ) : (
-                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                stat.value === null ? '—' : <AnimatedCounter value={stat.value} />
               )}
             </p>
             <p className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-300">{stat.label}</p>
@@ -186,11 +206,11 @@ export default function AboutPage() {
           </div>
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white">How I Work</h2>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {values.map((value, idx) => (
             <div
               key={idx}
-              className="rounded border border-slate-200 bg-white/90 p-6 transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900/70"
+              className="rounded-xl border border-slate-200 bg-white/90 p-6 transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900/70"
             >
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded bg-primary/10">
                 {value.icon}

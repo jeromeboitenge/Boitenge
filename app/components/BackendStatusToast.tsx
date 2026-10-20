@@ -42,7 +42,7 @@ export function BackendStatusToast() {
         exit={{ opacity: 0, y: -50 }}
         className="fixed top-24 right-4 z-50 max-w-sm"
       >
-        <div className={`glass-card p-4 rounded-2xl shadow-lg border-l-4 ${
+        <div className={`glass-card p-4 rounded-xl shadow-sm border-l-4 ${
           status === 'checking' ? 'border-blue-500' :
           status === 'online' ? 'border-green-500' :
           'border-yellow-500'

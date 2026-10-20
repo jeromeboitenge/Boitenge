@@ -117,7 +117,7 @@ export default function ProfileImageCard() {
   const displayImage = preview || imageUrl;
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-lg">
+    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
       {/* Card Header */}
       <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-gradient-to-r from-primary/5 to-accent/5">
         <div className="flex items-center gap-3">
@@ -140,7 +140,7 @@ export default function ProfileImageCard() {
             <div className="absolute -inset-1 bg-gradient-to-tr from-primary via-accent to-primary rounded-full opacity-60 blur-sm group-hover:opacity-80 transition-opacity duration-300" />
             
             {/* Image Container */}
-            <div className="relative w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 border-4 border-white dark:border-slate-900 shadow-xl">
+            <div className="relative w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 border-4 border-white dark:border-slate-900">
               <AnimatePresence mode="wait">
                 {isUploading && preview ? (
                   <motion.div
@@ -198,7 +198,7 @@ export default function ProfileImageCard() {
 
           {/* Drag & Drop Zone */}
           <div
-            className={`w-full max-w-md border-2 border-dashed rounded-2xl transition-all duration-200 ${
+            className={`w-full max-w-md border-2 border-dashed rounded-xl transition-all duration-200 ${
               isDragging
                 ? 'border-primary bg-primary/5 scale-[1.02]'
                 : 'border-slate-300 dark:border-slate-700 hover:border-primary/50 hover:bg-slate-50 dark:hover:bg-slate-800/50'
