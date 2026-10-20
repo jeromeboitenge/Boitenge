@@ -17,6 +17,7 @@ export default function ProfileImageCard() {
   const [progress, setProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const previewUrlRef = useRef<string | null>(null);
 
@@ -37,7 +38,7 @@ export default function ProfileImageCard() {
     return null;
   };
 
-  const handleFile = async (file: File) => {
+  const handleFile = (file: File) => {
     const error = validateFile(file);
     if (error) {
       toast.error(error);
@@ -48,34 +49,45 @@ export default function ProfileImageCard() {
     const objectUrl = URL.createObjectURL(file);
     previewUrlRef.current = objectUrl;
     setPreview(objectUrl);
+    setSelectedFile(file);
+    setHasChanges(true);
+  };
+
+  const handleSave = async () => {
+    if (!selectedFile) return;
+
     setIsUploading(true);
     setProgress(0);
+    let uploadedUrl: string | null = null;
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => (prev >= 90 ? 90 : prev + 10));
+    }, 100);
 
     try {
-      const progressInterval = setInterval(() => {
-        setProgress((prev) => (prev >= 90 ? 90 : prev + 10));
-      }, 100);
-
-      const response = await apiClient.uploadFile(file, 'profile-images');
-      clearInterval(progressInterval);
+      const response = await apiClient.uploadFile(selectedFile, 'profile-images');
       setProgress(100);
 
       if (response.success && response.data.url) {
+        uploadedUrl = response.data.url;
         await apiClient.updateProfileAvatar(response.data.url);
         cleanupPreview();
         setPreview(null);
+        setSelectedFile(null);
         setImageUrl(response.data.url);
         setHasChanges(false);
+        if (fileInputRef.current) fileInputRef.current.value = '';
         toast.success('Profile image updated!');
       } else {
         throw new Error('Upload failed');
       }
-    } catch {
-      toast.error('Upload failed. Please try again.');
-      setPreview(null);
-      cleanupPreview();
-      if (fileInputRef.current) fileInputRef.current.value = '';
+    } catch (error) {
+      toast.error(
+        uploadedUrl
+          ? 'Image uploaded, but could not be saved to your profile. Please retry.'
+          : error instanceof Error ? error.message : 'Upload failed. Please retry.'
+      );
     } finally {
+      clearInterval(progressInterval);
       setIsUploading(false);
       setProgress(0);
     }
@@ -96,6 +108,7 @@ export default function ProfileImageCard() {
   const handleCancel = () => {
     cleanupPreview();
     setPreview(null);
+    setSelectedFile(null);
     setHasChanges(false);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
@@ -103,6 +116,7 @@ export default function ProfileImageCard() {
   const handleReset = async () => {
     cleanupPreview();
     setPreview(null);
+    setSelectedFile(null);
     setHasChanges(false);
     try {
       await apiClient.updateProfileAvatar(null);
@@ -230,13 +244,21 @@ export default function ProfileImageCard() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="flex gap-3"
+                className="flex flex-col-reverse gap-2 sm:flex-row sm:gap-3"
               >
                 <button
                   onClick={handleCancel}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                 >
                   <FaTimes className="text-xs" /> Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  disabled={!selectedFile || isUploading}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <FaCloudUploadAlt className="text-sm" /> Save photo
                 </button>
               </motion.div>
             )}

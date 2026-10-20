@@ -2,10 +2,12 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowDown, ArrowUpRight, Download, Github, Linkedin, Mail } from 'lucide-react';
 import Modal from './Modal';
 import { useProfileStore } from '../stores/profileStore';
+
+const DEFAULT_PROFILE_IMAGE = '/Nzaramyimana-Jerome.jpeg';
 
 interface ProfileIntroProps {
   showButtons?: boolean;
@@ -19,10 +21,15 @@ const socialLinks = [
 
 export default function ProfileIntro({ showButtons = false }: ProfileIntroProps) {
   const [showCvModal, setShowCvModal] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
   const { imageUrl, cvUrl } = useProfileStore();
   const cvEmbedUrl = cvUrl?.includes('/view')
     ? cvUrl.replace(/\/file\/d\/([^/]+)\/view.*$/, '/file/d/$1/preview')
     : cvUrl;
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   return (
     <div className="mx-auto grid w-full max-w-7xl items-center gap-12 px-5 py-10 max-[320px]:gap-6 max-[320px]:px-3 max-[320px]:py-6 sm:px-8 sm:py-14 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:px-12 lg:py-16">
@@ -103,7 +110,7 @@ export default function ProfileIntro({ showButtons = false }: ProfileIntroProps)
         <div className="absolute inset-[2%] overflow-hidden rounded-full border-[3px] border-[#D86C49] bg-white p-1 dark:bg-slate-900">
           <div className="relative h-full w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
             <Image
-              src={imageUrl}
+              src={hasMounted ? imageUrl : DEFAULT_PROFILE_IMAGE}
               alt="Portrait of Jerome Nzaramyimana"
               fill
               sizes="(max-width: 640px) 76vw, (max-width: 1024px) 380px, 448px"
