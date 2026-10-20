@@ -117,7 +117,7 @@ export default function ProfileImageCard() {
   const displayImage = preview || imageUrl;
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
       {/* Card Header */}
       <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-gradient-to-r from-primary/5 to-accent/5">
         <div className="flex items-center gap-3">
@@ -198,7 +198,7 @@ export default function ProfileImageCard() {
 
           {/* Drag & Drop Zone */}
           <div
-            className={`w-full max-w-md border-2 border-dashed rounded-xl transition-all duration-200 ${
+            className={`w-full max-w-md border-2 border-dashed rounded-2xl transition-all duration-200 ${
               isDragging
                 ? 'border-primary bg-primary/5 scale-[1.02]'
                 : 'border-slate-300 dark:border-slate-700 hover:border-primary/50 hover:bg-slate-50 dark:hover:bg-slate-800/50'

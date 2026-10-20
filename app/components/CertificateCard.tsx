@@ -34,7 +34,7 @@ export default function CertificateCard({ certificate, index, onView }: Certific
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ y: -2 }}
-      className="group overflow-hidden rounded-xl border border-slate-200 bg-white transition-colors duration-200 hover:border-primary/50 dark:border-slate-800 dark:bg-slate-900"
+      className="group overflow-hidden rounded-2xl border border-slate-200 bg-white transition-colors duration-200 hover:border-primary/50 dark:border-slate-800 dark:bg-slate-900"
     >
       {/* Certificate Image */}
       <div className="relative h-56 overflow-hidden bg-slate-100 dark:bg-slate-800 max-[320px]:h-32">

@@ -135,7 +135,7 @@ export default function AboutPage() {
           whileInView: { opacity: 1, y: 0 },
           transition: { duration: 0.7 }
         } : {})}
-        className="rounded-xl border border-slate-200 bg-white/90 p-6 dark:border-slate-800 dark:bg-slate-900/70 sm:p-8"
+        className="rounded-2xl border border-slate-200 bg-white/90 p-6 dark:border-slate-800 dark:bg-slate-900/70 sm:p-8"
       >
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
           <div className="max-w-3xl">
@@ -177,7 +177,7 @@ export default function AboutPage() {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-xl border border-slate-200 bg-white/90 p-6 text-center transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900/70"
+            className="rounded-2xl border border-slate-200 bg-white/90 p-6 text-center transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900/70"
           >
             <p className="text-4xl font-extrabold font-display text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
               {stat.loading ? (
@@ -210,7 +210,7 @@ export default function AboutPage() {
           {values.map((value, idx) => (
             <div
               key={idx}
-              className="rounded-xl border border-slate-200 bg-white/90 p-6 transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900/70"
+              className="rounded-2xl border border-slate-200 bg-white/90 p-6 transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900/70"
             >
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded bg-primary/10">
                 {value.icon}

@@ -70,7 +70,7 @@ export default function ExperienceTimeline() {
             >
               <span className="absolute -left-[5px] top-5 h-2.5 w-2.5 rounded-full bg-primary ring-4 ring-lightBg dark:ring-darkBg" aria-hidden="true" />
 
-              <article className="rounded-xl border border-slate-200 bg-white p-5 transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900 max-[320px]:p-4 sm:p-6">
+              <article className="rounded-2xl border border-slate-200 bg-white p-5 transition-colors hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900 max-[320px]:p-4 sm:p-6">
                 <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-start">
                   <div>
                     <h3 className="text-lg font-bold leading-snug text-slate-950 dark:text-white">

@@ -71,7 +71,7 @@ export default function CertificateViewer({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ type: 'spring', duration: 0.5, bounce: 0.3 }}
-            className={`relative flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 ${
+            className={`relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 ${
               isFullscreen
                 ? 'w-full h-full max-w-none max-h-none'
                 : 'w-full max-w-6xl h-[90vh]'

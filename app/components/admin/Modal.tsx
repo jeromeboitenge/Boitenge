@@ -127,7 +127,7 @@ export function Modal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className={`relative w-full ${sizeClasses[size]} bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 max-h-[90vh] flex flex-col`}
+              className={`relative w-full ${sizeClasses[size]} bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] flex flex-col`}
               onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-modal="true"

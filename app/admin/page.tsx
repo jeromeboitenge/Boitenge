@@ -312,7 +312,7 @@ export default function AdminDashboard() {
 
         {/* Tabs Navigation */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-2">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-2">
             <div className="flex gap-2 overflow-x-auto">
               {tabs.map((tab) => (
                 <button
@@ -433,7 +433,7 @@ function ProjectsManager({ projects, onDelete, onRefresh }: { projects: Project[
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {projects.length === 0 ? (
-          <div className="col-span-2 text-center py-20 bg-white dark:bg-slate-900 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700">
+          <div className="col-span-2 text-center py-20 bg-white dark:bg-slate-900 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700">
             <FaProjectDiagram className="text-6xl text-slate-300 dark:text-slate-700 mx-auto mb-4" />
             <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No Projects Yet</h3>
             <p className="text-slate-600 dark:text-slate-400 mb-6">Get started by creating your first project</p>
@@ -449,7 +449,7 @@ function ProjectsManager({ projects, onDelete, onRefresh }: { projects: Project[
           <motion.div
             key={project.id}
             whileHover={{ y: -2 }}
-            className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:border-primary/50 transition-all"
+            className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:border-primary/50 transition-all"
           >
             {project.imageUrl && (
               <div className="h-48 bg-slate-200 dark:bg-slate-800 overflow-hidden">
@@ -575,7 +575,7 @@ function SkillsManager({ skills, onRefresh }: { skills: Skill[]; onRefresh: () =
           <motion.div
             key={skill.id}
             whileHover={{ y: -4 }}
-            className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 hover:border-primary/50 transition-all"
+            className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 hover:border-primary/50 transition-all"
           >
             <div className="flex justify-between items-start mb-4">
               <div>
@@ -690,7 +690,7 @@ function ExperienceManager({ experiences, onRefresh }: { experiences: Experience
           <motion.div
             key={exp.id}
             whileHover={{ y: -2 }}
-            className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 hover:border-primary/50 transition-all"
+            className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 hover:border-primary/50 transition-all"
           >
             <div className="flex justify-between items-start mb-4">
               <div>
@@ -808,7 +808,7 @@ function CertificatesManager({ certificates, onRefresh }: { certificates: Certif
           <motion.div
             key={cert.id}
             whileHover={{ y: -2 }}
-            className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 hover:border-primary/50 transition-all"
+            className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 hover:border-primary/50 transition-all"
           >
             <div className="flex justify-between items-start mb-4">
               <div className="flex-1">
@@ -933,7 +933,7 @@ function MessagesManager({ messages, onRefresh }: { messages: Message[]; onRefre
             <motion.div
               key={message.id}
               whileHover={{ y: -2 }}
-              className="bg-primary/5 dark:bg-primary/10 rounded-xl border border-primary/20 p-6 hover:border-primary/50 transition-all"
+              className="bg-primary/5 dark:bg-primary/10 rounded-2xl border border-primary/20 p-6 hover:border-primary/50 transition-all"
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
@@ -983,7 +983,7 @@ function MessagesManager({ messages, onRefresh }: { messages: Message[]; onRefre
             <motion.div
               key={message.id}
               whileHover={{ y: -2 }}
-              className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 hover:border-slate-300 dark:hover:border-slate-700 transition-all opacity-75"
+              className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 hover:border-slate-300 dark:hover:border-slate-700 transition-all opacity-75"
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">

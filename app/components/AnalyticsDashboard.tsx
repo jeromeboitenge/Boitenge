@@ -82,7 +82,7 @@ export default function AnalyticsDashboard() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Daily Views Chart */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
               <FaChartLine className="text-primary" />
@@ -114,7 +114,7 @@ export default function AnalyticsDashboard() {
         </div>
 
         {/* Popular Projects */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-xl bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
               <FaProjectDiagram className="text-green-600 dark:text-green-400" />
@@ -156,7 +156,7 @@ export default function AnalyticsDashboard() {
       {/* Visitor Locations & Popular Pages */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Visitor Locations */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center">
               <FaMapMarkerAlt className="text-orange-600 dark:text-orange-400" />
@@ -195,7 +195,7 @@ export default function AnalyticsDashboard() {
         </div>
 
         {/* Popular Pages */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
               <FaChartLine className="text-purple-600 dark:text-purple-400" />
@@ -232,7 +232,7 @@ export default function AnalyticsDashboard() {
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
         <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Recent Activity</h3>
         <div className="space-y-2 max-h-96 overflow-y-auto">
           {analyticsData.recentEvents.map((event: any, idx: number) => (
@@ -275,7 +275,7 @@ function StatCard({ icon, label, value, color }: any) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6"
+      className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6"
     >
       <div className="flex items-center gap-4">
         <div className={`w-12 h-12 rounded-xl ${colorClasses[color as keyof typeof colorClasses]} flex items-center justify-center text-xl`}>

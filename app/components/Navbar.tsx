@@ -184,9 +184,11 @@ export default function Navbar() {
           ) : (
             <Link 
               href="/admin/login" 
-              className="rounded bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+              className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white transition-colors hover:bg-primary-700"
+              aria-label="Owner sign in"
+              title="Owner sign in"
             >
-              Sign In
+              <FaUser aria-hidden="true" />
             </Link>
           )}
         </div>

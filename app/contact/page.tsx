@@ -111,7 +111,7 @@ export default function ContactPage() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="flex flex-col gap-6 rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-[#1a1a1a] sm:p-7"
+          className="flex flex-col gap-6 rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-[#1a1a1a] sm:p-7"
         >
           <h3 className="text-3xl font-semibold text-slate-900 dark:text-white">Let’s Talk Via</h3>
 
@@ -120,7 +120,7 @@ export default function ContactPage() {
             {contacts.map((item, i) => (
               <div
                 key={i}
-                className="group flex min-w-0 items-center gap-3 rounded-xl border border-gray-200 bg-gray-100 px-4 py-4 transition-colors hover:border-primary/40 dark:border-gray-600 dark:bg-[#2a2a2a] sm:gap-4 sm:px-5"
+                className="group flex min-w-0 items-center gap-3 rounded-2xl border border-gray-200 bg-gray-100 px-4 py-4 transition-colors hover:border-primary/40 dark:border-gray-600 dark:bg-[#2a2a2a] sm:gap-4 sm:px-5"
               >
                 <a
                   href={item.href}

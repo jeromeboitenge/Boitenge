@@ -59,7 +59,7 @@ export default function AdminLoginPage() {
 
               {/* Feature highlights */}
               <div className="grid gap-4 sm:grid-cols-2 pt-8">
-                <div className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white/60 p-6 transition-colors duration-300 hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900/60">
+                <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white/60 p-6 transition-colors duration-300 hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900/60">
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="relative">
                     <div className="h-12 w-12 rounded-xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center mb-4">
@@ -72,7 +72,7 @@ export default function AdminLoginPage() {
                   </div>
                 </div>
 
-                <div className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white/60 p-6 transition-colors duration-300 hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900/60">
+                <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white/60 p-6 transition-colors duration-300 hover:border-primary/40 dark:border-slate-800 dark:bg-slate-900/60">
                   <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="relative">
                     <div className="h-12 w-12 rounded-xl bg-accent/10 dark:bg-accent/20 flex items-center justify-center mb-4">
@@ -94,7 +94,7 @@ export default function AdminLoginPage() {
                 <div className="absolute -top-4 -left-4 w-24 h-24 bg-primary/20 rounded-full blur-2xl" />
                 <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-accent/20 rounded-full blur-2xl" />
                 
-                <div className="relative rounded-xl border border-slate-200 bg-white/95 p-8 dark:border-slate-800 dark:bg-slate-900/95 sm:p-10">
+                <div className="relative rounded-2xl border border-slate-200 bg-white/95 p-8 dark:border-slate-800 dark:bg-slate-900/95 sm:p-10">
                   <div className="mb-8 text-center">
                     <div className="inline-flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent mb-4 shadow-sm">
                       <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">

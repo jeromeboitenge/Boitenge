@@ -17,7 +17,7 @@ export default function RoleChecker() {
   if (!showInfo || !user) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 max-w-md bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-400 dark:border-yellow-600 rounded-xl p-6 shadow-sm z-50">
+    <div className="fixed bottom-4 left-4 max-w-md bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-400 dark:border-yellow-600 rounded-2xl p-6 shadow-sm z-50">
       <div className="flex items-start gap-4">
         <div className="flex-shrink-0">
           <FaUserShield className="text-3xl text-yellow-600 dark:text-yellow-400" />

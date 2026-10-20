@@ -70,7 +70,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="flex min-h-[350px] min-w-0 flex-col items-center justify-center rounded-xl border border-slate-200 bg-white p-6 text-center dark:border-slate-800 dark:bg-slate-900 sm:p-10"
+        className="flex min-h-[350px] min-w-0 flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6 text-center dark:border-slate-800 dark:bg-slate-900 sm:p-10"
       >
         {status === "success" ? (
           <>
@@ -114,7 +114,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
-      className="w-full min-w-0 rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900 sm:p-7 md:p-9"
+      className="w-full min-w-0 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900 sm:p-7 md:p-9"
     >
       {/* Top section */}
       <div className="flex flex-col items-start gap-2 mb-8">

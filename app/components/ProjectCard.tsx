@@ -176,7 +176,7 @@ export default function ProjectCard({
       transition={{ duration: 0.5 }}
       className="h-full"
     >
-      <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/80 bg-white transition-colors duration-200 hover:border-primary/50 dark:border-slate-800 dark:bg-slate-900">
+      <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white transition-colors duration-200 hover:border-primary/50 dark:border-slate-800 dark:bg-slate-900">
         <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
           <Image
             src={image}
