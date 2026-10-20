@@ -56,7 +56,7 @@ export default function ProfileImageCard() {
         setProgress((prev) => (prev >= 90 ? 90 : prev + 10));
       }, 100);
 
-      const response = await apiClient.uploadImage(file);
+      const response = await apiClient.uploadFile(file, 'profile-images');
       clearInterval(progressInterval);
       setProgress(100);
 

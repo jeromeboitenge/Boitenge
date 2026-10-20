@@ -9,17 +9,32 @@ export default function ProfileAssetsSync() {
 
   useEffect(() => {
     let isCurrent = true;
+    let retryAttempt = 0;
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
+    const retryDelays = [1000, 2000, 4000, 8000, 15000, 20000];
 
-    apiClient.getProfileAssets().then(({ avatarUrl, cvUrl }) => {
-      if (!isCurrent) return;
-      if (avatarUrl) setImageUrl(avatarUrl);
-      else resetImage();
-      if (cvUrl) setCvUrl(cvUrl);
-      else resetCv();
-    }).catch(() => {});
+    const syncAssets = async () => {
+      try {
+        const { avatarUrl, cvUrl } = await apiClient.getProfileAssets();
+        if (!isCurrent) return;
+        if (avatarUrl) setImageUrl(avatarUrl);
+        else resetImage();
+        if (cvUrl) setCvUrl(cvUrl);
+        else resetCv();
+      } catch {
+        if (!isCurrent || retryAttempt >= retryDelays.length) return;
+        retryTimer = setTimeout(() => {
+          retryAttempt += 1;
+          void syncAssets();
+        }, retryDelays[retryAttempt]);
+      }
+    };
+
+    void syncAssets();
 
     return () => {
       isCurrent = false;
+      if (retryTimer) clearTimeout(retryTimer);
     };
   }, [setImageUrl, setCvUrl, resetImage, resetCv]);
 
