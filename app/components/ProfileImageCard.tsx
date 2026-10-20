@@ -237,32 +237,30 @@ export default function ProfileImageCard() {
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <AnimatePresence>
-            {(preview || hasChanges) && !isUploading && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className="flex flex-col-reverse gap-2 sm:flex-row sm:gap-3"
+          <div className="w-full max-w-md space-y-3">
+            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:gap-3">
+              <button
+                type="button"
+                onClick={handleCancel}
+                disabled={!hasChanges || isUploading}
+                className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
               >
-                <button
-                  onClick={handleCancel}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
-                >
-                  <FaTimes className="text-xs" /> Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSave}
-                  disabled={!selectedFile || isUploading}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  <FaCloudUploadAlt className="text-sm" /> Save photo
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                <FaTimes className="text-xs" /> Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleSave}
+                disabled={!selectedFile || isUploading}
+                className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-55"
+              >
+                {isUploading ? <FaSpinner className="animate-spin" /> : <FaCloudUploadAlt className="text-sm" />}
+                {isUploading ? 'Saving photo...' : 'Save photo'}
+              </button>
+            </div>
+            <p className="text-center text-xs text-slate-500 dark:text-slate-400" aria-live="polite">
+              {hasChanges ? 'Preview ready. Save to publish this photo.' : 'Choose a photo, then save to publish it to your portfolio.'}
+            </p>
+          </div>
 
           {/* Reset to Default */}
           {imageUrl !== '/Nzaramyimana-Jerome.jpeg' && !isUploading && (
