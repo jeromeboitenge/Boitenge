@@ -157,6 +157,24 @@ export interface ProjectCardProps {
   id?: string | number; 
 }
 
+function getProjectLink(value: string) {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') return null;
+
+    const isDemo = /^(demo|preview|staging)\./i.test(url.hostname)
+      || /(^|\.)example\.(com|org|net)$/i.test(url.hostname);
+
+    return {
+      href: url.href,
+      badge: isDemo ? 'Demo' : 'Live',
+      action: isDemo ? 'View demo' : 'View live site',
+    };
+  } catch {
+    return null;
+  }
+}
+
 export default function ProjectCard({
   title,
   description,
@@ -166,7 +184,7 @@ export default function ProjectCard({
   demoLink,
   codeLink,
 }: ProjectCardProps) {
-  const hasLiveDemo = /^https:\/\/(?!demo\.|example\.)/i.test(demoLink) && demoLink !== '#';
+  const projectLink = getProjectLink(demoLink);
   
   return (
     <motion.div
@@ -188,9 +206,9 @@ export default function ProjectCard({
             quality={85}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-transparent" />
-          {hasLiveDemo && (
+          {projectLink && (
             <span className="absolute left-4 top-4 rounded bg-emerald-700 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
-              Live
+              {projectLink.badge}
             </span>
           )}
         </div>
@@ -241,17 +259,17 @@ export default function ProjectCard({
             </ul>
           </div>
 
-          {(hasLiveDemo || codeLink) && (
+          {(projectLink || codeLink) && (
             <div className="mt-auto flex flex-wrap gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
-              {hasLiveDemo && (
+              {projectLink && (
                 <Link
-                  href={demoLink}
+                  href={projectLink.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex min-h-10 flex-1 items-center justify-center gap-2 rounded bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
-                  aria-label={`${title} live site`}
+                  aria-label={`${title}: ${projectLink.action}`}
                 >
-                  View live site <IconExternal />
+                  {projectLink.action} <IconExternal />
                 </Link>
               )}
               {codeLink && (

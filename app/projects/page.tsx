@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import ProjectCard from '../components/ProjectCard';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
-import { unifiedApiClient } from '@/lib/unified-api-client';
+import { PORTFOLIO_DATA_UPDATED_EVENT, unifiedApiClient } from '@/lib/unified-api-client';
 import { Project } from '@/types';
 
 // Define the number of projects to show by default
@@ -16,21 +16,31 @@ export default function ProjectsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    let isMounted = true;
+    const fetchProjects = async (showLoading: boolean) => {
       try {
-        setIsLoading(true);
+        if (showLoading) setIsLoading(true);
         const data = await unifiedApiClient.getProjects();
+        if (!isMounted) return;
         setProjects(data);
         setError(null);
       } catch (err) {
+        if (!isMounted) return;
         console.error('Failed to fetch projects:', err);
         setError('Failed to load projects. Showing cached data.');
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     };
 
-    fetchProjects();
+    const refreshProjects = () => void fetchProjects(false);
+    void fetchProjects(true);
+    window.addEventListener(PORTFOLIO_DATA_UPDATED_EVENT, refreshProjects);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener(PORTFOLIO_DATA_UPDATED_EVENT, refreshProjects);
+    };
   }, []);
 
   const projectsToShow = useMemo(() => {

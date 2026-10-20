@@ -6,7 +6,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from './AuthProvider';
 
 interface AuthGuardProps {
@@ -21,8 +21,13 @@ export function AuthGuard({
   requireAuth = true 
 }: AuthGuardProps) {
   const { isAuthenticated, isLoading } = useAuth();
+  const [hasMounted, setHasMounted] = useState(false);
 
-  if (isLoading) {
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted || isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>

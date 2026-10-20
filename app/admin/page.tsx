@@ -179,9 +179,9 @@ export default function AdminDashboard() {
     }
   };
 
-  const tabs = [
-    { id: 'analytics' as TabType, label: 'Analytics', icon: <FaChartLine />, count: 0 },
-    { id: 'profile' as TabType, label: 'Profile', icon: <FaUser />, count: 0 },
+  const tabs: { id: TabType; label: string; icon: JSX.Element; count?: number }[] = [
+    { id: 'analytics', label: 'Analytics', icon: <FaChartLine /> },
+    { id: 'profile', label: 'Profile', icon: <FaUser /> },
     { id: 'messages' as TabType, label: 'Messages', icon: <FaEnvelope />, count: stats.messages },
     { id: 'projects' as TabType, label: 'Projects', icon: <FaProjectDiagram />, count: stats.projects },
     { id: 'skills' as TabType, label: 'Skills', icon: <FaCode />, count: stats.skills },
@@ -196,43 +196,45 @@ export default function AdminDashboard() {
       <RoleChecker />
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
         {/* Header */}
-        <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-lg">
+        <header className="sticky top-0 z-50 border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center py-6">
+            <div className="flex flex-col items-start justify-between gap-3 py-4 sm:flex-row sm:items-center">
               <div>
-                <h1 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                <h1 className="flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-white sm:gap-3 sm:text-2xl">
                   <span className="text-primary">Portfolio</span>
                   <span className="text-slate-600 dark:text-slate-400">Admin</span>
                 </h1>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 flex items-center gap-2">
+                <p className="mt-1 flex flex-wrap items-center gap-2 text-sm text-slate-600 dark:text-slate-400 sm:mt-2">
                   <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                   Welcome back, <span className="font-semibold">{user?.name}</span>
                 </p>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex w-full items-center justify-end gap-2 sm:w-auto sm:gap-3">
                 <Link
                   href="/admin/profile"
-                  className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-primary text-slate-700 dark:text-slate-300 px-6 py-2.5 rounded-full text-sm font-semibold transition-colors"
+                  className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700 transition-colors hover:border-primary dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 sm:px-4"
                 >
                   <FaUser className="text-xs" />
-                  Profile
+                  <span className="max-[380px]:hidden">Profile</span>
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-colors shadow-lg shadow-red-600/20"
+                  className="inline-flex h-10 items-center gap-2 rounded-lg border border-red-200 px-3 text-sm font-semibold text-red-700 transition-colors hover:bg-red-50 dark:border-red-900 dark:text-red-300 dark:hover:bg-red-950/40 sm:px-4"
                 >
-                  Logout
+                  <FaSignOutAlt className="text-xs" />
+                  <span className="max-[380px]:hidden">Sign out</span>
                 </button>
               </div>
-            </div>
+                  className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-700 transition-colors hover:bg-red-50 dark:border-red-900 dark:text-red-300 dark:hover:bg-red-950/40"
           </div>
+                  <FaSignOutAlt className="text-xs" />
         </header>
 
         {/* Quick Stats Bar */}
         <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="flex items-center gap-3">
+              <div className="flex min-w-0 items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
                   <FaEnvelope className="text-primary" />
                 </div>
@@ -272,67 +274,31 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            {tabs.map((tab) => (
-              <motion.div
-                key={tab.id}
-                whileHover={{ y: -2 }}
-                className={`bg-white dark:bg-slate-900 rounded-xl p-6 border-2 transition-all cursor-pointer ${
-                  activeTab === tab.id
-                    ? 'border-primary'
-                    : 'border-slate-200 dark:border-slate-800 hover:border-primary/50'
-                }`}
-                onClick={() => setActiveTab(tab.id)}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className={`text-xs font-semibold uppercase tracking-wider mb-2 ${
-                      activeTab === tab.id ? 'text-primary' : 'text-slate-500 dark:text-slate-400'
-                    }`}>
-                      {tab.label}
-                    </p>
-                    <p className={`text-4xl font-bold ${
-                      activeTab === tab.id ? 'text-primary' : 'text-slate-900 dark:text-white'
-                    }`}>
-                      {tab.count}
-                    </p>
-                  </div>
-                  <div className={`text-5xl ${
-                    activeTab === tab.id ? 'text-primary/30' : 'text-slate-300 dark:text-slate-600'
-                  }`}>
-                    {tab.icon}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
         {/* Tabs Navigation */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-2">
+        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+          <div className="rounded-xl border border-slate-200 bg-white p-2 dark:border-slate-800 dark:bg-slate-900">
             <div className="flex gap-2 overflow-x-auto">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap ${
+                  className={`flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold whitespace-nowrap transition-colors ${
                     activeTab === tab.id
-                      ? 'bg-primary text-white shadow-lg shadow-primary/30'
+                      ? 'bg-primary text-white'
                       : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                   }`}
                 >
                   {tab.icon}
                   {tab.label}
-                  <span className={`px-2 py-0.5 rounded-full text-xs ${
-                    activeTab === tab.id
-                      ? 'bg-white/20 text-white'
-                      : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
-                  }`}>
-                    {tab.count}
-                  </span>
+                  {tab.count !== undefined && (
+                    <span className={`rounded-full px-2 py-0.5 text-xs ${
+                      activeTab === tab.id
+                        ? 'bg-white/20 text-white'
+                        : 'bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300'
+                    }`}>
+                      {tab.count}
+                    </span>
+                  )}
                 </button>
               ))}
             </div>
@@ -414,11 +380,11 @@ function ProjectsManager({ projects, onDelete, onRefresh }: { projects: Project[
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Manage Projects</h2>
         <button 
           onClick={handleAdd}
-          className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-primary/30 transition-all"
+          className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
         >
           <FaPlus /> Add Project
         </button>
@@ -439,7 +405,7 @@ function ProjectsManager({ projects, onDelete, onRefresh }: { projects: Project[
             <p className="text-slate-600 dark:text-slate-400 mb-6">Get started by creating your first project</p>
             <button 
               onClick={handleAdd}
-              className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-primary/30 transition-all"
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
             >
               <FaPlus /> Create Your First Project
             </button>
@@ -553,11 +519,11 @@ function SkillsManager({ skills, onRefresh }: { skills: Skill[]; onRefresh: () =
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Manage Skills</h2>
         <button 
           onClick={handleAdd}
-          className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-primary/30 transition-all"
+          className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
         >
           <FaPlus /> Add Skill
         </button>
@@ -668,11 +634,11 @@ function ExperienceManager({ experiences, onRefresh }: { experiences: Experience
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Manage Experience</h2>
         <button 
           onClick={handleAdd}
-          className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-primary/30 transition-all"
+          className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
         >
           <FaPlus /> Add Experience
         </button>
@@ -786,11 +752,11 @@ function CertificatesManager({ certificates, onRefresh }: { certificates: Certif
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Manage Certificates</h2>
         <button 
           onClick={handleAdd}
-          className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-primary/30 transition-all"
+          className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
         >
           <FaPlus /> Add Certificate
         </button>

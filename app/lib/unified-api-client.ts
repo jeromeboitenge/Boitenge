@@ -9,9 +9,12 @@ import { Project, ProjectInput, Skill, Experience, Certificate } from '@/types';
 import { LocalStorageHelper, STORAGE_KEYS } from '@/data/seedData';
 import { buildBackendUrl, fetchWithTimeout } from './backend-config';
 
+export const PORTFOLIO_DATA_UPDATED_EVENT = 'portfolio:data-updated';
+
 class UnifiedApiClient {
   private isBackendAvailable: boolean | null = null;
   private checkingBackend: Promise<boolean> | null = null;
+  private backgroundRefreshes = new Map<string, Promise<void>>();
 
   /**
    * Check if backend is available
@@ -93,13 +96,46 @@ class UnifiedApiClient {
     }
   }
 
+  private async withLocalFirst<T>(
+    key: string,
+    backendFn: () => Promise<T>,
+    localFn: () => Promise<T>,
+    saveToLocal: (data: T) => void,
+  ): Promise<T> {
+    const localData = await localFn();
+
+    if (!this.backgroundRefreshes.has(key)) {
+      const refresh = backendFn()
+        .then((data) => {
+          saveToLocal(data);
+          this.isBackendAvailable = true;
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new Event(PORTFOLIO_DATA_UPDATED_EVENT));
+          }
+        })
+        .catch((error) => {
+          this.isBackendAvailable = false;
+          if (process.env.NODE_ENV === 'development') {
+            console.warn(`Background refresh failed for ${key}:`, error);
+          }
+        })
+        .finally(() => {
+          this.backgroundRefreshes.delete(key);
+        });
+
+      this.backgroundRefreshes.set(key, refresh);
+    }
+
+    return localData;
+  }
+
   // Projects
   async getProjects(): Promise<Project[]> {
-    return this.withFallback(
+    return this.withLocalFirst(
+      'projects',
       () => apiClient.getProjects(),
       () => localApiClient.getProjects(),
       (data) => LocalStorageHelper.saveToStorage(STORAGE_KEYS.PROJECTS, data),
-      'projects'
     );
   }
 
@@ -141,11 +177,11 @@ class UnifiedApiClient {
 
   // Skills
   async getSkills(): Promise<Skill[]> {
-    return this.withFallback(
+    return this.withLocalFirst(
+      'skills',
       () => apiClient.getSkills(),
       () => localApiClient.getSkills(),
       (data) => LocalStorageHelper.saveToStorage(STORAGE_KEYS.SKILLS, data),
-      'skills'
     );
   }
 
@@ -178,11 +214,11 @@ class UnifiedApiClient {
 
   // Experience
   async getExperience(): Promise<Experience[]> {
-    return this.withFallback(
+    return this.withLocalFirst(
+      'experience',
       () => apiClient.getExperience(),
       () => localApiClient.getExperience(),
       (data) => LocalStorageHelper.saveToStorage(STORAGE_KEYS.EXPERIENCE, data),
-      'experience'
     );
   }
 
@@ -215,11 +251,11 @@ class UnifiedApiClient {
 
   // Certificates
   async getCertificates(): Promise<Certificate[]> {
-    return this.withFallback(
+    return this.withLocalFirst(
+      'certificates',
       () => apiClient.getCertificates(),
       () => localApiClient.getCertificates(),
       (data) => LocalStorageHelper.saveToStorage(STORAGE_KEYS.CERTIFICATES, data),
-      'certificates'
     );
   }
 

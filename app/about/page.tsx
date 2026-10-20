@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { FaRocket, FaUsers, FaLightbulb, FaCode, FaDownload, FaHandshake } from "react-icons/fa";
 import AnimatedCounter from "../components/AnimatedCounter";
-import { unifiedApiClient } from "../lib/unified-api-client";
+import { PORTFOLIO_DATA_UPDATED_EVENT, unifiedApiClient } from "../lib/unified-api-client";
 import { useProfileStore } from "../stores/profileStore";
 
 interface Stat {
@@ -102,12 +102,14 @@ export default function AboutPage() {
     void fetchStats();
     window.addEventListener('focus', fetchStats);
     window.addEventListener('storage', fetchStats);
+    window.addEventListener(PORTFOLIO_DATA_UPDATED_EVENT, fetchStats);
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       isCurrent = false;
       window.removeEventListener('focus', fetchStats);
       window.removeEventListener('storage', fetchStats);
+      window.removeEventListener(PORTFOLIO_DATA_UPDATED_EVENT, fetchStats);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
