@@ -50,14 +50,20 @@ export const metadata = {
     title: "Jerome Nzaramyimana | Jerome Boitenge | Kigali Developer",
     description:
       "Jerome Nzaramyimana, also known as Jerome Boitenge, is a software developer in Kigali, Rwanda. Explore his selected work.",
-    images: [{ url: "/Nzaramyimana-Jerome.jpeg", alt: "Jerome Nzaramyimana" }],
+    images: [{
+      url: "/Nzaramyimana-Jerome.jpeg",
+      alt: "Portrait of Jerome Nzaramyimana, also known as Jerome Boitenge",
+    }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Jerome Nzaramyimana | Jerome Boitenge | Kigali Developer",
     description:
       "Jerome Nzaramyimana, also known as Jerome Boitenge, is a software developer in Kigali, Rwanda. Explore his selected work.",
-    images: ["/Nzaramyimana-Jerome.jpeg"],
+    images: [{
+      url: "/Nzaramyimana-Jerome.jpeg",
+      alt: "Portrait of Jerome Nzaramyimana, also known as Jerome Boitenge",
+    }],
   },
   robots: {
     index: true,

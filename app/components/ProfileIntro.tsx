@@ -84,7 +84,7 @@ export default function ProfileIntro({ showButtons = false }: ProfileIntroProps)
           <div className="relative h-full w-full overflow-hidden rounded-full">
             <Image
               src={imageUrl || DEFAULT_PROFILE_IMAGE}
-              alt="Portrait of Jerome Nzaramyimana"
+              alt="Portrait of Jerome Nzaramyimana, also known as Jerome Boitenge"
               fill
               sizes="(max-width: 640px) 288px, (max-width: 1024px) 352px, 432px"
               className="rounded-full object-cover object-center"
