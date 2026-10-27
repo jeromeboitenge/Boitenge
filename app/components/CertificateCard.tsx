@@ -13,7 +13,6 @@ interface CertificateCardProps {
 export default function CertificateCard({ certificate, index, onView }: CertificateCardProps) {
   // Check if the URL is a PDF
   const isPDF = certificate.imageUrl?.toLowerCase().endsWith('.pdf');
-  const isImage = certificate.imageUrl && !isPDF;
   
   // Convert Cloudinary PDF to image thumbnail (first page)
   const getThumbnailUrl = (url: string | undefined) => {
@@ -83,11 +82,13 @@ export default function CertificateCard({ certificate, index, onView }: Certific
         
         {/* View Button Overlay */}
         <button
+          type="button"
           onClick={() => onView(certificate)}
-          className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          aria-label={`View certificate: ${certificate.name}`}
+          className="absolute inset-0 flex items-center justify-center opacity-100 transition-opacity duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
         >
           <div className="rounded border border-slate-200 bg-white p-3 transition-transform duration-300 group-hover:scale-100 dark:border-slate-700 dark:bg-slate-900">
-            <FaEye className="text-2xl text-primary" />
+            <FaEye className="text-2xl text-primary" aria-hidden="true" />
           </div>
         </button>
 

@@ -3,9 +3,20 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import SkillCard from "../components/SkillCard";
-import SkillsChart from "../components/SkillsChart";
 import { PORTFOLIO_DATA_UPDATED_EVENT, unifiedApiClient } from "@/lib/unified-api-client";
 import { Skill } from "@/types";
+
+const categoryLabels: Record<string, string> = {
+  frontend: "Frontend",
+  backend: "Backend & APIs",
+  database: "Databases",
+  mobile: "Mobile",
+  tools: "Developer tools",
+  "data science": "Data & machine learning",
+  "embeded system": "Embedded systems",
+  "embedded system": "Embedded systems",
+  other: "Other skills",
+};
 
 export default function Skills() {
   const [activeFilter, setActiveFilter] = useState("All");
@@ -21,13 +32,18 @@ export default function Skills() {
         const data = await unifiedApiClient.getSkills();
         if (!isMounted) return;
         
-        // Group skills by category
         const grouped = data.reduce((acc, skill) => {
-          const category = skill.category.charAt(0).toUpperCase() + skill.category.slice(1);
+          const normalizedCategory = skill.category.trim().toLowerCase();
+          const category = categoryLabels[normalizedCategory] ?? normalizedCategory
+            .split(/\s+/)
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
           if (!acc[category]) {
             acc[category] = [];
           }
-          acc[category].push(skill.name);
+          if (!acc[category].some((name) => name.toLowerCase() === skill.name.trim().toLowerCase())) {
+            acc[category].push(skill.name.trim());
+          }
           return acc;
         }, {} as Record<string, string[]>);
         
@@ -60,14 +76,14 @@ export default function Skills() {
       : Object.entries(skills).filter(([category]) => category === activeFilter);
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:px-8">
+    <section id="skills" aria-labelledby="skills-heading" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:px-8">
       <header className="mx-auto mb-10 max-w-2xl text-center">
         <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-primary">Tools of the trade</p>
-        <h2 className="font-display text-4xl font-bold tracking-tight text-slate-950 dark:text-white">
+        <h2 id="skills-heading" className="font-display text-4xl font-bold tracking-tight text-slate-950 dark:text-white">
           My Skills
         </h2>
         <p className="mt-3 text-base leading-7 text-slate-600 dark:text-slate-400">
-          Technologies and tools I use to design, build, and ship reliable digital products.
+          A concise view of the technologies represented in my projects and experience.
         </p>
       </header>
 
@@ -138,9 +154,6 @@ export default function Skills() {
           </div>
 
           {/* Charts */}
-          <div className="mt-16">
-            <SkillsChart />
-          </div>
         </>
       )}
     </section>

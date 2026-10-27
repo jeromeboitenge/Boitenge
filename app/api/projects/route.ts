@@ -1,19 +1,11 @@
 import { NextResponse } from 'next/server';
-import { projectsData } from '../../data/projectsData';
+import { seedProjects } from '../../data/seedData';
+import { isPlaceholderProjectUrl } from '../../lib/project-links';
 
 export async function GET() {
-  const projects = projectsData.map(project => ({
-    id: project.id.toString(),
-    title: project.title,
-    description: project.description,
-    technologies: project.tags,
-    liveUrl: project.demoLink,
-    imageUrl: project.image,
-    highlights: project.highlights,
-    order: project.id,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  }));
+  const projects = seedProjects
+    .filter((project) => project.isPublished && !isPlaceholderProjectUrl(project.liveUrl))
+    .sort((a, b) => a.order - b.order);
 
   return NextResponse.json(projects);
 }

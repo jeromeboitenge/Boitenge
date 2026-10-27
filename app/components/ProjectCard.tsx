@@ -149,12 +149,13 @@ const techIconMap: Record<string, JSX.Element> = {
 export interface ProjectCardProps {
   title: string;
   description: string;
-  image: string;
+  image?: string;
   tags: string[];
   highlights: string[];
   demoLink: string;
   codeLink?: string; 
   id?: string | number; 
+  featured?: boolean;
 }
 
 function getProjectLink(value: string) {
@@ -162,13 +163,9 @@ function getProjectLink(value: string) {
     const url = new URL(value);
     if (url.protocol !== 'http:' && url.protocol !== 'https:') return null;
 
-    const isDemo = /^(demo|preview|staging)\./i.test(url.hostname)
-      || /(^|\.)example\.(com|org|net)$/i.test(url.hostname);
-
     return {
       href: url.href,
-      badge: isDemo ? 'Demo' : 'Live',
-      action: isDemo ? 'View demo' : 'View live site',
+      action: 'Open project',
     };
   } catch {
     return null;
@@ -183,6 +180,7 @@ export default function ProjectCard({
   highlights,
   demoLink,
   codeLink,
+  featured = false,
 }: ProjectCardProps) {
   const projectLink = getProjectLink(demoLink);
   
@@ -192,75 +190,86 @@ export default function ProjectCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.5 }}
-      className="h-full"
+      className={`h-full ${featured ? 'lg:col-span-2' : ''}`}
     >
-      <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-slate-900/10 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-primary/50 dark:hover:shadow-black/25">
-        <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
-          <Image
-            src={image}
-            alt={`${title} project preview`}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition duration-700 ease-out group-hover:scale-[1.05]"
-            loading="lazy"
-            quality={85}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/65 via-slate-950/5 to-transparent" />
-          {projectLink && (
-            <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-sm backdrop-blur-md">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
-              {projectLink.badge}
+      <article className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-slate-900/10 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-primary/50 dark:hover:shadow-black/25 ${featured ? 'lg:flex-row' : ''}`}>
+        <div className={`relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-slate-100 dark:bg-slate-800 ${featured ? 'lg:aspect-auto lg:min-h-[32rem] lg:w-[48%]' : ''}`}>
+          {image ? (
+            <Image
+              src={image}
+              alt={`${title} project preview`}
+              fill
+              sizes={featured
+                ? '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw'
+                : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'}
+              className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
+              loading="lazy"
+              quality={85}
+            />
+          ) : (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <DefaultTechIcon />
+              </span>
+              <span className="text-sm font-medium">Project preview unavailable</span>
+            </div>
+          )}
+          {featured && (
+            <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-slate-950/75 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-sm backdrop-blur-sm">
+              Featured project
             </span>
           )}
         </div>
 
-        <div className="flex flex-1 flex-col gap-5 p-6 max-[320px]:gap-3 max-[320px]:p-4">
+        <div className={`flex flex-1 flex-col gap-5 p-6 max-[320px]:gap-3 max-[320px]:p-4 ${featured ? 'lg:justify-center lg:p-8' : ''}`}>
           <div className="space-y-3">
-            <h3 className="text-xl font-bold leading-snug tracking-tight text-slate-950 transition-colors group-hover:text-primary dark:text-white max-[320px]:text-base">
+            <h3 className={`font-bold leading-snug tracking-tight text-slate-950 transition-colors group-hover:text-primary dark:text-white ${featured ? 'text-2xl sm:text-3xl' : 'text-xl max-[320px]:text-base'}`}>
               {title}
             </h3>
-            <p className="line-clamp-3 text-sm leading-6 text-slate-600 dark:text-slate-300 max-[320px]:text-[13px] max-[320px]:leading-5">
+            <p className={`text-sm leading-6 text-slate-600 dark:text-slate-300 max-[320px]:text-[13px] max-[320px]:leading-5 ${featured ? 'line-clamp-5' : 'line-clamp-3'}`}>
               {description}
             </p>
           </div>
 
           {tags.length > 0 && (
-          <div className="border-t border-slate-100 pt-4 dark:border-slate-800">
-            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">Built with</p>
-            <div className="flex flex-wrap gap-2 max-[320px]:gap-1.5">
-            {tags.slice(0, 4).map((tag) => (
-              <span
-                key={tag}
-                className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 max-[320px]:px-1.5 max-[320px]:text-[11px]"
-              >
-                {techIconMap[tag] ?? <DefaultTechIcon />}
-                {tag}
-              </span>
-            ))}
-            {tags.length > 4 && (
-              <span className="inline-flex items-center rounded px-2 py-1 text-xs font-medium text-primary">
-                +{tags.length - 4} more
-              </span>
-            )}
+            <div className="border-t border-slate-100 pt-4 dark:border-slate-800">
+              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">Built with</p>
+              <div className="flex flex-wrap gap-2 max-[320px]:gap-1.5">
+                {tags.slice(0, featured ? 6 : 4).map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 max-[320px]:px-1.5 max-[320px]:text-[11px]"
+                  >
+                    {techIconMap[tag] ?? <DefaultTechIcon />}
+                    {tag}
+                  </span>
+                ))}
+                {tags.length > (featured ? 6 : 4) && (
+                  <span className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium text-primary">
+                    +{tags.length - (featured ? 6 : 4)} more
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
           )}
 
-          {highlights.length > 0 && <div className="flex-1 pt-1">
-            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
-              Key outcomes
-            </p>
-            <ul className="space-y-2.5">
-              {highlights.slice(0, 2).map((point) => (
-                <li key={point} className="flex items-start gap-2 text-sm leading-5 text-slate-600 dark:text-slate-200">
-                  <span className="mt-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-sm bg-primary/10 text-primary">
-                    <IconCheck />
-                  </span>
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
-          </div>}
+          {highlights.length > 0 && (
+            <div className="flex-1 pt-1">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                Project highlights
+              </p>
+              <ul className="space-y-2.5">
+                {highlights.slice(0, featured ? 3 : 2).map((point) => (
+                  <li key={point} className="flex items-start gap-2 text-sm leading-5 text-slate-600 dark:text-slate-200">
+                    <span className="mt-0.5 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-sm bg-primary/10 text-primary">
+                      <IconCheck />
+                    </span>
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {(projectLink || codeLink) && (
             <div className="mt-auto flex flex-wrap gap-2 border-t border-slate-100 pt-5 dark:border-slate-800">
@@ -276,16 +285,16 @@ export default function ProjectCard({
                 </a>
               )}
               {codeLink && (
-              <Link
-                href={codeLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={`${title} source code`}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 text-slate-700 transition-colors hover:border-primary hover:bg-primary/5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:border-slate-700 dark:text-slate-200 dark:focus-visible:ring-offset-slate-900"
-                aria-label={`${title} source code`}
-              >
-                <IconGithub />
-              </Link>
+                <Link
+                  href={codeLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={`${title} source code`}
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 text-slate-700 transition-colors hover:border-primary hover:bg-primary/5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:border-slate-700 dark:text-slate-200 dark:focus-visible:ring-offset-slate-900"
+                  aria-label={`${title} source code`}
+                >
+                  <IconGithub />
+                </Link>
               )}
             </div>
           )}

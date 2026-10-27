@@ -70,6 +70,8 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
+        role={status === "success" ? "status" : "alert"}
+        aria-live="polite"
         className="flex min-h-[350px] min-w-0 flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6 text-center dark:border-slate-800 dark:bg-slate-900 sm:p-10"
       >
         {status === "success" ? (
@@ -114,6 +116,7 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
+      aria-busy={status === "sending"}
       className="w-full min-w-0 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900 sm:p-7 md:p-9"
     >
       {/* Top section */}
@@ -134,40 +137,45 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
       <div className="space-y-6">
         {/* Name */}
         <div>
-          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Full Name</label>
+          <label htmlFor="contact-name" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Full Name</label>
           <input
+            id="contact-name"
             type="text"
             required
+            autoComplete="name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             placeholder="John Doe"
-            className="w-full rounded border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 transition-colors placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+            className="w-full rounded border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 transition-colors placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
           />
         </div>
 
         {/* Email */}
         <div>
-          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Email Address</label>
+          <label htmlFor="contact-email" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Email Address</label>
           <input
+            id="contact-email"
             type="email"
             required
+            autoComplete="email"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             placeholder="john@example.com"
-            className="w-full rounded border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 transition-colors placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+            className="w-full rounded border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 transition-colors placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
           />
         </div>
 
         {/* Message */}
         <div>
-          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Your Message</label>
+          <label htmlFor="contact-message" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Your Message</label>
           <textarea
+            id="contact-message"
             required
             rows={4}
             value={form.message}
             onChange={(e) => setForm({ ...form, message: e.target.value })}
             placeholder="How can I help you?"
-            className="w-full resize-none rounded border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 transition-colors placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+            className="w-full resize-none rounded border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 transition-colors placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
           ></textarea>
         </div>
 
@@ -176,11 +184,14 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
           type="submit"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="flex min-h-11 w-full items-center justify-center gap-3 rounded bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-70"
+          className="flex min-h-11 w-full items-center justify-center gap-3 rounded bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 disabled:cursor-not-allowed disabled:opacity-70"
           disabled={status === "sending"}
         >
           {status === "sending" ? (
-            <span className="animate-spin border-2 border-white/30 border-t-white rounded-full w-5 h-5"></span>
+            <>
+              <span aria-hidden="true" className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+              <span>Sending...</span>
+            </>
           ) : (
             "Send Message"
           )}

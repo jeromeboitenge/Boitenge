@@ -5,6 +5,7 @@ import ProjectCard from '../components/ProjectCard';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { PORTFOLIO_DATA_UPDATED_EVENT, unifiedApiClient } from '@/lib/unified-api-client';
 import { Project } from '@/types';
+import { isPlaceholderProjectUrl } from '@/lib/project-links';
 
 // Define the number of projects to show by default
 const DEFAULT_PROJECTS_COUNT = 3;
@@ -43,13 +44,22 @@ export default function ProjectsPage() {
     };
   }, []);
 
-  const projectsToShow = useMemo(() => {
-    return showAll ? projects : projects.slice(0, DEFAULT_PROJECTS_COUNT);
-  }, [showAll, projects]);
+  const visibleProjects = useMemo(
+    () => projects.filter((project) => project.isPublished && !isPlaceholderProjectUrl(project.liveUrl)),
+    [projects],
+  );
+  const featuredProject = visibleProjects.find(
+    (project) => project.liveUrl === 'https://www.mofresh.rw/',
+  );
+  const supportingProjects = featuredProject
+    ? visibleProjects.filter((project) => project.id !== featuredProject.id)
+    : visibleProjects;
+  const projectsToShow = showAll
+    ? supportingProjects
+    : supportingProjects.slice(0, Math.max(0, DEFAULT_PROJECTS_COUNT - (featuredProject ? 1 : 0)));
 
-  const defaultVisibleCount = Math.min(DEFAULT_PROJECTS_COUNT, projects.length);
-  const currentVisibleCount = showAll ? projects.length : defaultVisibleCount;
-  const isMoreAvailable = projects.length > currentVisibleCount && !showAll;
+  const currentVisibleCount = (featuredProject ? 1 : 0) + projectsToShow.length;
+  const isMoreAvailable = visibleProjects.length > currentVisibleCount && !showAll;
   const isViewLessAvailable = showAll;
 
   return (
@@ -58,15 +68,15 @@ export default function ProjectsPage() {
         <div className="flex flex-col gap-5 border-b border-slate-200 pb-7 dark:border-slate-800 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl">
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-primary">Selected work</p>
-            <h2 className="font-display text-3xl font-bold text-slate-950 dark:text-white sm:text-4xl">
-              Products built to solve real problems.
+            <h2 id="projects-heading" className="font-display text-3xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-4xl">
+              Projects, with the details that matter.
             </h2>
             <p className="mt-3 text-base leading-7 text-slate-600 dark:text-slate-400">
-              A closer look at the interfaces, systems, and decisions behind my work.
+              A selection of applications, their purpose, the technologies listed, and project links where available.
             </p>
           </div>
           <p className="shrink-0 text-sm font-medium text-slate-500 dark:text-slate-400">
-            Showing {currentVisibleCount} of {projects.length} projects
+            Showing {currentVisibleCount} of {visibleProjects.length} projects
           </p>
         </div>
 
@@ -80,7 +90,7 @@ export default function ProjectsPage() {
 
         {/* Error State */}
         {error && (
-          <div className="py-16 text-center">
+          <div className="py-16 text-center" role="alert">
             <p className="text-red-500">{error}</p>
           </div>
         )}
@@ -88,21 +98,41 @@ export default function ProjectsPage() {
         {/* Projects Grid */}
         {!isLoading && !error && (
           <>
-            <div className="mt-7 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {visibleProjects.length === 0 ? (
+              <p className="mt-7 rounded-2xl border border-dashed border-slate-300 px-6 py-12 text-center text-sm text-slate-600 dark:border-slate-700 dark:text-slate-400">
+                Project details will appear here soon.
+              </p>
+            ) : (
+            <div className="mt-7 grid grid-cols-1 gap-6 lg:grid-cols-2">
+              {featuredProject && (
+                <ProjectCard
+                  key={featuredProject.id}
+                  id={featuredProject.id}
+                  title={featuredProject.title}
+                  description={featuredProject.description}
+                  image={featuredProject.imageUrl}
+                  tags={featuredProject.technologies}
+                  highlights={featuredProject.highlights}
+                  demoLink={featuredProject.liveUrl || ''}
+                  codeLink={featuredProject.githubUrl}
+                  featured
+                />
+              )}
               {projectsToShow.map((project) => (
                 <ProjectCard
                   key={project.id}
                   id={project.id}
                   title={project.title}
                   description={project.description}
-                  image={project.imageUrl || '/hotel.png'}
+                  image={project.imageUrl}
                   tags={project.technologies}
                   highlights={project.highlights}
-                  demoLink={project.liveUrl || '#'}
+                  demoLink={project.liveUrl || ''}
                   codeLink={project.githubUrl}
                 />
               ))}
             </div>
+            )}
 
             {/* View More/Less Buttons */}
             <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">

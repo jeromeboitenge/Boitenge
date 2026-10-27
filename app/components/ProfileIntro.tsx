@@ -2,9 +2,7 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import { ArrowDown, ArrowUpRight, Download, Github, Linkedin, Mail } from 'lucide-react';
-import Modal from './Modal';
+import { ArrowDown, ArrowUpRight, Github, Linkedin, Mail } from 'lucide-react';
 import { useProfileStore } from '../stores/profileStore';
 
 const DEFAULT_PROFILE_IMAGE = '/Nzaramyimana-Jerome.jpeg';
@@ -20,54 +18,56 @@ const socialLinks = [
 ];
 
 export default function ProfileIntro({ showButtons = false }: ProfileIntroProps) {
-  const [showCvModal, setShowCvModal] = useState(false);
-  const [hasMounted, setHasMounted] = useState(false);
   const { imageUrl, cvUrl } = useProfileStore();
-  const cvEmbedUrl = cvUrl?.includes('/view')
-    ? cvUrl.replace(/\/file\/d\/([^/]+)\/view.*$/, '/file/d/$1/preview')
-    : cvUrl;
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
 
   return (
-    <div className="mx-auto grid w-full max-w-7xl items-center gap-12 px-5 py-10 max-[320px]:gap-6 max-[320px]:px-3 max-[320px]:py-6 sm:px-8 sm:py-14 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:px-12 lg:py-16">
+    <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:px-12 lg:py-20">
       <motion.div
-        initial={{ opacity: 0, y: 18 }}
+        initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, ease: 'easeOut' }}
-        className="relative z-10 order-2 text-center lg:order-1 lg:text-left"
+        transition={{ duration: 0.45, ease: 'easeOut' }}
+        className="relative z-10 order-1 text-left"
       >
-        <h1 className="break-words font-display text-4xl font-bold leading-[1.08] text-slate-950 dark:text-white max-[320px]:text-2xl sm:text-5xl md:text-6xl">
+        <p className="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-primary">
+          Software developer <span className="px-1 text-slate-400" aria-hidden="true">/</span> Kigali, Rwanda
+        </p>
+        <h1 className="max-w-3xl break-words font-display text-4xl font-bold leading-[1.08] tracking-tight text-slate-950 dark:text-white sm:text-5xl md:text-6xl">
           Jerome <span className="text-primary">Nzaramyimana</span>
         </h1>
         <p className="mt-6 max-w-2xl text-xl font-medium leading-relaxed text-slate-800 dark:text-slate-100 sm:text-2xl">
-          I build thoughtful web products, from the first interface to the systems behind it.
+          I build web and mobile applications, from the interface to the systems behind it.
         </p>
-        <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-300 lg:mx-0">
-          I work across React, Next.js, and Node.js to turn complex needs into clear, dependable software.
+        <p className="mt-4 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-300">
+          My work spans React and Next.js interfaces, Node.js APIs, and database-backed products.
+          Explore selected projects, the technologies behind them, and ways to get in touch.
         </p>
 
         {showButtons && (
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
+          <div className="mt-8 flex flex-wrap items-center gap-3">
             <a
               href="#projects"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded bg-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-primary px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
-              Explore selected work <ArrowDown size={16} aria-hidden="true" />
+              View selected work <ArrowDown size={16} aria-hidden="true" />
             </a>
-            <button
-              type="button"
-              onClick={() => setShowCvModal(true)}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded border border-slate-300 bg-white/70 px-6 text-sm font-semibold text-slate-800 transition-colors hover:border-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100"
+            <a
+              href="/contact"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white/70 px-5 text-sm font-semibold text-slate-800 transition-colors hover:border-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100"
             >
-              View résumé <Download size={16} aria-hidden="true" />
-            </button>
+              Contact me
+            </a>
+            <a
+              href={cvUrl || '/Nzaramyimana-Jerome.pdf'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-12 items-center gap-1 px-2 text-sm font-semibold text-primary transition hover:text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              View CV <ArrowUpRight size={16} aria-hidden="true" />
+            </a>
           </div>
         )}
 
-        <div className="mt-8 flex items-center justify-center gap-3 max-[320px]:gap-2 lg:justify-start">
+        <nav className="mt-8 flex items-center gap-3" aria-label="Social profiles">
           {socialLinks.map(({ icon: Icon, href, label }) => (
             <a
               key={label}
@@ -76,61 +76,29 @@ export default function ProfileIntro({ showButtons = false }: ProfileIntroProps)
               rel={href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
               aria-label={label}
               title={label}
-              className="flex h-11 w-11 items-center justify-center rounded border border-slate-200 bg-white/70 text-slate-600 transition-colors hover:border-primary hover:text-primary dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300 max-[320px]:h-9 max-[320px]:w-9"
+              className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-white/70 text-slate-600 transition-colors hover:border-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300"
             >
               <Icon size={18} aria-hidden="true" />
             </a>
           ))}
-          <a
-            href="/contact"
-            className="ml-2 inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary transition hover:text-primary-700 max-[320px]:hidden"
-          >
-            Get in touch <ArrowUpRight size={16} aria-hidden="true" />
-          </a>
-        </div>
-
+        </nav>
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 18 }}
+        initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.65, delay: 0.1, ease: 'easeOut' }}
-        className="relative order-1 mx-auto aspect-square w-full max-w-[19rem] sm:max-w-[24rem] lg:order-2 lg:max-w-[28rem]"
+        transition={{ duration: 0.55, delay: 0.08, ease: 'easeOut' }}
+        className="relative order-2 mx-auto aspect-[4/5] w-full max-w-[15rem] overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 shadow-xl shadow-slate-900/10 sm:max-w-[19rem] lg:max-w-[24rem] dark:border-slate-700 dark:bg-slate-800 dark:shadow-black/20"
       >
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 rounded-full opacity-70"
-          style={{
-            backgroundColor: 'rgba(0, 98, 139, 0.035)',
-            backgroundImage: 'linear-gradient(45deg, rgba(0,98,139,.07) 25%, transparent 25%, transparent 75%, rgba(0,98,139,.07) 75%), linear-gradient(45deg, rgba(0,98,139,.07) 25%, transparent 25%, transparent 75%, rgba(0,98,139,.07) 75%)',
-            backgroundPosition: '0 0, 12px 12px',
-            backgroundSize: '24px 24px',
-          }}
+        <Image
+          src={imageUrl || DEFAULT_PROFILE_IMAGE}
+          alt="Portrait of Jerome Nzaramyimana"
+          fill
+          sizes="(max-width: 640px) 240px, (max-width: 1024px) 304px, 384px"
+          className="object-cover object-center"
+          priority
         />
-        <div className="absolute inset-[2%] overflow-hidden rounded-full border-[3px] border-[#D86C49] bg-white p-1 dark:bg-slate-900">
-          <div className="relative h-full w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
-            <Image
-              src={hasMounted ? imageUrl : DEFAULT_PROFILE_IMAGE}
-              alt="Portrait of Jerome Nzaramyimana"
-              fill
-              sizes="(max-width: 640px) 76vw, (max-width: 1024px) 380px, 448px"
-              className="object-cover object-center"
-              priority
-            />
-          </div>
-        </div>
       </motion.div>
-
-      <Modal isOpen={showCvModal} onClose={() => setShowCvModal(false)} title="Curriculum Vitae" size="xl">
-        <div className="min-h-[60vh] overflow-hidden rounded border border-slate-200 dark:border-slate-800">
-          <iframe
-            src={cvEmbedUrl}
-            title="Curriculum Vitae"
-            className="min-h-[60vh] w-full"
-            loading="lazy"
-          />
-        </div>
-      </Modal>
     </div>
   );
 }

@@ -9,29 +9,18 @@ import Contact from './contact/page';
 
 export default function HomePage() {
   return (
-    <main className="scroll-smooth">
+    <>
       <section id="home">
         <Hero />
       </section>
-      <section id="about">
-        <About />
-      </section>
-      <section id="skills">
-        <Skills />
-      </section>
-
-      <section id="projects">
-        <Projects />
-      </section>
-      <section id="experience">
-        <Experience />
-      </section>
+      <About />
+      <Skills />
+      <Projects />
+      <Experience />
       <section id="certificates">
         <Certificates />
       </section>
-      <section id="contact">
-        <Contact />
-      </section>
-    </main>
+      <Contact />
+    </>
   );
 }
