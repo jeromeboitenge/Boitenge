@@ -6,6 +6,9 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://boitenge.vercel.app/sitemap.xml',
+    sitemap: [
+      'https://boitenge.vercel.app/sitemap.xml',
+      'https://boitenge.vercel.app/image-sitemap.xml',
+    ],
   };
 }

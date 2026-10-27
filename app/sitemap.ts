@@ -7,6 +7,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${siteUrl}${path}`,
     changeFrequency: 'monthly',
     priority: path ? 0.7 : 1,
-    ...(path === '' ? { images: [`${siteUrl}/Nzaramyimana-Jerome.jpeg`] } : {}),
   }));
 }
