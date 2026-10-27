@@ -9,6 +9,7 @@ import { profileData } from '@/data/profileData';
 type ProfileFields = {
   name: string;
   bio: string;
+  about: string;
   email: string;
   phone: string;
   location: string;
@@ -17,6 +18,7 @@ type ProfileFields = {
 const defaultProfile: ProfileFields = {
   name: profileData.name,
   bio: profileData.bio,
+  about: profileData.about,
   email: profileData.email,
   phone: profileData.phone,
   location: profileData.location,
@@ -36,6 +38,7 @@ export default function ProfileDetailsCard() {
       const nextProfile: ProfileFields = profile ? {
         name: profile.name || defaultProfile.name,
         bio: profile.bio || defaultProfile.bio,
+        about: profile.about || defaultProfile.about,
         email: profile.email || defaultProfile.email,
         phone: profile.phone || defaultProfile.phone,
         location: profile.location || defaultProfile.location,
@@ -65,6 +68,7 @@ export default function ProfileDetailsCard() {
       const nextProfile: ProfileFields = {
         name: updatedProfile.name || formData.name,
         bio: updatedProfile.bio || formData.bio,
+        about: updatedProfile.about || formData.about,
         email: updatedProfile.email || formData.email,
         phone: updatedProfile.phone || formData.phone,
         location: updatedProfile.location || formData.location,
@@ -115,6 +119,21 @@ export default function ProfileDetailsCard() {
             className={`${fieldClassName} resize-y leading-6`}
           />
           <p className="mt-1 text-right text-xs text-slate-500 dark:text-slate-400">{formData.bio.length}/600</p>
+        </div>
+
+        <div>
+          <label htmlFor="profile-about" className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">About section</label>
+          <textarea
+            id="profile-about"
+            required
+            rows={5}
+            maxLength={1600}
+            value={formData.about}
+            onChange={(event) => updateField('about', event.target.value)}
+            disabled={isLoading || isSaving}
+            className={`${fieldClassName} resize-y leading-6`}
+          />
+          <p className="mt-1 text-right text-xs text-slate-500 dark:text-slate-400">{formData.about.length}/1600</p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">

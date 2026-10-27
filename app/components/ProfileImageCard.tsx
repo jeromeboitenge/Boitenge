@@ -18,6 +18,8 @@ export default function ProfileImageCard() {
   const [isDragging, setIsDragging] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [pendingUploadedUrl, setPendingUploadedUrl] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const previewUrlRef = useRef<string | null>(null);
 
@@ -51,41 +53,51 @@ export default function ProfileImageCard() {
     setPreview(objectUrl);
     setSelectedFile(file);
     setHasChanges(true);
+    setPendingUploadedUrl(null);
+    setSaveError('');
   };
 
   const handleSave = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile && !pendingUploadedUrl) return;
 
     setIsUploading(true);
     setProgress(0);
-    let uploadedUrl: string | null = null;
+    setSaveError('');
+    let imageWasUploaded = Boolean(pendingUploadedUrl);
     const progressInterval = setInterval(() => {
       setProgress((prev) => (prev >= 90 ? 90 : prev + 10));
     }, 100);
 
     try {
-      const response = await apiClient.uploadFile(selectedFile, 'profile-images');
-      setProgress(100);
+      const authStorage = localStorage.getItem('auth-storage');
+      const token = authStorage ? JSON.parse(authStorage)?.state?.token : null;
+      if (!token) throw new Error('Your owner session has expired. Sign in again, then retry saving the photo.');
+      apiClient.setToken(token);
 
-      if (response.success && response.data.url) {
-        uploadedUrl = response.data.url;
-        await apiClient.updateProfileAvatar(response.data.url);
-        cleanupPreview();
-        setPreview(null);
-        setSelectedFile(null);
-        setImageUrl(response.data.url);
-        setHasChanges(false);
-        if (fileInputRef.current) fileInputRef.current.value = '';
-        toast.success('Profile image updated!');
-      } else {
-        throw new Error('Upload failed');
+      let avatarUrl = pendingUploadedUrl;
+      if (!avatarUrl && selectedFile) {
+        const response = await apiClient.uploadFile(selectedFile, 'profile-images');
+        if (!response.success || !response.data.url) throw new Error('The image upload did not return a usable URL.');
+        avatarUrl = response.data.url;
+        imageWasUploaded = true;
+        setPendingUploadedUrl(avatarUrl);
       }
+
+      if (!avatarUrl) throw new Error('No uploaded image is available to save.');
+      setProgress(100);
+      await apiClient.updateProfileAvatar(avatarUrl);
+      cleanupPreview();
+      setPreview(null);
+      setSelectedFile(null);
+      setPendingUploadedUrl(null);
+      setImageUrl(avatarUrl);
+      setHasChanges(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      toast.success('Profile image updated!');
     } catch (error) {
-      toast.error(
-        uploadedUrl
-          ? 'Image uploaded, but could not be saved to your profile. Please retry.'
-          : error instanceof Error ? error.message : 'Upload failed. Please retry.'
-      );
+      const message = error instanceof Error ? error.message : 'The profile photo could not be saved.';
+      setSaveError(message);
+      toast.error(imageWasUploaded ? `Image uploaded. Profile save failed: ${message}` : message);
     } finally {
       clearInterval(progressInterval);
       setIsUploading(false);
@@ -110,6 +122,8 @@ export default function ProfileImageCard() {
     setPreview(null);
     setSelectedFile(null);
     setHasChanges(false);
+    setPendingUploadedUrl(null);
+    setSaveError('');
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
@@ -118,13 +132,19 @@ export default function ProfileImageCard() {
     setPreview(null);
     setSelectedFile(null);
     setHasChanges(false);
+    setPendingUploadedUrl(null);
+    setSaveError('');
     try {
+      const authStorage = localStorage.getItem('auth-storage');
+      const token = authStorage ? JSON.parse(authStorage)?.state?.token : null;
+      if (!token) throw new Error('Your owner session has expired. Sign in again to reset the photo.');
+      apiClient.setToken(token);
       await apiClient.updateProfileAvatar(null);
       resetImage();
       if (fileInputRef.current) fileInputRef.current.value = '';
       toast.success('Profile image reset to default');
-    } catch {
-      toast.error('Could not reset the profile image. Please try again.');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Could not reset the profile image. Please try again.');
     }
   };
 
@@ -250,15 +270,15 @@ export default function ProfileImageCard() {
               <button
                 type="button"
                 onClick={handleSave}
-                disabled={!selectedFile || isUploading}
+                disabled={(!selectedFile && !pendingUploadedUrl) || isUploading}
                 className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-55"
               >
                 {isUploading ? <FaSpinner className="animate-spin" /> : <FaCloudUploadAlt className="text-sm" />}
-                {isUploading ? 'Saving photo...' : 'Save photo'}
+                {isUploading ? 'Saving photo...' : pendingUploadedUrl ? 'Retry save' : 'Save photo'}
               </button>
             </div>
             <p className="text-center text-xs text-slate-500 dark:text-slate-400" aria-live="polite">
-              {hasChanges ? 'Preview ready. Save to publish this photo.' : 'Choose a photo, then save to publish it to your portfolio.'}
+              {saveError || (pendingUploadedUrl ? 'Upload complete. Retry saving without uploading again.' : hasChanges ? 'Preview ready. Save to publish this photo.' : 'Choose a photo, then save to publish it to your portfolio.')}
             </p>
           </div>
 

@@ -3,6 +3,10 @@
 import { ArrowUpRight, Code2, Database, PanelsTopLeft, Sparkles } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useProfileStore } from '../stores/profileStore';
+import { useEffect, useState } from 'react';
+import { apiClient } from '@/lib/api-client';
+import { PROFILE_CONTENT_UPDATED_EVENT } from '@/lib/profile-events';
+import { profileData } from '@/data/profileData';
 
 const focusAreas = [
   {
@@ -26,6 +30,23 @@ export default function AboutPage() {
   const pathname = usePathname();
   const Heading = pathname === '/about' ? 'h1' : 'h2';
   const { cvUrl } = useProfileStore();
+  const [about, setAbout] = useState(profileData.about);
+
+  useEffect(() => {
+    let active = true;
+    apiClient.getProfile().then((profile) => {
+      if (active && profile?.about) setAbout(profile.about);
+    }).catch(() => undefined);
+    const handleProfileUpdate = (event: Event) => {
+      const updatedProfile = (event as CustomEvent<{ about?: string }>).detail;
+      if (updatedProfile?.about) setAbout(updatedProfile.about);
+    };
+    window.addEventListener(PROFILE_CONTENT_UPDATED_EVENT, handleProfileUpdate);
+    return () => {
+      active = false;
+      window.removeEventListener(PROFILE_CONTENT_UPDATED_EVENT, handleProfileUpdate);
+    };
+  }, []);
 
   return (
     <section
@@ -45,14 +66,8 @@ export default function AboutPage() {
           >
             I turn product ideas into durable software that people can actually use.
           </Heading>
-          <p className="mt-5 text-base leading-7 text-slate-600 dark:text-slate-300">
-            I’m a software developer based in Kigali, Rwanda, and I work across the full product
-            lifecycle: understanding the problem, designing a sensible experience, building the
-            underlying system, and making sure it stays maintainable as it grows.
-          </p>
-          <p className="mt-4 text-base leading-7 text-slate-600 dark:text-slate-300">
-            My work blends thoughtful UX, clean architecture, and practical engineering. I care
-            about how software behaves in real life, not just how it looks in a prototype.
+          <p className="mt-5 whitespace-pre-line text-base leading-7 text-slate-600 dark:text-slate-300">
+            {about}
           </p>
           <a
             href={cvUrl || '/Nzaramyimana-Jerome.pdf'}

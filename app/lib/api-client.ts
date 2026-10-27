@@ -863,6 +863,7 @@ class ApiClientImpl implements ApiClient {
       name: string;
       title: string;
       bio: string;
+      about: string | null;
       badges: string[];
       location: string;
       locationUrl?: string;
@@ -875,7 +876,6 @@ class ApiClientImpl implements ApiClient {
         linkedin?: string;
         github?: string;
       };
-      about: string;
       services: string[];
       createdAt: string;
       updatedAt: string;
@@ -885,6 +885,7 @@ class ApiClientImpl implements ApiClient {
 
     return {
       ...profile,
+      about: profile.about ?? '',
       createdAt: new Date(profile.createdAt),
       updatedAt: new Date(profile.updatedAt)
     };
@@ -896,6 +897,7 @@ class ApiClientImpl implements ApiClient {
       name: string;
       title: string;
       bio: string;
+      about: string | null;
       badges: string[];
       location: string;
       locationUrl?: string;
@@ -908,17 +910,17 @@ class ApiClientImpl implements ApiClient {
         linkedin?: string;
         github?: string;
       };
-      about: string;
       services: string[];
       createdAt: string;
       updatedAt: string;
     }>('/api/profile', {
-      method: 'POST',
+      method: 'PATCH',
       body: JSON.stringify(profileData),
     });
 
     return {
       ...profile,
+      about: profile.about ?? '',
       createdAt: new Date(profile.createdAt),
       updatedAt: new Date(profile.updatedAt)
     };

@@ -27,13 +27,16 @@ export default function LocationTracker() {
 
   // Auto-start tracking when permission is granted and user is admin
   useEffect(() => {
-    if (pathname.startsWith('/admin')) return;
+    if (pathname.startsWith('/admin')) {
+      stopTracking();
+      return;
+    }
     if (user && (user.role === 'admin' || user.role === 'owner')) {
       if (permissionStatus === 'granted' && !isTracking) {
         startTracking();
       }
     }
-  }, [permissionStatus, pathname, user]);
+  }, [permissionStatus, pathname, startTracking, stopTracking, user]);
 
   // Request permission on mount for admin users
   useEffect(() => {
