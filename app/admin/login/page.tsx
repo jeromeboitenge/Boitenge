@@ -8,6 +8,8 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import { LoginForm } from '@/components/auth';
 import { useAuth } from '@/components/auth';
 
@@ -29,6 +31,13 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-lightText dark:text-darkText transition-colors duration-300">
       <div className="relative isolate overflow-hidden">
+        <Link
+          href="/"
+          className="absolute left-4 top-4 z-20 inline-flex min-h-10 items-center gap-2 rounded-lg border border-slate-200 bg-white/80 px-3 text-sm font-medium text-slate-700 transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-200 sm:left-8 sm:top-6"
+        >
+          <ArrowLeft size={16} aria-hidden="true" />
+          Back to site
+        </Link>
         {/* Animated background gradient */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-0 -left-4 w-96 h-96 bg-primary/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob" />
