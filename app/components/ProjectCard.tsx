@@ -194,28 +194,29 @@ export default function ProjectCard({
       transition={{ duration: 0.5 }}
       className="h-full"
     >
-      <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white transition-colors duration-200 hover:border-primary/50 dark:border-slate-800 dark:bg-slate-900">
+      <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-slate-900/10 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-primary/50 dark:hover:shadow-black/25">
         <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
           <Image
             src={image}
             alt={`${title} project preview`}
             fill
-            sizes="(max-width: 320px) 100vw, (max-width: 768px) 92vw, (max-width: 1280px) 45vw, 400px"
-            className="object-cover transition duration-500 ease-out group-hover:scale-[1.03]"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition duration-700 ease-out group-hover:scale-[1.05]"
             loading="lazy"
             quality={85}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/65 via-slate-950/5 to-transparent" />
           {projectLink && (
-            <span className="absolute left-4 top-4 rounded bg-emerald-700 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
+            <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-slate-950/70 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-sm backdrop-blur-md">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
               {projectLink.badge}
             </span>
           )}
         </div>
 
-        <div className="flex flex-1 flex-col gap-4 p-6 max-[320px]:gap-3 max-[320px]:p-4">
-          <div className="space-y-2">
-            <h3 className="text-lg font-bold leading-snug text-slate-950 dark:text-white max-[320px]:text-base">
+        <div className="flex flex-1 flex-col gap-5 p-6 max-[320px]:gap-3 max-[320px]:p-4">
+          <div className="space-y-3">
+            <h3 className="text-xl font-bold leading-snug tracking-tight text-slate-950 transition-colors group-hover:text-primary dark:text-white max-[320px]:text-base">
               {title}
             </h3>
             <p className="line-clamp-3 text-sm leading-6 text-slate-600 dark:text-slate-300 max-[320px]:text-[13px] max-[320px]:leading-5">
@@ -223,13 +224,14 @@ export default function ProjectCard({
             </p>
           </div>
 
+          {tags.length > 0 && (
           <div className="border-t border-slate-100 pt-4 dark:border-slate-800">
-            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">Technology</p>
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">Built with</p>
             <div className="flex flex-wrap gap-2 max-[320px]:gap-1.5">
             {tags.slice(0, 4).map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1.5 rounded bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200 max-[320px]:px-1.5 max-[320px]:text-[11px]"
+                className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 max-[320px]:px-1.5 max-[320px]:text-[11px]"
               >
                 {techIconMap[tag] ?? <DefaultTechIcon />}
                 {tag}
@@ -242,10 +244,11 @@ export default function ProjectCard({
             )}
             </div>
           </div>
+          )}
 
-          <div className="flex-1 pt-1">
+          {highlights.length > 0 && <div className="flex-1 pt-1">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
-              Highlights
+              Key outcomes
             </p>
             <ul className="space-y-2.5">
               {highlights.slice(0, 2).map((point) => (
@@ -257,16 +260,16 @@ export default function ProjectCard({
                 </li>
               ))}
             </ul>
-          </div>
+          </div>}
 
           {(projectLink || codeLink) && (
-            <div className="mt-auto flex flex-wrap gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
+            <div className="mt-auto flex flex-wrap gap-2 border-t border-slate-100 pt-5 dark:border-slate-800">
               {projectLink && (
                 <a
                   href={projectLink.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-10 flex-1 items-center justify-center gap-2 rounded bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+                  className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
                   aria-label={`${title}: ${projectLink.action}`}
                 >
                   {projectLink.action} <IconExternal />
@@ -278,7 +281,7 @@ export default function ProjectCard({
                 target="_blank"
                 rel="noopener noreferrer"
                 title={`${title} source code`}
-                className="inline-flex h-10 w-10 items-center justify-center rounded border border-slate-200 text-slate-700 transition-colors hover:border-primary hover:text-primary dark:border-slate-700 dark:text-slate-200"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 text-slate-700 transition-colors hover:border-primary hover:bg-primary/5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:border-slate-700 dark:text-slate-200 dark:focus-visible:ring-offset-slate-900"
                 aria-label={`${title} source code`}
               >
                 <IconGithub />

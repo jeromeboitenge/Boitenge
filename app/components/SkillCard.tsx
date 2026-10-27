@@ -21,7 +21,7 @@ import {
   SiDocker,
 } from "react-icons/si";
 
-import { VscVscode } from "react-icons/vsc";
+import { VscCode, VscVscode } from "react-icons/vsc";
 
 
 const iconMap: Record<string, JSX.Element> = {
@@ -54,11 +54,11 @@ const iconMap: Record<string, JSX.Element> = {
 export default function SkillCard({ name }: { name: string }) {
   return (
     <motion.div
-      whileHover={{ y: -2 }}
-      className="flex items-center gap-2 rounded-md border border-slate-200 bg-lightCard px-3 py-2 text-lightText transition-colors hover:border-primary/50 dark:border-slate-800 dark:bg-darkCard dark:text-darkText"
+      whileHover={{ y: -2, scale: 1.01 }}
+      className="inline-flex min-h-11 items-center gap-2.5 rounded-xl border border-slate-200/80 bg-white px-3.5 py-2.5 text-sm text-slate-700 shadow-sm transition-colors hover:border-primary/40 hover:bg-primary/[0.03] dark:border-slate-700/80 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-primary/10"
     >
-      <span className="text-xl text-primary">{iconMap[name]}</span>
-      <span className="font-medium">{name}</span>
+      <span className="text-lg text-primary" aria-hidden="true">{iconMap[name] ?? <VscCode />}</span>
+      <span className="font-semibold">{name}</span>
     </motion.div>
   );
 }
