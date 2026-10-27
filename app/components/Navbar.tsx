@@ -98,10 +98,7 @@ export default function Navbar() {
       <div className="site-container flex items-center justify-between gap-4 max-[320px]:gap-2">
         <Link href="/" className="flex shrink-0 items-center gap-3 text-slate-950 dark:text-white max-[320px]:gap-0">
           <span className="flex h-9 w-9 items-center justify-center rounded bg-primary font-display text-sm font-bold text-white max-[320px]:h-8 max-[320px]:w-8">JB</span>
-          <span className="leading-tight max-[320px]:hidden">
-            <span className="block font-display text-base font-bold">Jerome</span>
-            <span className="hidden text-[11px] font-medium text-slate-500 dark:text-slate-400 sm:block">Full-stack engineer</span>
-          </span>
+          <span className="font-display text-base font-bold">Jerome</span>
         </Link>
 
         {/* Desktop Menu */}

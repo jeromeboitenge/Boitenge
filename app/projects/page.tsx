@@ -103,7 +103,7 @@ export default function ProjectsPage() {
                 Project details will appear here soon.
               </p>
             ) : (
-            <div className="mt-7 grid grid-cols-1 gap-6 xl:grid-cols-3">
+            <div className="mt-7 grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
               {featuredProject && (
                 <ProjectCard
                   key={featuredProject.id}
@@ -115,7 +115,6 @@ export default function ProjectsPage() {
                   highlights={featuredProject.highlights}
                   demoLink={featuredProject.liveUrl || ''}
                   codeLink={featuredProject.githubUrl}
-                  featured
                 />
               )}
               {projectsToShow.map((project) => (

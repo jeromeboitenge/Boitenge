@@ -1,31 +1,11 @@
 "use client";
 
-import { Mail, Phone, MapPin, ArrowUp } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import { FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import clsx from "clsx";
-
-const scrollToTop = () => {
-  if (typeof window !== "undefined") {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }
-};
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const [showScrollTop, setShowScrollTop] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 300);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <footer className="relative overflow-hidden bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 pt-16 pb-10">
@@ -43,7 +23,7 @@ export default function Footer() {
             </Link>
 
             <p className="max-w-sm text-sm leading-7 text-slate-600 dark:text-slate-400">
-              Passionate software engineer crafting digital solutions that make a difference. Let's build something amazing together.
+              Software engineer based in Kigali, Rwanda.
             </p>
 
             <div className="flex flex-wrap gap-3 pt-2">
@@ -77,7 +57,7 @@ export default function Footer() {
               href="/contact"
               className="inline-flex min-h-11 items-center justify-center rounded bg-primary px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
             >
-              Hire me
+              Contact me
             </Link>
           </div>
 
@@ -153,17 +133,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* SCROLL TO TOP */}
-      <button
-        onClick={scrollToTop}
-        aria-label="Scroll to top"
-        className={clsx(
-          "fixed bottom-5 right-5 z-40 flex h-11 w-11 items-center justify-center rounded bg-primary text-white shadow-lg transition-all duration-200 hover:bg-primary-700",
-          showScrollTop ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-10 opacity-0"
-        )}
-      >
-        <ArrowUp size={20} />
-      </button>
     </footer>
   );
 }

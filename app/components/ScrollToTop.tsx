@@ -8,11 +8,20 @@ export default function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    const footer = document.querySelector('footer');
     const toggleVisibility = () => {
-      setIsVisible(window.scrollY > 400);
+      const footerIsVisible = footer
+        ? footer.getBoundingClientRect().top < window.innerHeight
+        : false;
+      setIsVisible(window.scrollY > 400 && !footerIsVisible);
     };
     window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    window.addEventListener('resize', toggleVisibility);
+    toggleVisibility();
+    return () => {
+      window.removeEventListener('scroll', toggleVisibility);
+      window.removeEventListener('resize', toggleVisibility);
+    };
   }, []);
 
   const scrollToTop = () => {

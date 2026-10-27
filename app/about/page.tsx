@@ -64,7 +64,7 @@ export default function AboutPage() {
           </a>
         </header>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3">
           {focusAreas.map(({ icon: Icon, title, description }, index) => (
             <article
               key={title}

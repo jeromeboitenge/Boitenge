@@ -8,7 +8,7 @@ export default function DocsPage() {
   return (
     <div className="min-h-screen bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText">
       <Navbar />
-      <main className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+      <main className="site-container site-section">
         <Certificates />
       </main>
       <Footer />

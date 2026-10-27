@@ -4,7 +4,7 @@ import ProfileIntro from './ProfileIntro';
 
 export default function Hero() {
   return (
-    <section className="relative isolate flex min-h-[calc(100svh-5rem)] items-center overflow-hidden">
+    <section className="relative isolate flex items-center overflow-hidden">
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10 opacity-40 [background-image:linear-gradient(to_right,rgba(20,90,74,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(20,90,74,0.07)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent)]"

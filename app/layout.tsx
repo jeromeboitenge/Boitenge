@@ -27,12 +27,13 @@ const outfit = Outfit({
 
 export const metadata = {
   metadataBase: new URL("https://boitenge.vercel.app"),
-  title: "Jerome Nzaramyimana | Software Developer in Kigali, Rwanda",
+  title: "Jerome Nzaramyimana | Jerome Boitenge | Kigali Developer",
   description:
-    "Portfolio of Jerome Nzaramyimana, a software developer in Kigali, Rwanda. Explore selected web and mobile applications, technologies, experience, and contact details.",
+    "Jerome Nzaramyimana, also known as Jerome Boitenge, is a software developer in Kigali, Rwanda. Explore his projects, skills, experience, and contact details.",
   keywords: [
     "Jerome Nzaramyimana",
     "Jerome Boitenge",
+    "Boitenge",
     "Software developer Kigali",
     "React developer Rwanda",
     "Next.js developer",
@@ -46,16 +47,16 @@ export const metadata = {
     locale: "en_US",
     url: "https://boitenge.vercel.app/",
     siteName: "Jerome Nzaramyimana",
-    title: "Jerome Nzaramyimana | Software Developer",
+    title: "Jerome Nzaramyimana | Jerome Boitenge | Kigali Developer",
     description:
-      "Selected web and mobile applications by Jerome Nzaramyimana, a software developer based in Kigali, Rwanda.",
+      "Jerome Nzaramyimana, also known as Jerome Boitenge, is a software developer in Kigali, Rwanda. Explore his selected work.",
     images: [{ url: "/Nzaramyimana-Jerome.jpeg", alt: "Jerome Nzaramyimana" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jerome Nzaramyimana | Software Developer",
+    title: "Jerome Nzaramyimana | Jerome Boitenge | Kigali Developer",
     description:
-      "Selected web and mobile applications by Jerome Nzaramyimana, a software developer based in Kigali, Rwanda.",
+      "Jerome Nzaramyimana, also known as Jerome Boitenge, is a software developer in Kigali, Rwanda. Explore his selected work.",
     images: ["/Nzaramyimana-Jerome.jpeg"],
   },
   robots: {
@@ -67,9 +68,6 @@ export const metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
-  },
-  alternates: {
-    canonical: "https://boitenge.vercel.app/",
   },
 };
 
@@ -95,10 +93,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               "@context": "https://schema.org",
               "@type": "Person",
               name: "Jerome Nzaramyimana",
-              alternateName: "Jerome Boitenge",
+              alternateName: ["Jerome Boitenge", "Boitenge"],
               url: "https://boitenge.vercel.app/",
               image: "https://boitenge.vercel.app/Nzaramyimana-Jerome.jpeg",
               jobTitle: "Software Developer",
+              description:
+                "Jerome Nzaramyimana, also known as Jerome Boitenge, is a software developer based in Kigali, Rwanda.",
+              knowsAbout: [
+                "Full-stack software development",
+                "Web application development",
+                "Backend engineering",
+              ],
               email: "jeromeboitenge@gmail.com",
               address: {
                 "@type": "PostalAddress",
@@ -115,7 +120,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
 
       <body className="font-sans bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText transition-colors duration-300">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <ErrorBoundary>
             <AuthProvider>
               <AnalyticsProvider>
