@@ -1,0 +1,1 @@
+export const PROFILE_CONTENT_UPDATED_EVENT = 'portfolio:profile-content-updated';

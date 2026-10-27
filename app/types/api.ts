@@ -28,7 +28,7 @@ export interface ApiClient {
   refreshToken(): Promise<AuthResponse>;
   
   // Profile
-  getProfile(): Promise<Profile>;
+  getProfile(): Promise<Profile | null>;
   updateProfile(profile: ProfileInput): Promise<Profile>;
   getProfileAvatar(): Promise<string | null>;
   updateProfileAvatar(avatarUrl: string | null): Promise<void>;

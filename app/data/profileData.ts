@@ -1,7 +1,7 @@
 export const profileData = {
   name: "Jerome Nzaramyimana",
   title: "Full-stack Engineer",
-  bio: "I design and engineer premium digital experiences across React, Next.js, and Node.js—blending product thinking with scalable infrastructure so launches feel effortless and polished.",
+  bio: "I build reliable web applications and backend systems for teams and businesses.",
   badges: ["Full-stack Engineer", "Design Systems", "Hardware & Software Maintenance"],
   location: "Kigali, Rwanda",
   locationUrl: "https://maps.app.goo.gl/Pm6nVE3Qb2LzXCng8",

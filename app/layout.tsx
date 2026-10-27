@@ -1,7 +1,5 @@
 import "./globals.css";
 import { ReactNode } from "react";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import { ThemeProvider } from "next-themes";
 import { Inter, Outfit } from "next/font/google";
 import { AuthProvider } from "./components/auth";
@@ -9,9 +7,8 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 // removed
 import LocationTracker from "./components/LocationTracker";
 import AnalyticsProvider from "./components/AnalyticsProvider";
-import ScrollToTop from "./components/ScrollToTop";
-import PageTransition from "./components/PageTransition";
 import ProfileAssetsSync from "./components/ProfileAssetsSync";
+import SiteFrame from "./components/SiteFrame";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -132,12 +129,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <AnalyticsProvider>
                 <ProfileAssetsSync />
                 <LocationTracker />
-                <Navbar />
-                <main className="min-h-screen pt-20">
-                  <PageTransition>{children}</PageTransition>
-                </main>
-                <Footer />
-                <ScrollToTop />
+                <SiteFrame>{children}</SiteFrame>
               </AnalyticsProvider>
             </AuthProvider>
           </ErrorBoundary>

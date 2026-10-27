@@ -4,6 +4,10 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
 import { useProfileStore } from '../stores/profileStore';
+import { apiClient } from '@/lib/api-client';
+import { PROFILE_CONTENT_UPDATED_EVENT } from '@/lib/profile-events';
+import { profileData } from '@/data/profileData';
+import { useEffect, useState } from 'react';
 
 const DEFAULT_PROFILE_IMAGE = '/Nzaramyimana-Jerome.jpeg';
 
@@ -19,6 +23,37 @@ const socialLinks = [
 
 export default function ProfileIntro({ showButtons = false }: ProfileIntroProps) {
   const { imageUrl } = useProfileStore();
+  const [bio, setBio] = useState(profileData.bio);
+  const [location, setLocation] = useState(profileData.location);
+
+  useEffect(() => {
+    let isCurrent = true;
+    const loadProfile = async () => {
+      try {
+        const profile = await apiClient.getProfile();
+        if (!isCurrent || !profile) return;
+        setBio(profile.bio || profileData.bio);
+        setLocation(profile.location || profileData.location);
+      } catch {
+        // Keep the local profile copy when the public profile API is unavailable.
+      }
+    };
+
+    const updateProfile = (event: Event) => {
+      const updatedProfile = (event as CustomEvent<{ bio: string; location: string }>).detail;
+      if (updatedProfile) {
+        setBio(updatedProfile.bio);
+        setLocation(updatedProfile.location);
+      }
+    };
+
+    void loadProfile();
+    window.addEventListener(PROFILE_CONTENT_UPDATED_EVENT, updateProfile);
+    return () => {
+      isCurrent = false;
+      window.removeEventListener(PROFILE_CONTENT_UPDATED_EVENT, updateProfile);
+    };
+  }, []);
 
   return (
     <div className="grid w-full items-center gap-8 py-12 sm:py-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)] lg:gap-12 lg:py-16">
@@ -29,7 +64,7 @@ export default function ProfileIntro({ showButtons = false }: ProfileIntroProps)
         className="relative z-10 order-1 text-left"
       >
         <p className="mb-6 text-sm font-semibold text-primary">
-          Software engineer <span className="px-1.5 text-slate-400">/</span> Kigali, Rwanda
+          Software engineer <span className="px-1.5 text-slate-400">/</span> {location}
         </p>
 
         <h1 className="max-w-3xl break-words font-display text-4xl font-bold leading-[1.04] text-slate-950 dark:text-white sm:text-5xl md:text-6xl">
@@ -37,7 +72,7 @@ export default function ProfileIntro({ showButtons = false }: ProfileIntroProps)
         </h1>
 
         <p className="mt-5 max-w-xl text-lg leading-8 text-slate-600 dark:text-slate-300 sm:text-xl">
-          I build reliable web applications and backend systems for teams and businesses.
+          {bio}
         </p>
 
         {showButtons && (

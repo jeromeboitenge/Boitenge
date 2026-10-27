@@ -122,6 +122,8 @@ class AnalyticsTracker {
     const pageViews = events.filter(e => e.type === 'page_view');
     const projectViews = events.filter(e => e.type === 'project_view');
     const contactForms = events.filter(e => e.type === 'contact_form');
+    const last24Hours = Date.now() - 24 * 60 * 60 * 1000;
+    const recentViews = pageViews.filter(e => e.timestamp > last24Hours).length;
     
     // Unique visitors (by session)
     const uniqueSessions = new Set(events.map(e => e.sessionId)).size;
@@ -154,17 +156,23 @@ class AnalyticsTracker {
     });
     
     // Time series data (last 7 days)
-    const last7Days = Date.now() - 7 * 24 * 60 * 60 * 1000;
-    const recentEvents = events.filter(e => e.timestamp > last7Days);
+    const last30Days = Date.now() - 30 * 24 * 60 * 60 * 1000;
+    const recentEvents = events.filter(e => e.timestamp > last30Days);
     
     const dailyViews: Record<string, number> = {};
+    for (let dayOffset = 29; dayOffset >= 0; dayOffset -= 1) {
+      const date = new Date(Date.now() - dayOffset * 24 * 60 * 60 * 1000).toLocaleDateString();
+      dailyViews[date] = 0;
+    }
     recentEvents.forEach(e => {
+      if (e.type !== 'page_view') return;
       const date = new Date(e.timestamp).toLocaleDateString();
       dailyViews[date] = (dailyViews[date] || 0) + 1;
     });
     
     return {
-      totalViews: events.length,
+      totalViews: pageViews.length,
+      recentViews,
       uniqueVisitors: uniqueSessions,
       pageViews: Object.entries(pageViewCounts)
         .map(([page, count]) => ({ page, count }))

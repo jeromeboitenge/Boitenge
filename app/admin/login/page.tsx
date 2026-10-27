@@ -13,14 +13,14 @@ import { useAuth } from '@/components/auth';
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   // Redirect if already authenticated
   React.useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && user?.role === 'owner') {
       router.push('/admin');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, router, user?.role]);
 
   const handleLoginSuccess = () => {
     router.push('/admin');

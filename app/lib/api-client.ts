@@ -857,7 +857,7 @@ class ApiClientImpl implements ApiClient {
     });
   }
 
-  async getProfile(): Promise<Profile> {
+  async getProfile(): Promise<Profile | null> {
     const profile = await this.request<{
       id: string;
       name: string;
@@ -879,7 +879,9 @@ class ApiClientImpl implements ApiClient {
       services: string[];
       createdAt: string;
       updatedAt: string;
-    }>('/api/profile');
+    } | null>('/api/profile');
+
+    if (!profile) return null;
 
     return {
       ...profile,

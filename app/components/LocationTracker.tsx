@@ -1,12 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useLocationTracking } from '@/hooks/useLocationTracking';
 import { useAuth } from '@/components/auth';
 import { FaMapMarkerAlt, FaCheck, FaTimes } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function LocationTracker() {
+  const pathname = usePathname();
   const { user } = useAuth();
   const [isVisible, setIsVisible] = useState(false);
   
@@ -25,15 +27,17 @@ export default function LocationTracker() {
 
   // Auto-start tracking when permission is granted and user is admin
   useEffect(() => {
+    if (pathname.startsWith('/admin')) return;
     if (user && (user.role === 'admin' || user.role === 'owner')) {
       if (permissionStatus === 'granted' && !isTracking) {
         startTracking();
       }
     }
-  }, [permissionStatus, user]);
+  }, [permissionStatus, pathname, user]);
 
   // Request permission on mount for admin users
   useEffect(() => {
+    if (pathname.startsWith('/admin')) return;
     if (!user || (user.role !== 'admin' && user.role !== 'owner')) {
       return;
     }
@@ -52,10 +56,10 @@ export default function LocationTracker() {
     };
 
     requestPermission();
-  }, [user]);
+  }, [pathname, user]);
 
   // Don't render UI for non-admin users
-  if (!user || (user.role !== 'admin' && user.role !== 'owner')) {
+  if (pathname.startsWith('/admin') || !user || (user.role !== 'admin' && user.role !== 'owner')) {
     return null;
   }
 
