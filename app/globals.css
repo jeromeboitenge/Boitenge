@@ -3,8 +3,26 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --container-max: 1440px;
+    --container-max-wide: 1680px;
+    --container-padding: clamp(16px, 3vw, 48px);
+    --section-padding-mobile: 64px;
+    --section-padding-desktop: 96px;
+    --bg-page: #f8fafc;
+    --bg-elevated: rgba(255, 255, 255, 0.78);
+    --border-soft: rgba(15, 23, 42, 0.08);
+    --text-strong: #0f172a;
+    --text-muted: #475569;
+  }
+
   html.dark {
     color-scheme: dark;
+    --bg-page: #020817;
+    --bg-elevated: rgba(15, 23, 42, 0.8);
+    --border-soft: rgba(148, 163, 184, 0.18);
+    --text-strong: #f8fafc;
+    --text-muted: #cbd5e1;
   }
 
   html {
@@ -12,18 +30,19 @@
     scroll-behavior: smooth;
     overflow-x: hidden;
     -webkit-text-size-adjust: 100%;
-    /* Better font rendering on mobile */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   body {
     @apply bg-lightBg text-lightText antialiased selection:bg-primary selection:text-white dark:bg-darkBg dark:text-darkText;
+    background-image:
+      radial-gradient(circle at top left, rgba(0, 98, 139, 0.08), transparent 24%),
+      radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.1), transparent 30%);
     -webkit-tap-highlight-color: transparent;
     overflow-x: hidden;
     width: 100%;
     position: relative;
-    /* Support iOS safe areas */
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
   }
@@ -32,35 +51,34 @@
     box-sizing: border-box;
   }
 
-  /* Improve tap targets on mobile - minimum 44x44px */
+  a {
+    @apply transition-colors duration-200;
+  }
+
   .touch-target {
     min-height: 44px;
     min-width: 44px;
   }
 
-  /* Responsive images and videos */
   img, video {
     max-width: 100%;
     height: auto;
     display: block;
   }
 
-  /* Prevent text overflow */
   p, h1, h2, h3, h4, h5, h6 {
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: auto;
   }
 
-  /* Better input styling on mobile */
   input, textarea, select {
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
   }
 
-  /* Smooth scrolling for anchor links */
   @media (prefers-reduced-motion: no-preference) {
     html {
       scroll-behavior: smooth;
@@ -69,86 +87,110 @@
 }
 
 @layer utilities {
+  .site-container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+  }
+
+  @media (min-width: 1920px) {
+    .site-container {
+      max-width: var(--container-max-wide);
+    }
+  }
+
+  .site-section {
+    padding-top: var(--section-padding-mobile);
+    padding-bottom: var(--section-padding-mobile);
+  }
+
+  @media (min-width: 1024px) {
+    .site-section {
+      padding-top: var(--section-padding-desktop);
+      padding-bottom: var(--section-padding-desktop);
+    }
+  }
+
+  .footer-email {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
   }
-  
+
   .glass {
     @apply bg-white/70 backdrop-blur-md border border-white/20 dark:bg-slate-900/70 dark:border-slate-800/50 shadow-lg;
   }
-  
+
   .glass-card {
     @apply bg-white/80 backdrop-blur-lg border border-white/40 dark:bg-slate-800/80 dark:border-slate-700/50 shadow-xl;
   }
-  
-  /* Safe area padding helpers for notched devices */
+
   .safe-bottom {
     padding-bottom: max(env(safe-area-inset-bottom), 1rem);
   }
-  
+
   .safe-top {
     padding-top: max(env(safe-area-inset-top), 1rem);
   }
-  
-  /* Container with safe padding */
+
   .container-safe {
     padding-left: max(env(safe-area-inset-left), 1rem);
     padding-right: max(env(safe-area-inset-right), 1rem);
   }
-  
-  /* Prevent horizontal scroll */
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  
-  /* Touch-friendly spacing */
+
   .touch-spacing {
     @apply p-4 sm:p-6 md:p-8;
   }
-  
-  /* Responsive text sizing */
+
   .text-responsive-xs {
     @apply text-xs sm:text-sm;
   }
-  
+
   .text-responsive-sm {
     @apply text-sm sm:text-base;
   }
-  
+
   .text-responsive-base {
     @apply text-base sm:text-lg;
   }
-  
+
   .text-responsive-lg {
     @apply text-lg sm:text-xl md:text-2xl;
   }
-  
+
   .text-responsive-xl {
     @apply text-xl sm:text-2xl md:text-3xl;
   }
-  
+
   .text-responsive-2xl {
     @apply text-2xl sm:text-3xl md:text-4xl;
   }
-  
+
   .text-responsive-3xl {
     @apply text-3xl sm:text-4xl md:text-5xl;
   }
-  
-  /* Blob animation for login page */
+
   .animate-blob {
     animation: blob 7s infinite;
   }
-  
+
   .animation-delay-2000 {
     animation-delay: 2s;
   }
-  
+
   .animation-delay-4000 {
     animation-delay: 4s;
   }

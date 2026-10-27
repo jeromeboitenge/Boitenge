@@ -6,11 +6,11 @@
 
 'use client';
 
-import React, { createContext, useContext, useEffect } from 'react';
+import * as React from 'react';
 import { AuthContextType } from '../../types';
 import { useAuthStore } from '../../stores/authStore';
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -20,7 +20,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const {
     user,
     isAuthenticated,
-    isLoading,
+    isLoading: authLoading,
     error,
     login,
     logout,
@@ -29,7 +29,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   } = useAuthStore();
 
   // Initialize authentication on mount
-  useEffect(() => {
+  React.useEffect(() => {
     refreshAuth();
   }, [refreshAuth]);
 
@@ -38,7 +38,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     login,
     logout,
     isAuthenticated,
-    isLoading,
+    isLoading: authLoading,
     error
   };
 
@@ -50,7 +50,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 }
 
 export function useAuth(): AuthContextType {
-  const context = useContext(AuthContext);
+  const context = React.useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }

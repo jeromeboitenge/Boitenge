@@ -4,7 +4,6 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { ThemeProvider } from "next-themes";
 import { Inter, Outfit } from "next/font/google";
-import { MotionConfig } from "framer-motion";
 import { AuthProvider } from "./components/auth";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 // removed
@@ -27,6 +26,7 @@ const outfit = Outfit({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://boitenge.vercel.app"),
   title: "Jerome Nzaramyimana | Software Developer in Kigali, Rwanda",
   description:
     "Portfolio of Jerome Nzaramyimana, a software developer in Kigali, Rwanda. Explore selected web and mobile applications, technologies, experience, and contact details.",
@@ -115,24 +115,22 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
 
       <body className="font-sans bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText transition-colors duration-300">
-        <MotionConfig reducedMotion="user">
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <ErrorBoundary>
-              <AuthProvider>
-                <AnalyticsProvider>
-                  <ProfileAssetsSync />
-                  <LocationTracker />
-                  <Navbar />
-                  <main className="min-h-screen pt-20">
-                    <PageTransition>{children}</PageTransition>
-                  </main>
-                  <Footer />
-                  <ScrollToTop />
-                </AnalyticsProvider>
-              </AuthProvider>
-            </ErrorBoundary>
-          </ThemeProvider>
-        </MotionConfig>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ErrorBoundary>
+            <AuthProvider>
+              <AnalyticsProvider>
+                <ProfileAssetsSync />
+                <LocationTracker />
+                <Navbar />
+                <main className="min-h-screen pt-20">
+                  <PageTransition>{children}</PageTransition>
+                </main>
+                <Footer />
+                <ScrollToTop />
+              </AnalyticsProvider>
+            </AuthProvider>
+          </ErrorBoundary>
+        </ThemeProvider>
       </body>
     </html>
   );

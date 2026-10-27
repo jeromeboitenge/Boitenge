@@ -43,8 +43,8 @@ export default function Certificates() {
   }, []);
 
   return (
-    <section aria-labelledby="certifications-heading" className="py-16 sm:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section aria-labelledby="certifications-heading" className="site-section">
+      <div className="site-container">
         <motion.header
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}

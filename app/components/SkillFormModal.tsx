@@ -106,12 +106,12 @@ export default function SkillFormModal({ isOpen, onClose, onSuccess, skill }: Sk
 
     try {
       const authStorage = localStorage.getItem('auth-storage');
-      let accessToken = null;
+      let token = null;
       
       if (authStorage) {
         try {
           const authData = JSON.parse(authStorage);
-          accessToken = authData?.state?.token || null;
+          token = authData?.state?.token || null;
         } catch (e) {
           // Silent fail
         }
@@ -137,7 +137,7 @@ export default function SkillFormModal({ isOpen, onClose, onSuccess, skill }: Sk
         method,
         headers: {
           'Content-Type': 'application/json',
-          ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
+          ...(token && { 'Authorization': 'Bearer ' + token })
         },
         body: JSON.stringify(payload)
       });

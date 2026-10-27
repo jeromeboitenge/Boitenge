@@ -233,7 +233,7 @@ export default function ProjectCard({
 
           {tags.length > 0 && (
             <div className="border-t border-slate-100 pt-4 dark:border-slate-800">
-              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">Built with</p>
+              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">Technology focus</p>
               <div className="flex flex-wrap gap-2 max-[320px]:gap-1.5">
                 {tags.slice(0, featured ? 6 : 4).map((tag) => (
                   <span

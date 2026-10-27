@@ -14,7 +14,7 @@ import { useAuth } from '@/components/auth';
 import { apiClient } from '@/lib/api-client';
 import { PORTFOLIO_DATA_UPDATED_EVENT, unifiedApiClient } from '@/lib/unified-api-client';
 import { Project, Skill, Experience, Certificate, Message } from '@/types';
-import { FaProjectDiagram, FaCode, FaBriefcase, FaCertificate, FaPlus, FaEdit, FaTrash, FaEye, FaEnvelope, FaEnvelopeOpen, FaChartLine, FaClock, FaCheckCircle, FaUser } from 'react-icons/fa';
+import { FaProjectDiagram, FaCode, FaBriefcase, FaCertificate, FaPlus, FaEdit, FaTrash, FaEye, FaEnvelope, FaEnvelopeOpen, FaChartLine, FaClock, FaCheckCircle, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProjectFormModal from '@/components/ProjectFormModal';
 import SkillFormModal from '@/components/SkillFormModal';
@@ -141,12 +141,12 @@ export default function AdminDashboard() {
     
     try {
       const authStorage = localStorage.getItem('auth-storage');
-      let accessToken = null;
+      let token = null;
       
       if (authStorage) {
         try {
           const authData = JSON.parse(authStorage);
-          accessToken = authData?.state?.token || null;
+          token = authData?.state?.token || null;
         } catch (e) {
           console.error('Failed to parse auth data:', e);
         }
@@ -168,9 +168,10 @@ export default function AdminDashboard() {
       const response = await fetch(endpoint, {
         method: 'DELETE',
         headers: {
-          ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
-        }
+          ...(token && { 'Authorization': 'Bearer ' + token }),
+        },
       });
+
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -245,6 +246,8 @@ export default function AdminDashboard() {
                   <span className="max-[380px]:hidden">Sign out</span>
                 </button>
               </div>
+            </div>
+          </div>
         </header>
 
         {/* Quick Stats Bar */}
@@ -510,12 +513,12 @@ function SkillsManager({ skills, onRefresh }: { skills: Skill[]; onRefresh: () =
     
     try {
       const authStorage = localStorage.getItem('auth-storage');
-      let accessToken = null;
+      let token = null;
       
       if (authStorage) {
         try {
           const authData = JSON.parse(authStorage);
-          accessToken = authData?.state?.token || null;
+          token = authData?.state?.token || null;
         } catch (e) {
           console.error('Failed to parse auth data:', e);
         }
@@ -524,7 +527,7 @@ function SkillsManager({ skills, onRefresh }: { skills: Skill[]; onRefresh: () =
       await fetch(buildBackendUrl(`/api/skills/${id}`), {
         method: 'DELETE',
         headers: {
-          ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
+          ...(token && { 'Authorization': 'Bearer ' + token })
         }
       });
       toast.success('Skill deleted!');
@@ -625,12 +628,12 @@ function ExperienceManager({ experiences, onRefresh }: { experiences: Experience
     
     try {
       const authStorage = localStorage.getItem('auth-storage');
-      let accessToken = null;
+      let token = null;
       
       if (authStorage) {
         try {
           const authData = JSON.parse(authStorage);
-          accessToken = authData?.state?.token || null;
+          token = authData?.state?.token || null;
         } catch (e) {
           console.error('Failed to parse auth data:', e);
         }
@@ -639,7 +642,7 @@ function ExperienceManager({ experiences, onRefresh }: { experiences: Experience
       await fetch(buildBackendUrl(`/api/experience/${id}`), {
         method: 'DELETE',
         headers: {
-          ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
+          ...(token && { 'Authorization': 'Bearer ' + token })
         }
       });
       toast.success('Experience deleted!');
@@ -743,12 +746,12 @@ function CertificatesManager({ certificates, onRefresh }: { certificates: Certif
     
     try {
       const authStorage = localStorage.getItem('auth-storage');
-      let accessToken = null;
+      let token = null;
       
       if (authStorage) {
         try {
           const authData = JSON.parse(authStorage);
-          accessToken = authData?.state?.token || null;
+          token = authData?.state?.token || null;
         } catch (e) {
           console.error('Failed to parse auth data:', e);
         }
@@ -757,7 +760,7 @@ function CertificatesManager({ certificates, onRefresh }: { certificates: Certif
       await fetch(buildBackendUrl(`/api/certificates/${id}`), {
         method: 'DELETE',
         headers: {
-          ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
+          ...(token && { 'Authorization': 'Bearer ' + token })
         }
       });
       toast.success('Certificate deleted!');
@@ -867,12 +870,12 @@ function MessagesManager({ messages, onRefresh }: { messages: Message[]; onRefre
     
     try {
       const authStorage = localStorage.getItem('auth-storage');
-      let accessToken = null;
+      let token = null;
       
       if (authStorage) {
         try {
           const authData = JSON.parse(authStorage);
-          accessToken = authData?.state?.token || null;
+          token = authData?.state?.token || null;
         } catch (e) {
           console.error('Failed to parse auth data:', e);
         }
@@ -881,7 +884,7 @@ function MessagesManager({ messages, onRefresh }: { messages: Message[]; onRefre
       await fetch(buildBackendUrl(`/api/messages/${id}`), {
         method: 'DELETE',
         headers: {
-          ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
+          ...(token && { 'Authorization': 'Bearer ' + token })
         }
       });
       toast.success('Message deleted!');

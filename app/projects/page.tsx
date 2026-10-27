@@ -64,7 +64,7 @@ export default function ProjectsPage() {
 
   return (
     <div className="border-y border-slate-200/80 bg-white/40 dark:border-slate-800 dark:bg-slate-900/20" id="projects">
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <section className="site-container site-section">
         <div className="flex flex-col gap-5 border-b border-slate-200 pb-7 dark:border-slate-800 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl">
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-primary">Selected work</p>
@@ -103,7 +103,7 @@ export default function ProjectsPage() {
                 Project details will appear here soon.
               </p>
             ) : (
-            <div className="mt-7 grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <div className="mt-7 grid grid-cols-1 gap-6 xl:grid-cols-3">
               {featuredProject && (
                 <ProjectCard
                   key={featuredProject.id}

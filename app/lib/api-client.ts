@@ -42,7 +42,7 @@ class ApiClientImpl implements ApiClient {
     };
 
     if (this.token) {
-      headers['Authorization'] = `Bearer ${this.token}`;
+      headers['Authorization'] = 'Bearer ' + this.token;
     }
 
     // Only log in development mode
@@ -784,7 +784,7 @@ class ApiClientImpl implements ApiClient {
 
     const headers: Record<string, string> = {};
     if (this.token) {
-      headers['Authorization'] = `Bearer ${this.token}`;
+      headers['Authorization'] = 'Bearer ' + this.token;
     }
 
     const response = await fetch(`${this.baseUrl}/api/uploads`, {

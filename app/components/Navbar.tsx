@@ -95,9 +95,7 @@ export default function Navbar() {
           : 'border-transparent bg-lightBg/80 py-3 backdrop-blur-sm dark:bg-darkBg/75'
       )}
     >
-      <div className={clsx(
-        'mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 max-[320px]:gap-2 max-[320px]:px-2 sm:px-6 lg:px-8'
-      )}>
+      <div className="site-container flex items-center justify-between gap-4 max-[320px]:gap-2">
         <Link href="/" className="flex shrink-0 items-center gap-3 text-slate-950 dark:text-white max-[320px]:gap-0">
           <span className="flex h-9 w-9 items-center justify-center rounded bg-primary font-display text-sm font-bold text-white max-[320px]:h-8 max-[320px]:w-8">JB</span>
           <span className="leading-tight max-[320px]:hidden">

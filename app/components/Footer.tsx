@@ -28,12 +28,12 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="relative overflow-hidden bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 pt-20 pb-10 mt-20">
-      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-primary/10 to-transparent dark:from-primary/20 dark:to-transparent pointer-events-none" />
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+    <footer className="relative overflow-hidden bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 pt-16 pb-10">
+      <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-primary/10 to-transparent dark:from-primary/20 dark:to-transparent pointer-events-none" />
+      <div className="site-container">
 
         {/* GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 border-b border-slate-200 dark:border-slate-800 pb-16">
+        <div className="grid grid-cols-1 gap-10 border-b border-slate-200 pb-12 dark:border-slate-800 md:grid-cols-2 xl:grid-cols-4">
 
           {/* ABOUT */}
           <div className="space-y-6 lg:col-span-1">
@@ -115,7 +115,7 @@ export default function Footer() {
                   </div>
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-slate-900 dark:text-white">Email</p>
-                    <a href="mailto:jeromeboitenge@gmail.com" className="break-all text-sm text-slate-600 transition hover:text-primary dark:text-slate-400">jeromeboitenge@gmail.com</a>
+                    <a href="mailto:jeromeboitenge@gmail.com" className="footer-email block text-sm text-slate-600 transition hover:text-primary dark:text-slate-400">jeromeboitenge@gmail.com</a>
                   </div>
                 </div>
               </div>
@@ -158,8 +158,8 @@ export default function Footer() {
         onClick={scrollToTop}
         aria-label="Scroll to top"
         className={clsx(
-          "fixed bottom-8 right-8 z-40 flex h-11 w-11 items-center justify-center rounded bg-primary text-white transition-colors hover:bg-primary-700",
-          showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
+          "fixed bottom-5 right-5 z-40 flex h-11 w-11 items-center justify-center rounded bg-primary text-white shadow-lg transition-all duration-200 hover:bg-primary-700",
+          showScrollTop ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-10 opacity-0"
         )}
       >
         <ArrowUp size={20} />

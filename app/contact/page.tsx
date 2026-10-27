@@ -91,7 +91,7 @@ export default function ContactPage() {
   ];
 
   return (
-    <section id="contact" className="max-w-7xl mx-auto py-24 px-4 md:px-8">
+    <section id="contact" className="site-container site-section">
       <Toaster position="top-right" />
 
       {/* Title */}

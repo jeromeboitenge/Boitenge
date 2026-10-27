@@ -76,7 +76,7 @@ export default function Skills() {
       : Object.entries(skills).filter(([category]) => category === activeFilter);
 
   return (
-    <section id="skills" aria-labelledby="skills-heading" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:px-8">
+    <section id="skills" aria-labelledby="skills-heading" className="site-container site-section">
       <header className="mx-auto mb-10 max-w-2xl text-center">
         <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-primary">Tools of the trade</p>
         <h2 id="skills-heading" className="font-display text-4xl font-bold tracking-tight text-slate-950 dark:text-white">
@@ -128,7 +128,7 @@ export default function Skills() {
           </div>
 
           {/* Skill Cards */}
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             {filteredSkills.map(([category, list], idx) => (
               <motion.div
                 key={category}

@@ -83,9 +83,9 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
       if (authStorage) {
         try {
           const authData = JSON.parse(authStorage);
-          const accessToken = authData?.state?.token || null;
-          if (accessToken) {
-            apiClient.setToken(accessToken);
+          const token = authData?.state?.token || null;
+          if (token) {
+            apiClient.setToken(token);
           }
         } catch (e) {
           toast.error('Authentication failed. Please login again.');
@@ -125,18 +125,18 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
       }
 
       const authStorage = localStorage.getItem('auth-storage');
-      let accessToken = null;
+      let token = null;
       
       if (authStorage) {
         try {
           const authData = JSON.parse(authStorage);
-          accessToken = authData?.state?.token || null;
+          token = authData?.state?.token || null;
         } catch (e) {
           // Silent fail
         }
       }
 
-      if (!accessToken) {
+      if (!token) {
         toast.error('Please login first');
         setIsSubmitting(false);
         return;
@@ -163,7 +163,7 @@ export default function CertificateFormModal({ isOpen, onClose, onSuccess, certi
         method,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify(payload)
       });
