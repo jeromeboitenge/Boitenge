@@ -43,6 +43,7 @@ export default function CertificateCard({ certificate, index, onView }: Certific
               src={thumbnailUrl}
               alt={certificate.name}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              loading="lazy"
               onError={(e) => {
                 console.error('Failed to load certificate thumbnail:', thumbnailUrl);
                 e.currentTarget.style.display = 'none';

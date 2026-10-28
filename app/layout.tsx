@@ -24,13 +24,15 @@ const outfit = Outfit({
 
 export const metadata = {
   metadataBase: new URL("https://boitenge.vercel.app"),
-  title: "Jerome Nzaramyimana | Jerome Boitenge | Kigali Developer",
+  title: "Jerome Nzaramyimana | Full-stack Engineer in Kigali, Rwanda",
   description:
-    "Jerome Nzaramyimana, also known as Jerome Boitenge, is a software developer in Kigali, Rwanda. Explore his projects, skills, experience, and contact details.",
+    "Jerome Nzaramyimana is a full-stack engineer in Kigali, Rwanda, building reliable web applications and backend systems for teams and businesses. View his work.",
   keywords: [
     "Jerome Nzaramyimana",
     "Jerome Boitenge",
     "Boitenge",
+    "Full-stack Engineer",
+    "Kigali, Rwanda",
     "Software developer Kigali",
     "React developer Rwanda",
     "Next.js developer",
@@ -39,14 +41,18 @@ export const metadata = {
   ],
   authors: [{ name: "Jerome Nzaramyimana", url: "https://boitenge.vercel.app/" }],
   creator: "Jerome Nzaramyimana",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
-    type: "website",
+    type: "profile",
     locale: "en_US",
     url: "https://boitenge.vercel.app/",
     siteName: "Jerome Nzaramyimana",
-    title: "Jerome Nzaramyimana | Jerome Boitenge | Kigali Developer",
+    title: "Jerome Nzaramyimana | Full-stack Engineer in Kigali, Rwanda",
     description:
-      "Jerome Nzaramyimana, also known as Jerome Boitenge, is a software developer in Kigali, Rwanda. Explore his selected work.",
+      "Jerome Nzaramyimana is a full-stack engineer in Kigali, Rwanda, building reliable web applications and backend systems for teams and businesses. View his work.",
     images: [{
       url: "/Nzaramyimana-Jerome.jpeg",
       alt: "Portrait of Jerome Nzaramyimana, also known as Jerome Boitenge",
@@ -54,9 +60,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jerome Nzaramyimana | Jerome Boitenge | Kigali Developer",
+    title: "Jerome Nzaramyimana | Full-stack Engineer in Kigali, Rwanda",
     description:
-      "Jerome Nzaramyimana, also known as Jerome Boitenge, is a software developer in Kigali, Rwanda. Explore his selected work.",
+      "Jerome Nzaramyimana is a full-stack engineer in Kigali, Rwanda, building reliable web applications and backend systems for teams and businesses. View his work.",
     images: [{
       url: "/Nzaramyimana-Jerome.jpeg",
       alt: "Portrait of Jerome Nzaramyimana, also known as Jerome Boitenge",
@@ -94,28 +100,38 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Person",
-              name: "Jerome Nzaramyimana",
-              alternateName: ["Jerome Boitenge", "Boitenge"],
-              url: "https://boitenge.vercel.app/",
-              image: "https://boitenge.vercel.app/Nzaramyimana-Jerome.jpeg",
-              jobTitle: "Software Developer",
-              description:
-                "Jerome Nzaramyimana, also known as Jerome Boitenge, is a software developer based in Kigali, Rwanda.",
-              knowsAbout: [
-                "Full-stack software development",
-                "Web application development",
-                "Backend engineering",
-              ],
-              email: "jeromeboitenge@gmail.com",
-              address: {
-                "@type": "PostalAddress",
-                addressLocality: "Kigali",
-                addressCountry: "RW",
-              },
-              sameAs: [
-                "https://github.com/jeromeboitenge",
-                "https://www.linkedin.com/in/jerome-aldrin-463b4a411",
+              "@graph": [
+                {
+                  "@type": "Person",
+                  name: "Jerome Nzaramyimana",
+                  alternateName: ["Jerome Boitenge", "Boitenge"],
+                  url: "https://boitenge.vercel.app/",
+                  image: "https://boitenge.vercel.app/Nzaramyimana-Jerome.jpeg",
+                  jobTitle: "Full-stack Engineer",
+                  description:
+                    "Jerome Nzaramyimana is a full-stack engineer in Kigali, Rwanda, building reliable web applications and backend systems for teams and businesses. View his work.",
+                  knowsAbout: [
+                    "Full-stack software development",
+                    "Web application development",
+                    "Backend engineering",
+                  ],
+                  email: "jeromeboitenge@gmail.com",
+                  address: {
+                    "@type": "PostalAddress",
+                    addressLocality: "Kigali",
+                    addressCountry: "RW",
+                  },
+                  sameAs: [
+                    "https://github.com/jeromeboitenge",
+                    "https://www.linkedin.com/in/jerome-aldrin-463b4a411",
+                    "https://twitter.com/jeromeboitenge",
+                  ],
+                },
+                {
+                  "@type": "WebSite",
+                  name: "Jerome Nzaramyimana",
+                  url: "https://boitenge.vercel.app/",
+                },
               ],
             }),
           }}
